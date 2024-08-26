@@ -15,6 +15,8 @@ public protocol ReferenceProtocol: Decodable {
     var identifier: ReferenceIdentifier { get }
 }
 
+
+
 /// The type of a reference.
 public enum ReferenceType: String, Codable, Equatable {
     case image, video, file, fileType, xcodeRequirement, topic, section, download, link, externalLocation
@@ -37,6 +39,33 @@ public enum Reference: Decodable {
     case link(LinkReference)
 //    case externalLocation
 //    case unresolvable
+
+
+    public init(from decoder: any Decoder) throws {
+        enum CodingKeys: CodingKey {
+            case type
+        }
+
+
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let type = try container.decode(ReferenceType.self, forKey: .type)
+
+        switch type {
+        case .image:    self = try .image(.init(from: decoder))
+        case .video:    self = try .video(.init(from: decoder))
+        case .file:     self = try .file(.init(from: decoder))
+        case .fileType: self = try .fileType(.init(from: decoder))
+        case .topic:    self = try .topic(.init(from: decoder))
+        case .link:     self = try .link(.init(from: decoder))
+//        case .xcodeRequirement:
+//        case .section:
+//        case .download:
+//        case .externalLocation:
+//        case .unresolvable:
+        default:
+            throw DecodingError.dataCorruptedError(forKey: .type, in: container, debugDescription: "Cannot decode reference of type '\(type)'")
+        }
+    }
 }
 
 /// A reference that has a file.

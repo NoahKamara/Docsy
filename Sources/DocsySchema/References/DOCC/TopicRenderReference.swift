@@ -125,7 +125,8 @@ public struct TopicRenderReference: ReferenceProtocol, Equatable {
         required = try values.decodeIfPresent(Bool.self, forKey: .required) ?? false
         role = try values.decodeIfPresent(String.self, forKey: .role)
         fragments = try values.decodeIfPresent([DeclarationSection.Token].self, forKey: .fragments)
-        title = try values.decode(String.self, forKey: .navigatorTitle)
+        navigatorTitle = try values.decodeIfPresent([DeclarationSection.Token].self, forKey: .navigatorTitle)
+
         conformance = try values.decodeIfPresent(ConformanceSection.self, forKey: .conformance)
         estimatedTime = try values.decodeIfPresent(String.self, forKey: .estimatedTime)
         isBeta = try values.decodeIfPresent(Bool.self, forKey: .beta) ?? false

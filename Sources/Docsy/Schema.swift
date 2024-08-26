@@ -5,6 +5,6 @@
 //  Created by Noah Kamara on 26.08.24.
 //
 
-@_exported import DocsySchema
+@_exported public import DocsySchema
 
 

@@ -19,7 +19,6 @@ public struct LocalFileSystemDataProvider: DataProvider {
 
     public func contentsOfURL(_ url: URL) async throws -> Data {
         precondition(url.isFileURL, "Unexpected non-file url '\(url)'.")
-        print("RETRIEVING", url)
         return try Data(contentsOf: url)
     }
 

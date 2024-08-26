@@ -1,7 +1,6 @@
 
 import Foundation
 import Synchronization
-import DocCArchive
 
 struct CacheKey<T> {
     let identifier: String
@@ -101,7 +100,7 @@ public class DocumentationContext {
 //    }
 //
 //
-    public func document(for reference: TopicReference) async throws -> DocCArchive.Document {
+    public func document(for reference: TopicReference) async throws -> Document {
         print("DOCUMENT")
         let bundle = try bundle(for: reference.bundleIdentifier)
         var url = bundle.baseURL

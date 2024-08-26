@@ -134,13 +134,13 @@ extension NavigatorIndex {
             self.type = type
         }
 
-        convenience init(resolving node: DocumentationIndex.Node, at parentReference: TopicReference) {
+        convenience init(resolving node: DocumentationIndex.Node, at rootReference: TopicReference) {
             if let path = node.path {
-                let reference = parentReference.appendingPath(path)
+                let reference = rootReference.appendingPath(path)
 
                 self.init(
                     title: node.title,
-                    children: node.children?.map({ Node(resolving: $0, at: reference) }),
+                    children: node.children?.map({ Node(resolving: $0, at: rootReference) }),
                     reference: reference,
                     type: node.type
                 )

@@ -199,7 +199,7 @@ extension TopicReference: Decodable {
 /// If this step is not performed, the disallowed characters are instead percent escape encoded instead which is less readable.
 /// For example, a path like `"hello world/example project"` is converted to `"hello-world/example-project"`
 /// instead of `"hello%20world/example%20project"`.
-func urlReadablePath(_ path: some StringProtocol) -> String {
+public func urlReadablePath(_ path: some StringProtocol) -> String {
     return path.components(separatedBy: .urlPathNotAllowed).joined(separator: "-")
 }
 
