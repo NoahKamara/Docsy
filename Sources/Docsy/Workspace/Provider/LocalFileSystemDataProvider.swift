@@ -19,12 +19,7 @@ public struct LocalFileSystemDataProvider: DataProvider {
 
     public func contentsOfURL(_ url: URL) async throws -> Data {
         precondition(url.isFileURL, "Unexpected non-file url '\(url)'.")
-
-        let rootPath = rootURL.path()
-        let path = url.path()
-
-        precondition(url.path().starts(with: rootURL.path()), "Expected subpath of '\(rootPath)' but got '\(path)'")
-
+        print("RETRIEVING", url)
         return try Data(contentsOf: url)
     }
 
@@ -70,6 +65,7 @@ public struct LocalFileSystemDataProvider: DataProvider {
 
         return DocumentationBundle(
             info: metadata,
+            baseURL: url,
             indexURL: url.appending(components: "index", "index.json")
         )
     }

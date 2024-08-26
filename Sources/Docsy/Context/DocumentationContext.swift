@@ -1,6 +1,7 @@
 
 import Foundation
 import Synchronization
+import DocCArchive
 
 struct CacheKey<T> {
     let identifier: String
@@ -48,9 +49,68 @@ public class DocumentationContext {
         case unknownBundle(BundleIdentifier)
     }
 
-    public func contents(for reference: TopicReference) async throws -> Data {
+
+    public enum ReferenceResolverError: DescribedError {
+        case unknownBundle(BundleIdentifier)
+
+        public var errorDescription: String {
+            let msg = switch self {
+            case .unknownBundle(let bundleIdentifier): "Unknown Bundle '\(bundleIdentifier)'"
+            }
+
+            return "failed to resolve reference :" + msg
+        }
+    }
+
+    /// Fetches the parents of the documentation node with the given `reference`.
+    ///
+    /// - Parameter reference: The reference of the node to fetch parents for.
+    /// - Returns: A list of the reference for the given node's parent nodes.
+//    public func parents(of reference: TopicReference) -> [TopicReference] {
+//        return topicGraph.reverseEdges[reference] ?? []
+//    }
+
+//    /// Returns the document URL for the given article or tutorial reference.
+//    ///
+//    /// - Parameter reference: The identifier for the topic whose file URL to locate.
+//    /// - Returns: If the reference is a reference to a known Markdown document, this function returns the article's URL, otherwise `nil`.
+//    public func documentURL(for reference: TopicReference) -> URL? {
+//        if let node = topicGraph.nodes[reference], case .file(let url) = node.source {
+//            return url
+//        }
+//        return nil
+//    }
+//
+//    /// Returns the URL of the documentation extension of the given reference.
+//    ///
+//    /// - Parameter reference: The reference to the symbol this function should return the documentation extension URL for.
+//    /// - Returns: The document URL of the given symbol reference. If the given reference is not a symbol reference, returns `nil`.
+//    public func documentationExtensionURL(for reference: ResolvedTopicReference) -> URL? {
+//        guard (try? entity(with: reference))?.kind.isSymbol == true else {
+//            return nil
+//        }
+//        return documentLocationMap[reference]
+//    }
+//
+//    /// Attempt to locate the reference for a given file.
+//    ///
+//    /// - Parameter url: The file whose reference to locate.
+//    /// - Returns: The reference for the file if it could be found, otherwise `nil`.
+//    public func referenceForFileURL(_ url: URL) -> ResolvedTopicReference? {
+//        return documentLocationMap[url]
+//    }
+//
+//
+    public func document(for reference: TopicReference) async throws -> DocCArchive.Document {
+        print("DOCUMENT")
         let bundle = try bundle(for: reference.bundleIdentifier)
-        return try await dataProvider.contentsOfURL(reference.url, in: bundle)
+        var url = bundle.baseURL
+        url.append(component: "data")
+        url.append(path: reference.path.trimmingPrefix("/"))
+        url.appendPathExtension("json")
+        let data = try await dataProvider.contentsOfURL(url, in: bundle)
+        let document = try JSONDecoder().decode(Document.self, from: data)
+        return document
     }
 
     public func bundle(for identifier: BundleIdentifier) throws(ContextError) -> DocumentationBundle {

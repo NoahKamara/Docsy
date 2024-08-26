@@ -129,14 +129,3 @@ fileprivate struct SourceLanguageKey: CodingKey {
 }
 
 
-struct AnyCodingKey: CodingKey {
-    public let stringValue: String
-    public var intValue: Int? { nil }
-    public init?(intValue: Int) {
-        return nil
-    }
-
-    public init(stringValue: String) {
-        self.stringValue = stringValue
-    }
-}

@@ -1,6 +1,6 @@
 
 import Foundation
-
+import DocsySchema
 
 public typealias BundleIdentifier = String
 
@@ -24,6 +24,7 @@ public struct DocumentationBundle: CustomStringConvertible, Sendable {
     public var identifier: BundleIdentifier {
         metadata.identifier
     }
+
 //    /// The documentation bundle's version.
 //    ///
 //    /// > It's not safe to make computations based on assumptions about the format of bundle's version. The version can be in any format.
@@ -92,21 +93,37 @@ public struct DocumentationBundle: CustomStringConvertible, Sendable {
 //        self.customHeader = customHeader
 //        self.customFooter = customFooter
 //        self.themeSettings = themeSettings
+
+        let documentationRootReference = TopicReference(
+            bundleIdentifier: info.identifier,
+            path: "/documentation",
+            sourceLanguage: .swift
+        )
+        let tutorialsRootReference = TopicReference(
+            bundleIdentifier: info.identifier,
+            path: "/tutorials",
+            sourceLanguage: .swift
+        )
+        self.rootReference = TopicReference(bundleIdentifier: info.identifier, path: "/", sourceLanguage: .swift)
+        self.documentationRootReference = documentationRootReference
+        self.tutorialsRootReference = tutorialsRootReference
+        self.technologyTutorialsRootReference = tutorialsRootReference.appendingPath(urlReadablePath(info.displayName))
+        self.articlesDocumentationRootReference = documentationRootReference.appendingPath(urlReadablePath(info.displayName))
     }
 
-//    public private(set) var rootReference: ResolvedTopicReference
+    public let rootReference: TopicReference
 
-//    /// Default path to resolve symbol links.
-//    public private(set) var documentationRootReference: ResolvedTopicReference
-//
-//    /// Default path to resolve technology links.
-//    public var tutorialsRootReference: ResolvedTopicReference
-//
-//    /// Default path to resolve tutorials.
-//    public var technologyTutorialsRootReference: ResolvedTopicReference
-//
-//    /// Default path to resolve articles.
-//    public var articlesDocumentationRootReference: ResolvedTopicReference
+    /// Default path to resolve symbol links.
+    public let documentationRootReference: TopicReference
+
+    /// Default path to resolve technology links.
+    public let tutorialsRootReference: TopicReference
+
+    /// Default path to resolve tutorials.
+    public let technologyTutorialsRootReference: TopicReference
+
+    /// Default path to resolve articles.
+    public let articlesDocumentationRootReference: TopicReference
 }
 
 //public func stylesheetURLs() -> [ URL ] {
@@ -124,3 +141,13 @@ public struct DocumentationBundle: CustomStringConvertible, Sendable {
 //public func userDownloadURLs() -> [ URL ] {
 //    return fm.contentsOfDirectory(at: url.appendingPathComponent("downloads"))
 //}
+
+public enum DoccArchivePath {
+    public static let tutorialsFolderName = "tutorials"
+    public static let documentationFolderName = "documentation"
+    public static let dataFolderName = "data"
+    public static let indexFolderName = "index"
+
+    public static let tutorialsFolder = "/\(tutorialsFolderName)"
+    public static let documentationFolder = "/\(documentationFolderName)"
+}

@@ -9,16 +9,21 @@ let package = Package(
     products: [
         .library(
             name: "Docsy",
-            targets: ["Docsy"]),
+            targets: ["Docsy"]
+        ),
+        .library(
+            name: "DocsySchema",
+            targets: ["DocsySchema"]
+        ),
     ],
-    dependencies: [
-        .package(url: "https://github.com/DoccZz/DocCArchive.git", from: "0.4.1")
-    ],
+    dependencies: [],
     targets: [
         .target(
             name: "Docsy",
-            dependencies: ["DocCArchive"]
+            dependencies: ["DocsySchema"]
         ),
+        .target(name: "DocsySchema", dependencies: ["DocsyCore"]),
+        .target(name: "DocsyCore"),
         .testTarget(
             name: "Tests",
             dependencies: ["Docsy"]
