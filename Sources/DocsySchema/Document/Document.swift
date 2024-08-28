@@ -33,7 +33,7 @@ public struct Document: Decodable {
     public let abstract: [InlineContent]?
 
 //    /// The default value of the main sections of a reference documentation node.
-//    public let primaryContentSections: [Document.Section]
+    public let primaryContentSections: [AnyContentSection]
 //
 //    /// The variants of the primary content sections of the node, which are the main sections of a reference documentation node.
 //    public let primaryContentSectionsVariants: [VariantCollection<CodableContentSection?>] = []
@@ -42,19 +42,19 @@ public struct Document: Decodable {
 //    public let topicSectionsStyle: TopicsSectionStyle
 //
 //    /// The default Topics sections of this documentation node, which contain links to useful related documentation nodes.
-//    public let topicSections: [TaskGroupRenderSection]
+//    public let topicSections: [TaskGroupSection]
 //
 //    /// The default Relationships sections of a reference documentation node, which describes how this symbol is related to others.
-//    public let relationshipSections: [RelationshipsRenderSection]
+//    public let relationshipSections: [RelationshipsSection]
 //
 //    /// The default Default Implementations sections of symbol node, which list APIs that provide a default implementation of the symbol.
-//    public let defaultImplementationsSections: [TaskGroupRenderSection]
+//    public let defaultImplementationsSections: [TaskGroupSection]
 //
 //    /// The See Also sections of a node, which list documentation resources related to this documentation node.
-//    public let seeAlsoSections: [TaskGroupRenderSection]
+//    public let seeAlsoSections: [TaskGroupSection]
 //
 //    /// A description of why this symbol is deprecated.
-//    public let deprecationSummary: [RenderBlockContent]?
+//    public let deprecationSummary: [BlockContent]?
 //
 //    /// List of variants of the same documentation node for various languages.
 //    public let variants: [RenderNode.Variant]?
@@ -77,17 +77,17 @@ public struct Document: Decodable {
 //    public let sampleDownload: SampleDownloadSection?
 //
 //    /// Download not available information.
-//    public let downloadNotAvailableSummary: [RenderBlockContent]?
+//    public let downloadNotAvailableSummary: [BlockContent]?
 //
 //    // MARK: Tutorials nodes
 //
 //    /// The sections of this node.
 //    ///
 //    /// For tutorial pages, this property is the top-level grouping for the page's contents.
-//    public let sections: [RenderSection] = []
+//    public let sections: [Section] = []
 
     /// The kind of content represented by this node.
-    public enum Kind: String, Codable {
+    public enum Kind: String, Codable, Sendable {
         case symbol
         case article
         case tutorial = "project"

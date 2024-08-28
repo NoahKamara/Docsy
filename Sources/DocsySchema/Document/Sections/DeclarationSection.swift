@@ -29,14 +29,14 @@ public struct DeclarationSection: Decodable, Equatable {
     ///
     /// A lexical token is a string with an associated meaning in source code.
     /// For example, `123` is represented as a single token of kind "number".
-    public struct Token: Codable, Hashable, Equatable {
+    public struct Token: Codable, Hashable, Equatable, Sendable {
         /// The token text content.
         public var text: String
         /// The token programming kind.
         public let kind: Kind
 
         /// The list of all expected tokens in a declaration.
-        public enum Kind: String, Codable, RawRepresentable {
+        public enum Kind: String, Codable, RawRepresentable, Sendable {
             /// A known keyword, like "class" or "var".
             case keyword
             /// An attribute, for example, "@main".
@@ -73,7 +73,7 @@ public struct DeclarationSection: Decodable, Equatable {
         public var highlight: Highlight?
 
         /// The kinds of highlights that can be applied to a token.
-        public enum Highlight: String, Codable, RawRepresentable {
+        public enum Highlight: String, Codable, RawRepresentable, Sendable {
             /// A highlight representing generalized change, not specifically added or removed.
             case changed
         }

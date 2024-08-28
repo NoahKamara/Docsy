@@ -17,27 +17,27 @@ public struct FileReference: ReferenceProtocol, Equatable {
     /// The type of this file reference.
     ///
     /// This value is always `.file`.
-    public var type: ReferenceType = .file
-    
+    public let type: ReferenceType = .file
+
     /// The identifier of this reference.
-    public var identifier: ReferenceIdentifier
-    
+    public let identifier: ReferenceIdentifier
+
     /// The name of the file.
-    public var fileName: String
-    
+    public let fileName: String
+
     /// The type of the file, typically represented by its file extension.
-    public var fileType: String
-    
+    public let fileType: String
+
     /// The syntax for the content in the file, for example "swift".
     ///
     /// You can use this value to identify the syntax of the content. This would allow, for example, a renderer to perform syntax highlighting of the file's content.
-    public var syntax: String
-    
+    public let syntax: String
+
     /// The line-by-line contents of the file.
-    public var content: [String]
-    
+    public let content: [String]
+
     /// The line highlights for this file.
-    public var highlights: [LineHighlight] = []
+    public private(set) var highlights: [LineHighlight] = []
 
     enum CodingKeys: CodingKey {
         case type
@@ -49,9 +49,16 @@ public struct FileReference: ReferenceProtocol, Equatable {
         case highlights
     }
 
+    init(identifier: ReferenceIdentifier, fileName: String, fileType: String, syntax: String, content: [String], highlights: [LineHighlight]) {
+        self.identifier = identifier
+        self.fileName = fileName
+        self.fileType = fileType
+        self.syntax = syntax
+        self.content = content
+        self.highlights = highlights
+    }
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        type = try values.decode(ReferenceType.self, forKey: .type)
         identifier = try values.decode(ReferenceIdentifier.self, forKey: .identifier)
         fileName = try values.decode(String.self, forKey: .fileName)
         fileType = try values.decode(String.self, forKey: .fileType)
@@ -61,7 +68,7 @@ public struct FileReference: ReferenceProtocol, Equatable {
     }
 }
 
-public struct LineHighlight: Codable, Equatable {
+public struct LineHighlight: Codable, Equatable, Sendable {
     /// The line to highlight.
     public let line: Int
 

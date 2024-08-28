@@ -4,6 +4,10 @@ public struct ReferenceIdentifier: Codable, Hashable, Equatable, Sendable {
     /// The wrapped string identifier.
     public let identifier: String
 
+    public init(_ identifier: String) {
+        self.identifier = identifier
+    }
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         identifier = try container.decode(String.self)

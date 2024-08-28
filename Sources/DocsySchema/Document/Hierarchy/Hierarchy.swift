@@ -48,6 +48,10 @@ public extension Document {
         ///
         /// Landing pages' hierarchy contains a single, empty path.
         public let paths: [[String]]
+
+        public init(paths: [[String]]) {
+            self.paths = paths
+        }
     }
 
     // MARK: TutorialsHierarchy

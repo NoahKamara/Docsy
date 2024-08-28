@@ -15,21 +15,29 @@ public struct VideoReference: MediaReference, URLReference, Equatable {
     /// The type of this video reference.
     ///
     /// This value is always `.video`.
-    public var type: ReferenceType = .video
-    
+    public let type: ReferenceType = .video
+
     /// The identifier of this reference.
-    public var identifier: ReferenceIdentifier
-    
+    public let identifier: ReferenceIdentifier
+
     /// Alternate text for the video.
     ///
     /// This text helps screen readers describe the video.
-    public var altText: String?
-    
+    public let altText: String?
+
     /// The data associated with this asset, including its variants.
-    public var asset: DataAsset
-    
+    public let asset: DataAsset
+
     /// The reference to a poster image for this video.
-    public var poster: ReferenceIdentifier?
+    public let poster: ReferenceIdentifier?
+
+    init(identifier: ReferenceIdentifier, altText: String? = nil, asset: DataAsset, poster: ReferenceIdentifier? = nil) {
+        self.identifier = identifier
+        self.altText = altText
+        self.asset = asset
+        self.poster = poster
+    }
+
 
     enum CodingKeys: String, CodingKey {
         case type
@@ -41,17 +49,17 @@ public struct VideoReference: MediaReference, URLReference, Equatable {
     
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        type = try values.decode(ReferenceType.self, forKey: .type)
         identifier = try values.decode(ReferenceIdentifier.self, forKey: .identifier)
         altText = try values.decodeIfPresent(String.self, forKey: .alt)
         
         // rebuild the data asset
-        asset = DataAsset()
+        var asset = DataAsset()
         let variants = try values.decode([VariantProxy].self, forKey: .variants)
         variants.forEach { (variant) in
             asset.register(variant.url, with: DataTraitCollection(from: variant.traits))
         }
-        
+        self.asset = asset
+
         poster = try values.decodeIfPresent(ReferenceIdentifier.self, forKey: .poster)
     }
     

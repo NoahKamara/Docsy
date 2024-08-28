@@ -1,0 +1,31 @@
+{
+  "configurations" : [
+    {
+      "id" : "291918AE-F983-4901-B7BD-7AC4F6B664A0",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "skippedTests" : {
+        "suites" : [
+          {
+            "name" : "ProviderRegistrationTest"
+          }
+        ]
+      },
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "Tests",
+        "name" : "Tests"
+      }
+    }
+  ],
+  "version" : 2
+}

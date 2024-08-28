@@ -4,7 +4,7 @@
 /// The section contains a list of generic constraints that describe the conditions
 /// when a symbol is available or conforms to a protocol. For example:
 /// "Available when `Element` conforms to `Equatable` and `S` conforms to `StringLiteral`."
-public struct ConformanceSection: Decodable, Equatable {
+public struct ConformanceSection: Decodable, Equatable, Sendable {
     /// A prefix with which to prepend availability constraints.
     var availabilityPrefix: [InlineContent] = [.text("Available when")]
 

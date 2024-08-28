@@ -5,7 +5,7 @@ import Foundation
 ///
 /// The reference can refer to a resource within a documentation bundle (e.g., another symbol) or an external resource (e.g., a web URL).
 /// Check the conforming types to browse the different kinds of references.
-public protocol ReferenceProtocol: Decodable {
+public protocol ReferenceProtocol: Decodable, Sendable, Equatable {
     /// The type of the reference.
     var type: ReferenceType { get }
 
@@ -18,7 +18,7 @@ public protocol ReferenceProtocol: Decodable {
 
 
 /// The type of a reference.
-public enum ReferenceType: String, Codable, Equatable {
+public enum ReferenceType: String, Codable, Equatable, Sendable {
     case image, video, file, fileType, xcodeRequirement, topic, section, download, link, externalLocation
     case unresolvable
 }
@@ -27,7 +27,7 @@ public enum ReferenceType: String, Codable, Equatable {
 ///
 /// The reference can refer to a resource within a documentation bundle (e.g., another symbol) or an external resource (e.g., a web URL).
 /// Check the conforming types to browse the different kinds of references.
-public enum Reference: Decodable {
+public enum Reference: Decodable, Sendable, Equatable {
     case image(ImageReference)
     case video(VideoReference)
     case file(FileReference)
@@ -35,7 +35,7 @@ public enum Reference: Decodable {
 //    case xcodeRequirement
     case topic(TopicRenderReference)
 //    case section(SectionRefere)
-//    case download(DownloadRefer)
+    case download(DownloadReference)
     case link(LinkReference)
 //    case externalLocation
 //    case unresolvable
@@ -59,7 +59,7 @@ public enum Reference: Decodable {
         case .link:     self = try .link(.init(from: decoder))
 //        case .xcodeRequirement:
 //        case .section:
-//        case .download:
+        case .download: self = try .download(.init(from: decoder))
 //        case .externalLocation:
 //        case .unresolvable:
         default:
@@ -104,7 +104,7 @@ extension Reference: ReferenceProtocol {
 //        case .xcodeRequirement(let ref): ref
         case .topic(let ref): ref
 //        case .section(let ref): ref
-//        case .download(let ref): ref
+        case .download(let ref): ref
         case .link(let ref): ref
 //        case .externalLocation(let ref): ref
 //        case .unresolvable(let ref): ref

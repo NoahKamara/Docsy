@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "A206ABC1-5460-4409-A058-06F198E6D493",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "SchemaTests",
+        "name" : "SchemaTests"
+      }
+    }
+  ],
+  "version" : 2
+}

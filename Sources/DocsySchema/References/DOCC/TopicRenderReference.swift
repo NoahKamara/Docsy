@@ -74,7 +74,7 @@ public struct TopicRenderReference: ReferenceProtocol, Equatable {
     public var propertyListKeyNames: PropertyListKeyNames?
 
     /// The display name and raw key name for a property list key or entitlement key and configuration about which "name" to use for links to this page.
-    public struct PropertyListKeyNames: Equatable {
+    public struct PropertyListKeyNames: Equatable, Sendable {
         /// A style for how to render links to a property list key or an entitlement key.
         public var titleStyle: PropertyListTitleStyle?
         /// The raw key name of a property list key or entitlement key, for example "com.apple.enableDataAccess".
@@ -153,16 +153,3 @@ public struct TopicRenderReference: ReferenceProtocol, Equatable {
 }
 
 
-/// A style for how to render links to a property list key or an entitlement key.
-public enum PropertyListTitleStyle: String, Codable, Equatable {
-    /// Render links to the property list key using the raw key, for example "com.apple.enableDataAccess".
-    ///
-    /// ## See Also
-    /// - ``TopicRenderReference/PropertyListKeyNames/rawKey``
-    case useRawKey = "symbol"
-    /// Render links to the property list key using the display name, for example "Enables Data Access".
-    ///
-    /// ## See Also
-    /// - ``TopicRenderReference/PropertyListKeyNames/displayName``
-    case useDisplayName = "title"
-}

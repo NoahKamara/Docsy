@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct AnyCodingKey: CodingKey {
+public struct AnyCodingKey: CodingKey {
     public let stringValue: String
     public var intValue: Int? { nil }
     public init?(intValue: Int) {

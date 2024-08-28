@@ -101,15 +101,22 @@ public class DocumentationContext {
 //
 //
     public func document(for reference: TopicReference) async throws -> Document {
-        print("DOCUMENT")
-        let bundle = try bundle(for: reference.bundleIdentifier)
-        var url = bundle.baseURL
-        url.append(component: "data")
-        url.append(path: reference.path.trimmingPrefix("/"))
-        url.appendPathExtension("json")
-        let data = try await dataProvider.contentsOfURL(url, in: bundle)
-        let document = try JSONDecoder().decode(Document.self, from: data)
-        return document
+        do {
+            print("DOCUMENT")
+            let bundle = try bundle(for: reference.bundleIdentifier)
+            var url = bundle.baseURL
+            url.append(component: "data")
+            url.append(path: reference.path.trimmingPrefix("/"))
+            url.appendPathExtension("json")
+            let data = try await dataProvider.contentsOfURL(url, in: bundle)
+            let document = try JSONDecoder().decode(Document.self, from: data)
+            return document
+        } catch let error as DescribedError {
+            print("document(for:) failed: "+error.errorDescription)
+            throw error
+        } catch {
+            throw error
+        }
     }
 
     public func bundle(for identifier: BundleIdentifier) throws(ContextError) -> DocumentationBundle {

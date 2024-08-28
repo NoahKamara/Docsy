@@ -15,6 +15,10 @@ let package = Package(
             name: "DocsySchema",
             targets: ["DocsySchema"]
         ),
+        .library(
+            name: "TestResources",
+            targets: ["TestResources"]
+        ),
     ],
     dependencies: [],
     targets: [
@@ -24,9 +28,23 @@ let package = Package(
         ),
         .target(name: "DocsySchema", dependencies: ["DocsyCore"]),
         .target(name: "DocsyCore"),
-        .testTarget(
-            name: "Tests",
-            dependencies: ["Docsy"]
-        )
+        .target(
+            name: "TestResources",
+            path: "Tests/TestResources",
+            resources: [
+                .copy("Resources/.")
+            ]
+        ),
+//        .testTarget(
+//            name: "Tests",
+//            dependencies: ["Docsy", "TestResources"],
+//            resources: [
+//                .copy("Resources/")
+//            ]
+//        )
+            .testTarget(
+                name: "SchemaTests",
+                dependencies: ["DocsySchema", "TestResources"]
+            )
     ]
 )

@@ -148,9 +148,9 @@ import Foundation
 /// ### Asset Traits
 /// - ``DisplayScale``
 /// - ``UserInterfaceStyle``
-public struct DataAsset: Decodable, Equatable {
+public struct DataAsset: Decodable, Equatable, Sendable {
     /// A context in which you intend clients to use a data asset.
-    public enum Context: String, CaseIterable, Codable {
+    public enum Context: String, CaseIterable, Codable, Sendable {
         /// An asset that a user intends to view alongside documentation content.
         case display
         /// An asset that a user intends to download.
@@ -232,7 +232,7 @@ public struct BundleData {
 
 extension DataAsset {
     /// Metadata specific to this data asset.
-    public struct Metadata: Codable, Equatable {
+    public struct Metadata: Codable, Equatable, Sendable {
         /// The first ID found in the SVG asset.
         ///
         /// This value is nil if the data asset is not an SVG or if it is an SVG that does not contain an ID.

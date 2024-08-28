@@ -1,7 +1,7 @@
 /// A custom authored image that can be associated with a documentation topic.
 ///
 /// Allows an author to provide a custom icon or card image for a given documentation page.
-public struct TopicImage: Codable, Hashable {
+public struct TopicImage: Codable, Hashable, Sendable {
     /// The type of this topic image.
     public let type: TopicImageType
 
@@ -20,7 +20,7 @@ public struct TopicImage: Codable, Hashable {
 
 extension TopicImage {
     /// The type of topic image.
-    public enum TopicImageType: String, Codable, Hashable {
+    public enum TopicImageType: String, Codable, Hashable, Sendable {
         /// An icon image that should be used to represent this page wherever a default icon
         /// is currently used.
         case icon
