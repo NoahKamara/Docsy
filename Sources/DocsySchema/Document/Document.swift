@@ -19,7 +19,7 @@ public struct Document: Decodable {
     /// The references used in the document. These can be references to other nodes, media, and more.
     ///
     /// The key for each reference is the ``ReferenceIdentifier/identifier`` of the reference's ``RenderReference/identifier``.
-    public let references: [String: Reference]
+    public let references: [ReferenceIdentifier: Reference]
 
     /// Hierarchy information about the context in which this documentation node is placed.
     public let hierarchy: Hierarchy?
@@ -86,6 +86,49 @@ public struct Document: Decodable {
 //    /// For tutorial pages, this property is the top-level grouping for the page's contents.
 //    public let sections: [Section] = []
 
+    enum CodingKeys: CodingKey {
+        case schemaVersion
+        case identifier
+        case kind
+        case references
+        case hierarchy
+        case metadata
+        case abstract
+        case primaryContentSections
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.schemaVersion = try container.decode(SemanticVersion.self, forKey: .schemaVersion)
+        self.identifier = try container.decode(TopicReference.self, forKey: .identifier)
+        self.kind = try container.decode(Document.Kind.self, forKey: .kind)
+        self.references = try container.decodeDictionary(of: [ReferenceIdentifier: Reference].self, forKey: .references)
+        self.hierarchy = try container.decodeIfPresent(Document.Hierarchy.self, forKey: .hierarchy)
+        self.metadata = try container.decode(Document.Metadata.self, forKey: .metadata)
+        self.abstract = try container.decodeIfPresent([InlineContent].self, forKey: .abstract)
+        self.primaryContentSections = try container.decode([AnyContentSection].self, forKey: .primaryContentSections)
+    }
+
+    public init(
+        schemaVersion: SemanticVersion,
+        identifier: TopicReference,
+        kind: Kind,
+        references: [ReferenceIdentifier : Reference],
+        hierarchy: Hierarchy?,
+        metadata: Metadata,
+        abstract: [InlineContent]?,
+        primaryContentSections: [AnyContentSection]
+    ) {
+        self.schemaVersion = schemaVersion
+        self.identifier = identifier
+        self.kind = kind
+        self.references = references
+        self.hierarchy = hierarchy
+        self.metadata = metadata
+        self.abstract = abstract
+        self.primaryContentSections = primaryContentSections
+    }
+
     /// The kind of content represented by this node.
     public enum Kind: String, Codable, Sendable {
         case symbol
@@ -112,6 +155,15 @@ public struct Document: Decodable {
                 throw DecodingError.dataCorruptedError(
                     in: container, debugDescription: "Unknown RenderNode.Kind: '\(unknown)'.")
             }
+        }
+    }
+}
+
+extension KeyedDecodingContainer {
+    func decodeDictionary<Value: Decodable, DictKey: CodingKeyRepresentable>(of _: [DictKey:Value].Type, forKey key: Key) throws -> [DictKey: Value] {
+        let container = try self.nestedContainer(keyedBy: AnyCodingKey.self, forKey: key)
+        return try container.allKeys.reduce(into: [DictKey:Value]()) { partialResult, key in
+            partialResult[DictKey(from: key)] = try container.decode(Value.self, forKey: key)
         }
     }
 }

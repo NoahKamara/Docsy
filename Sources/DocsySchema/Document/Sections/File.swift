@@ -6,4 +6,9 @@ public struct ContentSection: SectionProtocol, Equatable {
 
     /// Arbitrary content for this section.
     public var content: [BlockContent]
+
+    public init(kind: SectionKind, content: [BlockContent]) {
+        self.kind = kind
+        self.content = content
+    }
 }

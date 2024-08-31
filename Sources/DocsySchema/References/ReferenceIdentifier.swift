@@ -22,3 +22,27 @@ public struct ReferenceIdentifier: Codable, Hashable, Equatable, Sendable {
         case identifier
     }
 }
+
+extension ReferenceIdentifier: CodingKeyRepresentable {
+    var codingKey: any CodingKey { AnyCodingKey(stringValue: identifier) }
+    init(from codingKey: any CodingKey) {
+        self.init(codingKey.stringValue)
+    }
+}
+
+protocol CodingKeyRepresentable {
+    var codingKey: CodingKey { get }
+    init(from codingKey: CodingKey)
+}
+
+public struct WrappedCodingKey<T>: CodingKey {
+    public let stringValue: String
+    public var intValue: Int? { nil }
+    public init?(intValue: Int) {
+        return nil
+    }
+
+    public init(stringValue: String) {
+        self.stringValue = stringValue
+    }
+}

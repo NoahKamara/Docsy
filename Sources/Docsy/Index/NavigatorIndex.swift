@@ -11,6 +11,8 @@ import OSLog
 
 @Observable
 public class NavigatorIndex {
+
+
     static let logger = Logger.docsy("Index")
 
     public let identifier: BundleIdentifier
@@ -51,16 +53,9 @@ public class NavigatorIndex {
         let context = context
         let identifier = identifier
 
+        let index = try await Task {
         do {
-            let index = try await Task {
-                try await context.index(for: identifier)
-            }.value
-
-            let bundle = try context.bundle(for: identifier)
-
-            withMutation(keyPath: \.root) {
-                root.append(nodesOf: index, in: bundle)
-            }
+            return try await context.index(for: identifier)
         } catch let error as any DescribedError {
             Self.logger.error("failed to bootstrap index for '\(self.identifier)': \(error.errorDescription)")
             throw error
@@ -68,9 +63,17 @@ public class NavigatorIndex {
             Self.logger.error("failed to bootstrap index for '\(self.identifier)': \(error)")
             throw error
         }
+    }.value
+
+        // Load Index
+
+        let bundle = try context.bundle(for: identifier)
+
+        withMutation(keyPath: \.root) {
+            root.append(nodesOf: index, in: bundle)
+        }
     }
 }
-
 
 
 
@@ -112,6 +115,22 @@ extension NavigatorIndex {
             let newLanguage = LanguageMapping.init(uniqueKeysWithValues: children)
             self.languages = newLanguage
         }
+
+        public func tree(for language: SourceLanguage = .swift) -> String {
+            let elements = self[.swift]
+            
+            let line = "\(self.bundleIdentifier) \(language.name)"
+
+            let lastIndex = elements.endIndex - 1
+
+            return elements
+                .enumerated()
+                .map({ ($0.offset < lastIndex, $0.element) })
+                .flatMap({ isLast, node in
+                    node.treeLines(prefix: "│   ", isLast: isLast)
+                })
+                .joined(separator: "\n")
+        }
     }
 
     public final class Node: Identifiable, Sendable {
@@ -146,7 +165,7 @@ extension NavigatorIndex {
                 )
             } else {
                 if node.children?.isEmpty == false {
-                    fatalError("Node without reference may not have children")
+                    print("WARNING: Node without reference may not have children")
                 }
                 self.init(
                     title: node.title,
@@ -169,6 +188,31 @@ extension NavigatorIndex {
 //                )
 //            }
 //        }
+
+
+        public func tree() -> String {
+            return treeLines().joined(separator: "\n")
+        }
+
+        func treeLines(prefix: String = "", isLast: Bool = true) -> [String] {
+            var line = prefix
+
+            if prefix != "" {
+                line += isLast ? "╰─" : "├─"
+            }
+
+            line += "[\(self.type.rawValue)] \(self.title)"
+
+            return if let children {
+                children.enumerated().reduce(into: [line]) { (result, element) in
+                    let (index, child) = element
+                    let newPrefix = prefix + (isLast ? "    " : "│   ")
+                    result += child.treeLines(prefix: newPrefix, isLast: index == children.count - 1)
+                }
+            } else {
+                [line]
+            }
+        }
     }
 }
 

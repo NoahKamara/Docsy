@@ -3,28 +3,34 @@ import Foundation
 public typealias InlineContents = [InlineContent]
 
 public enum InlineContent: Equatable, Hashable, Sendable {
+    // MARK: Plain
+    /// A piece of plain text.
+    case text(String)
+
+    // MARK: Text Style
     /// A piece of code like a variable name or a single operator.
     case codeVoice(code: String)
     /// An emphasized piece of inline content.
     case emphasis(inlineContent: [InlineContent])
     /// A strongly emphasized piece of inline content.
     case strong(inlineContent: [InlineContent])
-    /// An image element.
-    case image(identifier: ReferenceIdentifier, metadata: ContentMetadata?)
-    /// A reference to another resource.
-    case reference(identifier: ReferenceIdentifier, isActive: Bool, overridingTitle: String?, overridingTitleInlineContent: [InlineContent]?)
-    /// A piece of plain text.
-    case text(String)
-    /// A piece of content that introduces a new term.
-    case newTerm(inlineContent: [InlineContent])
-    /// An inline heading.
-    case inlineHead(inlineContent: [InlineContent])
+    /// A strikethrough piece of content.
+    case strikethrough(inlineContent: [InlineContent])
     /// A subscript piece of content.
     case `subscript`(inlineContent: [InlineContent])
     /// A superscript piece of content.
     case superscript(inlineContent: [InlineContent])
-    /// A strikethrough piece of content.
-    case strikethrough(inlineContent: [InlineContent])
+
+    // MARK: Embeddings & References
+    /// An image element.
+    case image(identifier: ReferenceIdentifier, metadata: ContentMetadata?)
+    /// A reference to another resource.
+    case reference(identifier: ReferenceIdentifier, isActive: Bool, overridingTitle: String?, overridingTitleInlineContent: [InlineContent]?)
+
+    /// A piece of content that introduces a new term.
+    case newTerm(inlineContent: [InlineContent])
+    /// An inline heading.
+    case inlineHead(inlineContent: [InlineContent])
 }
 
 

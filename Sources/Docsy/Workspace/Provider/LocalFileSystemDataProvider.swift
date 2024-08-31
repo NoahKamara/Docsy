@@ -9,8 +9,9 @@ public struct LocalFileSystemDataProvider: DataProvider {
     /// Creates a new provider that recursively traverses the content of the given root URL to discover documentation bundles.
     /// - Parameter rootURL: The location that this provider searches for documentation bundles in.
     public init(rootURL: URL, fileManager: FileManager = .default) throws {
+        let rootURL = rootURL.absoluteURL
         guard fileManager.directoryExists(atPath: rootURL.path()) else {
-            fatalError("requires directory")
+            fatalError("requires directory: \(rootURL)")
         }
 
         self.rootURL = rootURL
