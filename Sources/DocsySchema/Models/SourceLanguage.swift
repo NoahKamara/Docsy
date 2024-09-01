@@ -23,24 +23,6 @@ public struct SourceLanguage: Hashable, Codable, Comparable, Sendable {
         self.linkDisambiguationID = linkDisambiguationID ?? id
     }
 
-    /// Finds the programming language that matches a given identifier, or creates a new one if it finds no existing language.
-    /// - Parameter id: The identifier of the programming language.
-    public init(id: String) {
-        switch id {
-        case "swift": self = .swift
-        case "occ", "objc", "objective-c", "c": self = .objectiveC
-            // FIXME: DocC should display C++ and Objective-C++ as their own languages (https://github.com/swiftlang/swift-docc/issues/767)
-        case "occ++", "objc++", "objective-c++", "c++": self = .objectiveC
-        case "javascript": self = .javaScript
-        case "data": self = .data
-        case "metal": self = .metal
-        default:
-            self.name = id
-            self.id = id
-            self.linkDisambiguationID = id
-        }
-    }
-
     /// Finds the programming language that matches a given display name, or creates a new one if it finds no existing language.
     ///
     /// - Parameter name: The display name of the programming language.
@@ -94,36 +76,6 @@ public struct SourceLanguage: Hashable, Codable, Comparable, Sendable {
         }
     }
 
-    /// The Swift programming language.
-    public static let swift = SourceLanguage(name: "Swift", id: "swift")
-
-    /// The Objective-C programming language.
-    public static let objectiveC = SourceLanguage(
-        name: "Objective-C",
-        id: "occ",
-        idAliases: [
-            "objective-c",
-            "objc",
-            "c", // FIXME: DocC should display C as its own language (github.com/swiftlang/swift-docc/issues/169).
-            "c++", // FIXME: DocC should display C++ and Objective-C++ as their own languages (https://github.com/swiftlang/swift-docc/issues/767)
-            "objective-c++",
-            "objc++",
-            "occ++",
-        ],
-        linkDisambiguationID: "c"
-    )
-
-    /// The JavaScript programming language or another language that conforms to the ECMAScript specification.
-    public static let javaScript = SourceLanguage(name: "JavaScript", id: "javascript")
-    /// Miscellaneous data, that's not a programming language.
-    ///
-    /// For example, use this to represent JSON or XML content.
-    public static let data = SourceLanguage(name: "Data", id: "data")
-    /// The Metal programming language.
-    public static let metal = SourceLanguage(name: "Metal", id: "metal")
-
-    /// The list of programming languages that are known to DocC.
-    public static let knownLanguages: [SourceLanguage] = [.swift, .objectiveC, .javaScript, .data, .metal]
 
     enum CodingKeys: CodingKey {
         case name
@@ -163,3 +115,114 @@ public struct SourceLanguage: Hashable, Codable, Comparable, Sendable {
         return lhs.id < rhs.id
     }
 }
+
+
+
+// MARK: Known Languages
+public extension SourceLanguage {
+    /// The list of programming languages that are known to DocC.
+    static let knownLanguages: [SourceLanguage] = [
+        .bash,
+        .c,
+        .cpp,
+        .css,
+        .scss,
+        .diff,
+        .http,
+        .java,
+        .javascript,
+        .json,
+        .llvm,
+        .markdown,
+        .objective,
+        .perl,
+        .php,
+        .python,
+        .ruby,
+        .shell,
+        .swift,
+        .xml,
+        .metal,
+    ]
+
+
+    /// Finds the programming language that matches a given identifier, or creates a new one if it finds no existing language.
+    /// - Parameter id: The identifier of the programming language.
+    init(id: String) {
+        switch id {
+        case "bash", "sh", "zsh": self = .bash
+        case "c", "h": self = .c
+        case "cpp", "cc", "c++", "h++", "hpp", "hh", "hxx", "cxx": self = .cpp
+        case "css": self = .css
+        case "scss": self = .scss
+        case "diff", "patch": self = .diff
+        case "http", "https": self = .http
+        case "java", "jsp": self = .java
+        case "javascript", "js", "jsx", "mjs", "cjs": self = .javascript
+        case "json": self = .json
+        case "llvm": self = .llvm
+        case "markdown", "md", "mkdown", "mkd": self = .markdown
+        case "objective-c", "mm", "objc", "obj-c", "objectivec": self = .objective
+        case "perl", "pl", "pm": self = .perl
+        case "php": self = .php
+        case "python", "py", "gyp", "ipython": self = .python
+        case "ruby", "rb", "gemspec", "podspec", "thor", "irb": self = .ruby
+        case "shell", "console", "shellsession": self = .shell
+        case "swift": self = .swift
+        case "xml", "html", "xhtml", "rss", "atom", "xjb", "xsd", "xsl", "plist", "wsf", "svg": self = .xml
+        case "metal": self = .metal
+        case "html, xhtml, rss, atom, xjb, xsd, xsl, plist, wsf, svg": self = .xml
+        default:
+            self.name = id
+            self.id = id
+            self.linkDisambiguationID = id
+        }
+    }
+
+
+    /// The Bash shell scripting language.
+    static let bash = SourceLanguage(name: "Bash", id: "bash", idAliases: ["sh", "zsh"])
+    /// The C programming language.
+    static let c = SourceLanguage(name: "C", id: "C", idAliases: ["h"])
+    /// The C++ programming language.
+    static let cpp = SourceLanguage(name: "C++", id: "C++", idAliases: ["cc", "c++", "h++", "hpp", "hh", "hxx", "cxx"])
+    /// Cascading Style Sheets (CSS) for styling web pages.
+    static let css = SourceLanguage(name: "CSS", id: "CSS")
+    /// Sassy CSS (SCSS), a preprocessor scripting language that is interpreted or compiled into CSS.
+    static let scss = SourceLanguage(name: "SCSS", id: "SCSS")
+    /// A unified format for describing changes to text files.
+    static let diff = SourceLanguage(name: "Diff", id: "diff", idAliases: ["patch"])
+    /// The Hypertext Transfer Protocol (HTTP) used for transmitting web pages.
+    static let http = SourceLanguage(name: "HTTP", id: "http", idAliases: ["https"])
+    /// The Java programming language.
+    static let java = SourceLanguage(name: "Java", id: "java", idAliases: ["jsp"])
+    /// The JavaScript programming language.
+    static let javascript = SourceLanguage(name: "JavaScript", id: "javascript", idAliases: ["js", "jsx", "mjs", "cjs"])
+    /// JavaScript Object Notation (JSON) for data interchange.
+    static let json = SourceLanguage(name: "JSON", id: "json")
+    /// The LLVM compiler infrastructure project.
+    static let llvm = SourceLanguage(name: "LLVM", id: "llvm")
+    /// Markdown, a lightweight markup language for creating formatted text.
+    static let markdown = SourceLanguage(name: "Markdown", id: "markdown", idAliases: ["md", "mkdown", "mkd"])
+    /// The Objective-C programming language.
+    static let objective = SourceLanguage(name: "Objective-C", id: "objectiv", idAliases: ["-c mm", "objc", "obj-c", "objectivec"])
+    /// The Perl programming language.
+    static let perl = SourceLanguage(name: "Perl", id: "perl", idAliases: ["pl", "pm"])
+    /// The PHP programming language.
+    static let php = SourceLanguage(name: "PHP", id: "php")
+    /// The Python programming language.
+    static let python = SourceLanguage(name: "Python", id: "python", idAliases: ["py", "gyp", "ipython"])
+    /// The Ruby programming language.
+    static let ruby = SourceLanguage(name: "Ruby", id: "ruby", idAliases: ["rb", "gemspec", "podspec", "thor", "irb"])
+    /// Generic shell scripting.
+    static let shell = SourceLanguage(name: "Shell", id: "shell", idAliases: ["console", "shellsession"])
+    /// The Swift programming language.
+    static let swift = SourceLanguage(name: "Swift", id: "swift")
+    /// Extensible Markup Language (XML) and related formats.
+    static let xml = SourceLanguage(name: "XML", id: "xml", idAliases: ["html", "xhtml", "rss", "atom", "xjb", "xsd", "xsl", "plist", "wsf", "svg"])
+    /// The Metal programming language.
+    static let metal = SourceLanguage(name: "Metal", id: "metal")
+}
+
+
+
