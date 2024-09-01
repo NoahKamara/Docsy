@@ -1,6 +1,17 @@
 
 import Foundation
 
+public enum LocalFileSystemDataProviderError: DescribedError {
+    case rootIsNotDirectory(URL)
+
+    public var errorDescription: String {
+        switch self {
+        case .rootIsNotDirectory(let url):
+            "root url is not a directory: '\(url.path())'"
+        }
+    }
+}
+
 public struct LocalFileSystemDataProvider: DataProvider {
     public let identifier: String = UUID().uuidString
 
@@ -8,10 +19,14 @@ public struct LocalFileSystemDataProvider: DataProvider {
 
     /// Creates a new provider that recursively traverses the content of the given root URL to discover documentation bundles.
     /// - Parameter rootURL: The location that this provider searches for documentation bundles in.
-    public init(rootURL: URL, fileManager: FileManager = .default) throws {
+    public init(
+        rootURL: URL,
+        allowArbitraryCatalogDirectories: Bool = false,
+        fileManager: FileManager = .default
+    ) throws {
         let rootURL = rootURL.absoluteURL
-        guard fileManager.directoryExists(atPath: rootURL.path()) else {
-            fatalError("requires directory: \(rootURL)")
+        guard allowArbitraryCatalogDirectories || fileManager.directoryExists(atPath: rootURL.path()) else {
+            throw LocalFileSystemDataProviderError.rootIsNotDirectory(rootURL)
         }
 
         self.rootURL = rootURL
@@ -81,7 +96,7 @@ extension FileManager {
         return fileExistsAtPath && isDirectory.boolValue
     }
 
-    // This method doesn't exist on `FileManager`. There is a similar looking method but it doesn't provide information about potential errors.
+    // This method does n't exist on `FileManager`. There is a similar looking method but it doesn't provide information about potential errors.
     package func contents(of url: URL) throws -> Data {
         return try Data(contentsOf: url)
     }
