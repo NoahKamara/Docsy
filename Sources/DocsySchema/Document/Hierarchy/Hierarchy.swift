@@ -5,7 +5,7 @@ public extension Document {
     /// A document's hierarchy information, such as its parent topics,
     /// describes an API reference hierarchy that starts with a framework
     /// landing page, or a Tutorials hierarchy that starts with a Tutorials landing page.
-    enum Hierarchy: Codable, Equatable {
+    enum Hierarchy: Schema {
         /// The hierarchy for an API reference document.
         case reference(ReferenceHierarchy)
         /// The hierarchy for tutorials-related document.
@@ -32,7 +32,7 @@ public extension Document {
         }
     }
 
-    // MARK: ReferenceHierarchy
+    // MARK: Reference
     struct ReferenceHierarchy: Codable, Equatable, Sendable {
         /// The paths (breadcrumbs) that lead from the landing page to the given symbol.
         ///
@@ -54,8 +54,42 @@ public extension Document {
         }
     }
 
-    // MARK: TutorialsHierarchy
+    // MARK: Tutorials
     struct TutorialsHierarchy: Codable, Equatable, Sendable {
+        /// The topic reference for the landing page.
+        public var reference: ReferenceIdentifier
+
+        /// The chapters of the technology.
+        public var modules: [Hierarchy.Chapter]?
+
+        /// The paths to the current node.
+        ///
+        /// A list of render reference identifiers.
+        public var paths: [[String]]
+
+        private enum CodingKeys: CodingKey {
+            case reference
+            case modules
+            case paths
+        }
+
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            reference = try container.decode(ReferenceIdentifier.self, forKey: .reference)
+            modules = try container.decodeIfPresent([Hierarchy.Chapter].self, forKey: .modules)
+            paths = try container.decode([[String]].self, forKey: .paths)
+        }
+
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(reference, forKey: .reference)
+            try container.encodeIfPresent(modules, forKey: .modules)
+            try container.encode(paths, forKey: .paths)
+        }
+    }
+
+    // MARK: Technologies
+    struct TechnologiesHierarchy: Codable, Equatable, Sendable {
         /// The topic reference for the landing page.
         public var reference: ReferenceIdentifier
 

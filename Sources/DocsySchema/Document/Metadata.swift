@@ -20,7 +20,7 @@ extension Document {
         public let extendedModule: String?
 
         /// The platform availability information about a symbol.
-        public let platforms: [Availability]?
+        public let platforms: [PlatformAvailability]?
 
         /// Whether protocol method is required to be implemented by conforming types.
         public let required: Bool
@@ -169,7 +169,7 @@ extension Document.Metadata: Decodable {
         category = try container.decodeIfPresent(String.self, forKey: .category)
         categoryPathComponent = try container.decodeIfPresent(String.self, forKey: .categoryPathComponent)
 
-        self.platforms = try container.decodeIfPresent([Availability].self, forKey: .platforms)
+        self.platforms = try container.decodeIfPresent([PlatformAvailability].self, forKey: .platforms)
         self.modules = try container.decodeIfPresent([Module]?.self, forKey: .modules) ?? []
         self.extendedModule = try container.decodeIfPresent(String.self, forKey: .extendedModule)
         self.estimatedTime = try container.decodeIfPresent(String.self, forKey: .estimatedTime)
