@@ -5,12 +5,12 @@
 //  Created by Noah Kamara on 25.08.24.
 //
 
-import Testing
-import Foundation
 @testable import Docsy
+import Foundation
+import Testing
 
-//@Suite("Index")
-//struct IndexTexts {
+// @Suite("Index")
+// struct IndexTexts {
 //    let rootURL = URL(filePath: "/Users/noahkamara/Developer/Docsy/docc.doccarchive")
 //
 //    @Test
@@ -40,4 +40,4 @@ import Foundation
 //        #expect(article.title == "Documenting a Swift Framework or Package")
 //        #expect(article.type == .article)
 //    }
-//}
+// }

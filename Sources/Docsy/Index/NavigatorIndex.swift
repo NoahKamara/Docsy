@@ -1,144 +1,85 @@
-//
-//  File.swift
-//  Docsy
-//
-//  Created by Noah Kamara on 25.08.24.
-//
-
 import Foundation
 import OSLog
 
+import OSLog
 
-@Observable
 public class NavigatorIndex {
-
-
     static let logger = Logger.docsy("Index")
 
-    public let identifier: BundleIdentifier
-    public let context: DocumentationContext
-
-    private var index: DocumentationIndex?
-
-    public var hasLoaded: Bool {
-        access(keyPath: \.index)
-        return index != nil
-    }
-
-    public init(identifier: BundleIdentifier, context: DocumentationContext) {
-        self.identifier = identifier
-        self.context = context
-        self.root = NavigatorTree(bundleIdentifier: identifier)
+    public init() {
+        tree = NavigatorTree()
     }
 
     /// A mapping of interface languages to the index nodes they contain.
-    public var root: NavigatorTree
+    public var tree: NavigatorTree
 
-    /// The values of the image references used in the documentation index.
-    //    public private(set) var references: [String: ImageReference] {
-    //    access(keyPath: \.index)
-    //    index?.interfaceLanguages ?? [:]
-    //}
+    public var root: RootNode { tree.root }
+}
 
-    /// The unique identifiers of the archives that are included in the documentation index.
-    public var includedArchiveIdentifiers: [String] {
-        access(keyPath: \.index)
-        return index?.includedArchiveIdentifiers ?? []
+public extension NavigatorIndex {
+    func load(
+        for bundle: DocumentationBundle,
+        with dataProvider: any DocumentationContextDataProvider
+    ) async throws {
+        Self.logger.info("[\(bundle.identifier)] loading")
+
+        let index: DocumentationIndex = try await {
+            do {
+                let data = try await dataProvider.contentsOfURL(bundle.indexURL, in: bundle)
+                let index = try JSONDecoder().decode(DocumentationIndex.self, from: data)
+                return index
+            } catch let error as any DescribedError {
+                Self.logger.error("[\(bundle.identifier)] failed: \(error.errorDescription)")
+                throw error
+            } catch {
+                Self.logger.error("[\(bundle.identifier)] failed: \(error)")
+                throw error
+            }
+        }()
+
+        let bundleRoot = bundle.rootReference
+        Self.logger.debug("[\(bundle.identifier)] found Index \(index.schemaVersion)")
+
+        let langGroups = index.interfaceLanguages.values.map { lang, nodes in
+            let children = nodes.map {
+                Node(resolving: $0, at: bundleRoot)
+            }
+            Self.logger.debug("[\(bundle.identifier)] found language: \(lang.id) with \(nodes[0].title) elements")
+
+            return LanguageGroup(lang, children: children)
+        }
+
+        let bundleNode = BundleNode(bundle: bundle, children: langGroups)
+        await tree.root.insertBundle(bundleNode)
     }
 
     @MainActor
-    public func bootstrap() async throws {
-        Self.logger.info("bootstrap Index for '\(self.identifier)'")
-
-        let context = context
-        let identifier = identifier
-
-        let index = try await Task {
-        do {
-            return try await context.index(for: identifier)
-        } catch let error as any DescribedError {
-            Self.logger.error("failed to bootstrap index for '\(self.identifier)': \(error.errorDescription)")
-            throw error
-        } catch {
-            Self.logger.error("failed to bootstrap index for '\(self.identifier)': \(error)")
-            throw error
-        }
-    }.value
-
-        // Load Index
-
-        let bundle = try context.bundle(for: identifier)
-
-        withMutation(keyPath: \.root) {
-            root.append(nodesOf: index, in: bundle)
-        }
+    func unload(bundle: DocumentationBundle) {
+        Self.logger.info("[\(bundle.identifier)] unlodaing")
+        tree.root.removeBundle(bundle.identifier)
     }
 }
 
+public extension NavigatorIndex {
+    class NavigatorTree {
+        public let root: RootNode
 
-
-///  Rewrite to be ingle navigator index
-/// - Index
-///     - framework
-///         - languages
-
-extension NavigatorIndex {
-    @Observable
-    public final class NavigatorTree {
-        public typealias LanguageMapping = [SourceLanguage: [Node]]
-
-        private let bundleIdentifier: BundleIdentifier
-        public var languages: LanguageMapping = [:]
-
-        public init(bundleIdentifier: BundleIdentifier, children: LanguageMapping = [:]) {
-            self.bundleIdentifier = bundleIdentifier
-            self.languages = children
+        public init() {
+            root = RootNode()
         }
 
-        public subscript(_ lang: SourceLanguage) -> [Node] {
-            access(keyPath: \.languages[lang])
-            return languages[lang] ?? []
-        }
-
-        public func append(nodesOf index: DocumentationIndex, in bundle: DocumentationBundle) {
-            let children: [(SourceLanguage, [Node])] = index.interfaceLanguages.values.map { (language: SourceLanguage, children: [DocumentationIndex.Node]) in
-                let langReference = TopicReference(
-                    bundleIdentifier: bundleIdentifier,
-                    path: "",
-                    sourceLanguage: language
-                )
-
-                let root = bundle.rootReference
-                return (language, children.map({ Node(resolving: $0, at: root) }))
-            }
-
-            let newLanguage = LanguageMapping.init(uniqueKeysWithValues: children)
-            self.languages = newLanguage
-        }
-
-        public func tree(for language: SourceLanguage = .swift) -> String {
-            let elements = self[.swift]
-            
-            let line = "\(self.bundleIdentifier) \(language.name)"
-
-            let lastIndex = elements.endIndex - 1
-
-            return elements
-                .enumerated()
-                .map({ ($0.offset < lastIndex, $0.element) })
-                .flatMap({ isLast, node in
-                    node.treeLines(prefix: "│   ", isLast: isLast)
-                })
-                .joined(separator: "\n")
+        public func dumpTree(for _: SourceLanguage = .swift) -> String {
+            return root.treeLines().joined(separator: "\n")
         }
     }
 
-    public final class Node: Identifiable, Sendable {
+    @Observable
+    class Node: Identifiable {
         /// The title of the node, suitable for presentation.
         public let title: String
 
         /// The children of the node if it has any
-        public let children: [Node]?
+        public private(set) var children: [Node]?
 
         /// The relative path to the page represented by this node.
         public let reference: TopicReference?
@@ -159,7 +100,7 @@ extension NavigatorIndex {
 
                 self.init(
                     title: node.title,
-                    children: node.children?.map({ Node(resolving: $0, at: rootReference) }),
+                    children: node.children?.map { Node(resolving: $0, at: rootReference) },
                     reference: reference,
                     type: node.type
                 )
@@ -175,20 +116,6 @@ extension NavigatorIndex {
                 )
             }
         }
-//        init(bundle: DocumentationBundle, from index: DocumentationIndex) {
-//            let rootReference = TopicReference(bundleIdentifier: bundle.identifier, path: "")
-//
-//            let nodes = index.interfaceLanguages.languages.map { language in
-//                let parentReference = rootReference.appendingPath(language)
-//                Node(
-//                    title: language.capitalized,
-//                    children: children,
-//                    reference: ,
-//                    type: <#T##PageType#>
-//                )
-//            }
-//        }
-
 
         public func tree() -> String {
             return treeLines().joined(separator: "\n")
@@ -201,16 +128,89 @@ extension NavigatorIndex {
                 line += isLast ? "╰─" : "├─"
             }
 
-            line += "[\(self.type.rawValue)] \(self.title)"
+            line += "[\(type.rawValue)] \(title)"
 
             return if let children {
-                children.enumerated().reduce(into: [line]) { (result, element) in
+                children.enumerated().reduce(into: [line]) { result, element in
                     let (index, child) = element
                     let newPrefix = prefix + (isLast ? "    " : "│   ")
                     result += child.treeLines(prefix: newPrefix, isLast: index == children.count - 1)
                 }
             } else {
                 [line]
+            }
+        }
+    }
+
+    final class LanguageGroup: Node {
+        public let language: SourceLanguage
+
+        init(_ language: SourceLanguage, children: [NavigatorIndex.Node]? = nil) {
+            self.language = language
+            super.init(
+                title: language.name,
+                children: children,
+                reference: nil,
+                type: .languageGroup
+            )
+        }
+    }
+
+    @Observable
+    final class BundleNode: Node {
+        let identifier: BundleIdentifier
+
+        public let availableLanguages: Set<SourceLanguage>
+
+        init(bundle: DocumentationBundle, children: [LanguageGroup]) {
+            identifier = bundle.identifier
+            availableLanguages = Set(children.map(\.language))
+
+            super.init(
+                title: bundle.displayName,
+                children: children,
+                reference: nil,
+                type: .root
+            )
+        }
+    }
+
+    @Observable
+    class RootNode: Node {
+        public var availableLanguages: Set<SourceLanguage> {
+            access(keyPath: \.nodes)
+            return nodes.values.map(\.availableLanguages).reduce(Set()) {
+                $0.union($1)
+            }
+        }
+
+        private var nodes: [BundleIdentifier: BundleNode] = [:]
+
+        override public var children: [NavigatorIndex.Node]! {
+            access(keyPath: \.nodes)
+            return Array(nodes.values)
+        }
+
+        init() {
+            super.init(
+                title: "Root",
+                children: [],
+                reference: nil,
+                type: .root
+            )
+        }
+
+        @MainActor
+        func insertBundle(_ bundle: BundleNode) {
+            withMutation(keyPath: \.nodes[bundle.identifier]) {
+                nodes[bundle.identifier] = bundle
+            }
+        }
+
+        @MainActor
+        func removeBundle(_ identifier: BundleIdentifier) {
+            withMutation(keyPath: \.nodes[identifier]) {
+                _ = nodes.removeValue(forKey: identifier)
             }
         }
     }

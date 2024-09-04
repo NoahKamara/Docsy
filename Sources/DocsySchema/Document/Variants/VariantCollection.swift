@@ -8,7 +8,7 @@
 ///// For example, a collection can a hold programming language-agnostic documentation value as its ``defaultValue``, and hold Objective-C specific values
 ///// in its ``variants`` array. Clients that want to process the Objective-C version of a documentation page then use the override rather than the
 ///// default value, and fall back to the default value if no Objective-C-specific override is specified.
-//public struct VariantCollection<Value: Decodable>: Decodable {
+// public struct VariantCollection<Value: Decodable>: Decodable {
 //    /// The default value of the variant.
 //    ///
 //    /// Clients should decide whether the `defaultValue` or a value in ``variants`` is appropriate in their context.
@@ -48,13 +48,13 @@
 //            }
 //        )
 //    }
-//}
+// }
 //
-//extension VariantCollection: Equatable where Value: Equatable {
+// extension VariantCollection: Equatable where Value: Equatable {
 //    public static func == (lhs: VariantCollection<Value>, rhs: VariantCollection<Value>) -> Bool {
 //        guard lhs.defaultValue == rhs.defaultValue else { return false }
 //        guard lhs.variants == rhs.variants else { return false }
 //
 //        return true
 //    }
-//}
+// }

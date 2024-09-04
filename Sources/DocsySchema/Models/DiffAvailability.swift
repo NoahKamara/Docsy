@@ -3,16 +3,16 @@
 public struct DiffAvailability: Schema {
     /// The change information for a symbol that was updated in a beta version of the current platform.
     public var beta: Info?
-    
+
     /// The change information for a symbol that was updated in a minor increment of the current platform version.
     public var minor: Info?
-    
+
     /// The change information for a symbol that was updated in a major increment of the current platform version.
     public var major: Info?
-    
+
     /// The change information for a symbol that was updated in the current platform version.
     public var sdk: Info?
-    
+
     /// Creates a new availability change diff.
     /// - Parameters:
     ///   - beta: Beta change information.
@@ -25,18 +25,18 @@ public struct DiffAvailability: Schema {
         self.major = major
         self.sdk = sdk
     }
-    
+
     /// An item describing an availability change.
     public struct Info: Schema {
         /// The type of change, for example, "modified" or "added".
         public var change: String
-        
+
         /// The platform where the change occurred.
         public var platform: String
-        
+
         /// The target versions of the platform for this diff.
         public var versions: [String]
-        
+
         /// Creates a new availability change.
         /// - Parameters:
         ///   - change: The type of change, for example, "modified" or "added".

@@ -1,13 +1,13 @@
 //
-//  File.swift
+//  Integration.swift
 //  Docsy
 //
 //  Created by Noah Kamara on 28.08.24.
 //
 
-import Testing
 import DocsySchema
 import Foundation
+import Testing
 import TestResources
 
 @Suite("Integration")
@@ -16,19 +16,16 @@ struct IntegrationTests {
 
     @Test("SwiftDocC", arguments: [documents(of: Resources.docc).first!])
     func docc(documentURL: DoccArchiveURL) throws {
-        let data = try Data(contentsOf: documentURL.url )
+        let data = try Data(contentsOf: documentURL.url)
         _ = try decoder.decode(Document.self, from: data)
-
     }
 
     @Test("SlothCreator", arguments: [documents(of: Resources.slothCreator).first!])
     func sloth(documentURL: DoccArchiveURL) throws {
-        let data = try Data(contentsOf: documentURL.url )
+        let data = try Data(contentsOf: documentURL.url)
         _ = try decoder.decode(Document.self, from: data)
     }
 }
-
-
 
 struct DoccArchiveURL: CustomTestStringConvertible {
     var testDescription: String {

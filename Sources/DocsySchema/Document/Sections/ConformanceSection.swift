@@ -75,8 +75,8 @@ public struct ConformanceSection: Decodable, Equatable, Sendable {
     /// All requirements must be on the same type and with the same
     /// relation kind, for example, "is a" or "conforms to". The `conformances` parameter
     /// contains at least one requirement.
-    static func groupRequirements(_ constraints: [Constraint]) -> [InlineContent] {
-#warning("commented out")
+    static func groupRequirements(_: [Constraint]) -> [InlineContent] {
+        #warning("commented out")
         //            precondition(!constraints.isEmpty)
         //
         //            let constraintTypeNames = constraints.map { constraint in
@@ -98,9 +98,8 @@ public struct ConformanceSection: Decodable, Equatable, Sendable {
 
 private extension String {
     /// Returns the string surrounded by spaces.
-    var spaceDelimited: String { return " \(self) "}
+    var spaceDelimited: String { return " \(self) " }
 }
-
 
 /// SymbolGraph.Symbol.Swift.GenericConstraint
 public struct Constraint: Codable, Hashable {
@@ -183,7 +182,6 @@ public struct Constraint: Codable, Hashable {
         try container.encode(rightTypeName, forKey: .rightTypeName)
     }
 }
-
 
 extension Constraint.Kind {
     /// The spelling to use when rendering this kind of constraint.

@@ -23,7 +23,7 @@ public struct DocumentationIndex: Decodable, Equatable, Sendable {
 //        references: [String: ImageReference] = [:],
         includedArchiveIdentifiers: [String]
     ) {
-        self.schemaVersion = Self.currentSchemaVersion
+        schemaVersion = Self.currentSchemaVersion
         self.interfaceLanguages = interfaceLanguages
 //        self.references = references
         self.includedArchiveIdentifiers = includedArchiveIdentifiers
@@ -38,10 +38,10 @@ public struct DocumentationIndex: Decodable, Equatable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.schemaVersion = try container.decode(SemanticVersion.self, forKey: .schemaVersion)
-        self.interfaceLanguages = try container.decode(InterfaceLanguages.self, forKey: .interfaceLanguages)
+        schemaVersion = try container.decode(SemanticVersion.self, forKey: .schemaVersion)
+        interfaceLanguages = try container.decode(InterfaceLanguages.self, forKey: .interfaceLanguages)
 //        self.references = try container.decodeIfPresent([String : ImageReference].self, forKey: .references) ?? [:]
-        self.includedArchiveIdentifiers = try container.decodeIfPresent([String].self.self, forKey: .includedArchiveIdentifiers) ?? []
+        includedArchiveIdentifiers = try container.decodeIfPresent([String].self.self, forKey: .includedArchiveIdentifiers) ?? []
     }
 
 //    public mutating func merge(_ other: DocumentationIndex) throws {
@@ -74,7 +74,6 @@ public struct DocumentationIndex: Decodable, Equatable, Sendable {
 //        }
 //    }
 }
-
 
 public extension DocumentationIndex {
     struct InterfaceLanguages: Equatable, Decodable, ExpressibleByDictionaryLiteral, Sendable {
@@ -115,17 +114,16 @@ public extension DocumentationIndex {
     }
 }
 
-fileprivate struct SourceLanguageKey: CodingKey {
+private struct SourceLanguageKey: CodingKey {
     let lang: SourceLanguage
     var stringValue: String { lang.linkDisambiguationID }
     var intValue: Int? { nil }
 
     init(stringValue: String) {
-        self.lang = SourceLanguage(name: stringValue)
+        lang = SourceLanguage(name: stringValue)
     }
-    init?(intValue: Int) {
+
+    init?(intValue _: Int) {
         return nil
     }
 }
-
-

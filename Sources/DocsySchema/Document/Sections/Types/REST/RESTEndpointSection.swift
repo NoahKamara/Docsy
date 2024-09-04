@@ -32,16 +32,16 @@ public struct RESTEndpointSection: SectionProtocol, Equatable {
         public enum Kind: String, Codable {
             case method, baseURL, path, parameter, text
         }
-        
+
         /// The endpoint specific token kind.
         public let kind: Kind
         /// The plain text of the token.
         public let text: String
     }
-    
+
     /// The title for the section.
     public let title: String
-    
+
     /// The list of tokens.
     public let tokens: [Token]
 }

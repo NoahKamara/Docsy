@@ -1,5 +1,5 @@
-import Testing
 import Foundation
+import Testing
 
 public enum Resources {
     private static let bundle = Bundle.module
@@ -9,6 +9,7 @@ public extension Resources {
     static func doccarchive(named name: String) -> URL {
         bundle.url(forResource: "Resources/\(name)", withExtension: "doccarchive")!
     }
+
     static var docc: URL {
         print(Bundle.allBundles)
         print(bundle.resourceURL?.path())

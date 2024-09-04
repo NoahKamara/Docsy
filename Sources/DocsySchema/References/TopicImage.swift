@@ -18,9 +18,9 @@ public struct TopicImage: Codable, Hashable, Sendable {
     }
 }
 
-extension TopicImage {
+public extension TopicImage {
     /// The type of topic image.
-    public enum TopicImageType: String, Codable, Hashable, Sendable {
+    enum TopicImageType: String, Codable, Hashable, Sendable {
         /// An icon image that should be used to represent this page wherever a default icon
         /// is currently used.
         case icon

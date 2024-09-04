@@ -6,23 +6,23 @@
 
  See https://swift.org/LICENSE.txt for license information
  See https://swift.org/CONTRIBUTORS.txt for Swift project authors
-*/
+ */
 
 import Foundation
 
 /// A section that contains a list of symbol relationships of the same kind.
 public struct RelationshipsSection: SectionProtocol, Equatable {
     public let kind: Kind = .relationships
-    
+
     /// A title for the section.
     public let title: String
-    
+
     /// A list of references to the symbols that are related to the symbol.
     public let identifiers: [String]
-    
+
     /// The type of relationship, e.g., "Conforms To".
     public let type: String
-    
+
     /// Creates a new relationships section.
     /// - Parameters:
     ///   - type: The type of relationships in that section, for example, "Conforms To".
@@ -33,7 +33,6 @@ public struct RelationshipsSection: SectionProtocol, Equatable {
         self.title = title
         self.identifiers = identifiers
     }
-
 
     enum CodingKeys: CodingKey {
         case kind

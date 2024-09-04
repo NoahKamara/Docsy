@@ -1,6 +1,7 @@
 
 public extension BlockContent {
     // MARK: Table
+
     /// A table that contains a list of row data.
     struct Table: Schema {
         /// The style of header in this table.
@@ -42,12 +43,12 @@ public extension BlockContent {
     }
 }
 
-extension BlockContent.Table {
-    public static func == (lhs: BlockContent.Table, rhs: BlockContent.Table) -> Bool {
+public extension BlockContent.Table {
+    static func == (lhs: BlockContent.Table, rhs: BlockContent.Table) -> Bool {
         guard lhs.header == rhs.header
-                && lhs.extendedData == rhs.extendedData
-                && lhs.metadata == rhs.metadata
-                && lhs.rows == rhs.rows
+            && lhs.extendedData == rhs.extendedData
+            && lhs.metadata == rhs.metadata
+            && lhs.rows == rhs.rows
         else {
             return false
         }
@@ -84,19 +85,22 @@ extension BlockContent.Table {
         var stringValue: String {
             return "\(row)_\(column)"
         }
+
         init?(stringValue: String) {
             let coordinates = stringValue.split(separator: "_")
             guard coordinates.count == 2,
                   let rowIndex = Int(coordinates.first!),
-                  let columnIndex = Int(coordinates.last!) else {
+                  let columnIndex = Int(coordinates.last!)
+            else {
                 return nil
             }
             row = rowIndex
             column = columnIndex
         }
+
         // The key is only represented by a string value
         var intValue: Int? { nil }
-        init?(intValue: Int) { nil }
+        init?(intValue _: Int) { nil }
     }
 
     enum ExtendedDataCodingKeys: String, CodingKey {
@@ -106,17 +110,17 @@ extension BlockContent.Table {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        self.header = try container.decode(BlockContent.HeaderType.self, forKey: .header)
+        header = try container.decode(BlockContent.HeaderType.self, forKey: .header)
 
         let rawAlignments = try container.decodeIfPresent([BlockContent.ColumnAlignment].self, forKey: .alignments)
         if let alignments = rawAlignments, !alignments.allSatisfy({ $0 == .unset }) {
             self.alignments = alignments
         } else {
-            self.alignments = nil
+            alignments = nil
         }
 
-        self.rows = try container.decode([BlockContent.TableRow].self, forKey: .rows)
-        self.metadata = try container.decodeIfPresent(ContentMetadata.self, forKey: .metadata)
+        rows = try container.decode([BlockContent.TableRow].self, forKey: .rows)
+        metadata = try container.decodeIfPresent(ContentMetadata.self, forKey: .metadata)
 
         var extendedData = Set<BlockContent.TableCellExtendedData>()
         if container.contains(.extendedData) {
@@ -124,21 +128,21 @@ extension BlockContent.Table {
 
             for index in dataContainer.allKeys {
                 let cellContainer = try dataContainer.nestedContainer(keyedBy: ExtendedDataCodingKeys.self, forKey: index)
-                extendedData.insert(.init(rowIndex: index.row,
-                                          columnIndex: index.column,
-                                          colspan: try cellContainer.decode(UInt.self, forKey: .colspan),
-                                          rowspan: try cellContainer.decode(UInt.self, forKey: .rowspan)))
+                try extendedData.insert(.init(rowIndex: index.row,
+                                              columnIndex: index.column,
+                                              colspan: cellContainer.decode(UInt.self, forKey: .colspan),
+                                              rowspan: cellContainer.decode(UInt.self, forKey: .rowspan)))
             }
         }
         self.extendedData = extendedData
     }
 }
 
-
-extension BlockContent {
+public extension BlockContent {
     // MARK: Row
+
     /// A table row that contains a list of row cells.
-    public struct TableRow: Schema {
+    struct TableRow: Schema {
         /// A list of rendering block elements.
         public typealias Cell = [BlockContent]
         /// The list of row cells.
@@ -157,8 +161,9 @@ extension BlockContent {
     }
 
     // MARK: Extended Data
+
     /// Extended data that may be applied to a table cell.
-    public struct TableCellExtendedData: Schema, Hashable {
+    struct TableCellExtendedData: Schema, Hashable {
         /// The row coordinate for the cell described by this data.
         public let rowIndex: Int
         /// The column coordinate for the cell described by this data.
@@ -179,20 +184,21 @@ extension BlockContent {
         public let rowspan: UInt
 
         public init(rowIndex: Int, columnIndex: Int,
-                    colspan: UInt, rowspan: UInt) {
+                    colspan: UInt, rowspan: UInt)
+        {
             self.rowIndex = rowIndex
             self.columnIndex = columnIndex
             self.colspan = colspan
             self.rowspan = rowspan
         }
     }
-
 }
 
-extension BlockContent {
+public extension BlockContent {
     // MARK: Header
+
     /// The table headers style.
-    public enum HeaderType: String, Schema {
+    enum HeaderType: String, Schema {
         /// The first row in the table contains column headers.
         case row
         /// The first column in the table contains row headers.
@@ -204,8 +210,9 @@ extension BlockContent {
     }
 
     // MARK: Column Alignment
+
     /// The methods by which a table column can have its text aligned.
-    public enum ColumnAlignment: String, Schema {
+    enum ColumnAlignment: String, Schema {
         /// Force text alignment to be left-justified.
         case left
         /// Force text alignment to be right-justified.
@@ -216,6 +223,3 @@ extension BlockContent {
         case unset
     }
 }
-
-
-

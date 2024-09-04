@@ -5,10 +5,9 @@
 //  Created by Noah Kamara on 25.08.24.
 //
 
-import Testing
-import Foundation
 @testable import Docsy
-
+import Foundation
+import Testing
 
 @Suite("Provider Registration")
 @MainActor

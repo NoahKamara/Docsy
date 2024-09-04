@@ -1,6 +1,6 @@
 ////import Markdown
 //
-//public typealias BlockContent = String
+// public typealias BlockContent = String
 
 /// A block content element.
 public enum BlockContent: Schema {
@@ -14,6 +14,7 @@ public enum BlockContent: Schema {
     case heading(Heading)
 
     // MARK: List
+
     /// A list that contains ordered items.
     case orderedList(OrderedList)
     /// A list that contains unordered items.
@@ -22,9 +23,9 @@ public enum BlockContent: Schema {
     case termList(TermList)
 
     // MARK: Table
+
     /// A table that contains a list of row data.
     case table(Table)
-
 
 //    /// A row in a grid-based layout system that describes a collection of columns.
 //    case row(Row)
@@ -32,7 +33,6 @@ public enum BlockContent: Schema {
 //    case tabNavigator(TabNavigator)
 //    /// A paragraph of small print content that should be rendered in a small font.
 //    case small(Small)
-
 
 //    /// A step in a multi-step tutorial.
 //    case step(TutorialStep)
@@ -52,4 +52,3 @@ public enum BlockContent: Schema {
     /// An authored thematic break between block elements.
     case thematicBreak
 }
-

@@ -24,29 +24,27 @@ public struct LinkReference: ReferenceProtocol, Equatable {
         self.url = url
     }
 
-
-
     enum CodingKeys: String, CodingKey {
         case type, identifier, title, titleInlineContent, url
     }
-    
+
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         identifier = try values.decode(ReferenceIdentifier.self, forKey: .identifier)
-        
+
         let urlPath = try values.decode(String.self, forKey: .url)
-        
+
         if let formattedTitle = try values.decodeIfPresent([InlineContent].self, forKey: .titleInlineContent) {
-            self.titleInlineContent = formattedTitle
-            self.title = try values.decodeIfPresent(String.self, forKey: .title) ?? formattedTitle.plainText
+            titleInlineContent = formattedTitle
+            title = try values.decodeIfPresent(String.self, forKey: .title) ?? formattedTitle.plainText
         } else if let plainTextTitle = try values.decodeIfPresent(String.self, forKey: .title) {
-            self.titleInlineContent = [.text(plainTextTitle)]
-            self.title = plainTextTitle
+            titleInlineContent = [.text(plainTextTitle)]
+            title = plainTextTitle
         } else {
-            self.titleInlineContent = [.text(urlPath)]
-            self.title = urlPath
+            titleInlineContent = [.text(urlPath)]
+            title = urlPath
         }
-        
+
         url = urlPath
     }
 }

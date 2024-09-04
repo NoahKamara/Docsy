@@ -16,7 +16,7 @@ public enum PageType: String, Decodable, Sendable {
     case `protocol`
     case enumeration = "enum"
     case function = "func"
-    case `extension` = "extension"
+    case `extension`
     case variable = "var"
     case typeAlias = "typealias"
     case associatedType = "associatedtype"

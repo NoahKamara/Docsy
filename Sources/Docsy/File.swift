@@ -1,9 +1,9 @@
 //
 //
-//import Foundation
-//import SwiftUI
+// import Foundation
+// import SwiftUI
 //
-//struct TestView: View {
+// struct TestView: View {
 //    @Environment(DocumentationContext.self)
 //    var ws
 //
@@ -12,9 +12,9 @@
 //            Text(identifier)
 //        }
 //    }
-//}
+// }
 //
-//struct ExampleWorkspace: PreviewModifier {
+// struct ExampleWorkspace: PreviewModifier {
 //    static let rootURL = URL(filePath: "/Users/noahkamara/Developer/DocSee/docc.doccarchive")
 //
 //
@@ -31,14 +31,14 @@
 //        content
 //            .environment(\.documentationWorkspace, context)
 //    }
-//}
+// }
 //
-//extension PreviewTrait where T == Preview.ViewTraits {
+// extension PreviewTrait where T == Preview.ViewTraits {
 //    public static var workspace: PreviewTrait<T> {
 //        Self.modifier(ExampleWorkspace())
 //    }
-//}
+// }
 //
-//#Preview(traits: .workspace){
+// #Preview(traits: .workspace){
 //    TestView()
-//}
+// }

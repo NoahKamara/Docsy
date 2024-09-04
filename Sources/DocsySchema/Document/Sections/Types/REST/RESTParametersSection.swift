@@ -24,7 +24,7 @@ public struct RESTParametersSection: SectionProtocol, Equatable {
     public let items: [RenderProperty]
     /// The kind of listed parameters.
     public let source: RESTParameterSource
-    
+
     /// Creates a new REST parameters section.
     /// - Parameters:
     ///   - title: The title for the section.

@@ -20,9 +20,9 @@ public actor DocumentationWorkspace: DocumentationContextDataProvider {
         /// A plain-text description of the error.
         public var errorDescription: String {
             switch self {
-            case .unknownBundle(let id):
+            case let .unknownBundle(id):
                 return "The requested data could not be located because a containing bundle with id '\(id)' could not be found in the workspace."
-            case .unknownProvider(let id):
+            case let .unknownProvider(id):
                 return "The requested data could not be located because a containing data provider with id '\(id)' could not be found in the workspace."
             }
         }
@@ -62,7 +62,6 @@ public actor DocumentationWorkspace: DocumentationContextDataProvider {
     /// The delegate to notify when documentation bundles are added or removed from this workspace.
     @MainActor public weak var delegate: DocumentationContextDataProviderDelegate?
 
-
     /// Creates a new, empty documentation workspace.
     public init() {}
 
@@ -74,7 +73,7 @@ public actor DocumentationWorkspace: DocumentationContextDataProvider {
     ///   - provider: The workspace data provider to add to the workspace.
     ///   - options: The options that the data provider uses to discover documentation bundles that it provides to the delegate.
     public func registerProvider(_ provider: DataProvider) async throws {
-        Self.logger.info("register provider '\(provider.identifier)'")
+        Self.logger.info("[\(provider.identifier)] register '\(type(of: provider))'")
 
         // We must add the provider before adding the bundle so that the delegate
         // may start making requests immediately.
@@ -85,7 +84,7 @@ public actor DocumentationWorkspace: DocumentationContextDataProvider {
         }.value
 
         for bundle in discoveredBundles {
-            Self.logger.info("register bundle '\(bundle.identifier)' for provider '\(provider.identifier)'")
+            Self.logger.info("[\(provider.identifier)] register bundle: '\(bundle.identifier)'")
             bundles[bundle.identifier] = bundle
             bundleToProvider[bundle.identifier] = provider.identifier
             Task { @MainActor in
@@ -102,13 +101,13 @@ public actor DocumentationWorkspace: DocumentationContextDataProvider {
     ///   - provider: The workspace data provider to remove from the workspace.
     ///   - options: The options that the data provider uses to discover documentation bundles that it removes from the delegate.
     public func unregisterProvider(_ provider: DataProvider) async throws {
-        Self.logger.info("unregister provider '\(provider.identifier)' \(type(of: provider))")
+        Self.logger.info("[\(provider.identifier)] unregister provider")
 
         for (bundleIdentifier, providerIdentifier) in bundleToProvider {
             guard providerIdentifier == provider.identifier else {
                 continue
             }
-            Self.logger.info("unregister bundle '\(bundleIdentifier)' for provider '\(provider.identifier)'")
+            Self.logger.info("[\(provider.identifier)] unregister bundle: '\(bundleIdentifier)'")
             guard let bundle = bundles.removeValue(forKey: bundleIdentifier) else {
                 return
             }
@@ -125,11 +124,10 @@ public actor DocumentationWorkspace: DocumentationContextDataProvider {
     }
 }
 
-
-//public extension DocumentationWorkspace {
+// public extension DocumentationWorkspace {
 //    @MainActor
 //    func setDelegate(_ delegate: DocumentationContextDataProviderDelegate) async {
-//        return 
+//        return
 //    }
 //
 //    //    func beginNotifyingDelegate() async {
@@ -137,4 +135,4 @@ public actor DocumentationWorkspace: DocumentationContextDataProvider {
 //    //            await delegate?.dataProvider(self, didAddBundle: bundle)
 //    //        }
 //    //    }
-//}
+// }

@@ -3,7 +3,7 @@ import Testing
 
 struct TestCase<T: Decodable & Sendable>: Sendable, CustomStringConvertible, CustomTestStringConvertible, CustomDebugStringConvertible {
     var testDescription: String {
-        title+" \(T.self)"
+        title + " \(T.self)"
     }
 
     var description: String { title }
@@ -38,7 +38,7 @@ struct TestCase<T: Decodable & Sendable>: Sendable, CustomStringConvertible, Cus
         do {
             return try JSONDecoder().decode(T.self, from: data)
         } catch {
-            Issue.record(error, "Failed to decode TestCase at \(self.debugDescription)").sourceLocation
+            Issue.record(error, "Failed to decode TestCase at \(debugDescription)").sourceLocation
             throw error
         }
     }
@@ -48,17 +48,17 @@ struct JSONValue: ExpressibleByStringInterpolation {
     let rawValue: String
 
     init(stringLiteral value: StaticString) {
-        self.rawValue = value.description
+        rawValue = value.description
     }
 
     init(stringInterpolation: StringInterpolation) {
-        self.rawValue = stringInterpolation.result
+        rawValue = stringInterpolation.result
     }
 
     struct StringInterpolation: StringInterpolationProtocol {
         var result = ""
 
-        init(literalCapacity: Int, interpolationCount: Int) {}
+        init(literalCapacity _: Int, interpolationCount _: Int) {}
 
         mutating func appendLiteral(_ literal: StaticString) {
             result.append(literal.description)
@@ -114,7 +114,7 @@ protocol JSONValueRepresentable {
 }
 
 extension Int: JSONValueRepresentable {
-    var jsonValue: JSONValue { "\(literal: self.description)" }
+    var jsonValue: JSONValue { "\(literal: description)" }
 }
 
 extension String: JSONValueRepresentable {
@@ -138,7 +138,7 @@ extension Sequence where Element: JSONValueRepresentable {
 
 extension Dictionary where Key == String, Value: JSONValueRepresentable {
     var jsonValue: JSONValue {
-        "{\(literal: map({ "\($0.key): \($0.value)" }).joined(separator: ",") )}"
+        "{\(literal: map { "\($0.key): \($0.value)" }.joined(separator: ","))}"
     }
 }
 
@@ -147,6 +147,3 @@ extension Optional where Wrapped: JSONValueRepresentable {
         self?.jsonValue ?? "null"
     }
 }
-
-
-

@@ -5,7 +5,7 @@ import Synchronization
 struct CacheKey<T> {
     let identifier: String
 
-    init(_ identifier: String, of type: T.Type = T.self) {
+    init(_ identifier: String, of _: T.Type = T.self) {
         self.identifier = identifier
     }
 }
@@ -16,14 +16,18 @@ class Cache {
     subscript<T>(_ key: CacheKey<T>) -> T? {
         cache[key.identifier] as? T
     }
-    
+
     func put(_ data: Data, for key: String) {
         cache[key] = data
     }
 }
 
+import OSLog
+
 @Observable
 public class DocumentationContext {
+    static let logger = Logger.docsy("Context")
+
     private let decoder = JSONDecoder()
     private let dataProvider: DocumentationContextDataProvider
 
@@ -32,9 +36,9 @@ public class DocumentationContext {
         return bundles.keys.sorted()
     }
 
-    private(set) public var bundles: [BundleIdentifier: DocumentationBundle] = [:]
+    public private(set) var bundles: [BundleIdentifier: DocumentationBundle] = [:]
 
-//    public let index = Index()
+    public let index: NavigatorIndex = .init()
 
     /// Initializes a documentation context with a given `dataProvider` and registers all the documentation bundles that it provides.
     ///
@@ -48,58 +52,18 @@ public class DocumentationContext {
         case unknownBundle(BundleIdentifier)
     }
 
-
     public enum ReferenceResolverError: DescribedError {
         case unknownBundle(BundleIdentifier)
 
         public var errorDescription: String {
             let msg = switch self {
-            case .unknownBundle(let bundleIdentifier): "Unknown Bundle '\(bundleIdentifier)'"
+            case let .unknownBundle(bundleIdentifier): "Unknown Bundle '\(bundleIdentifier)'"
             }
 
             return "failed to resolve reference :" + msg
         }
     }
 
-    /// Fetches the parents of the documentation node with the given `reference`.
-    ///
-    /// - Parameter reference: The reference of the node to fetch parents for.
-    /// - Returns: A list of the reference for the given node's parent nodes.
-//    public func parents(of reference: TopicReference) -> [TopicReference] {
-//        return topicGraph.reverseEdges[reference] ?? []
-//    }
-
-//    /// Returns the document URL for the given article or tutorial reference.
-//    ///
-//    /// - Parameter reference: The identifier for the topic whose file URL to locate.
-//    /// - Returns: If the reference is a reference to a known Markdown document, this function returns the article's URL, otherwise `nil`.
-//    public func documentURL(for reference: TopicReference) -> URL? {
-//        if let node = topicGraph.nodes[reference], case .file(let url) = node.source {
-//            return url
-//        }
-//        return nil
-//    }
-//
-//    /// Returns the URL of the documentation extension of the given reference.
-//    ///
-//    /// - Parameter reference: The reference to the symbol this function should return the documentation extension URL for.
-//    /// - Returns: The document URL of the given symbol reference. If the given reference is not a symbol reference, returns `nil`.
-//    public func documentationExtensionURL(for reference: ResolvedTopicReference) -> URL? {
-//        guard (try? entity(with: reference))?.kind.isSymbol == true else {
-//            return nil
-//        }
-//        return documentLocationMap[reference]
-//    }
-//
-//    /// Attempt to locate the reference for a given file.
-//    ///
-//    /// - Parameter url: The file whose reference to locate.
-//    /// - Returns: The reference for the file if it could be found, otherwise `nil`.
-//    public func referenceForFileURL(_ url: URL) -> ResolvedTopicReference? {
-//        return documentLocationMap[url]
-//    }
-//
-//
     public func document(for reference: TopicReference) async throws -> Document {
         do {
             print("DOCUMENT")
@@ -112,7 +76,7 @@ public class DocumentationContext {
             let document = try JSONDecoder().decode(Document.self, from: data)
             return document
         } catch let error as DescribedError {
-            print("document(for:) failed: "+error.errorDescription)
+            print("document(for:) failed: " + error.errorDescription)
             throw error
         } catch {
             throw error
@@ -127,7 +91,7 @@ public class DocumentationContext {
     }
 
     public func index(for identifier: BundleIdentifier) async throws -> DocumentationIndex {
-        let provider = self.dataProvider
+        let provider = dataProvider
         let decoder = decoder
         let bundle = try bundle(for: identifier)
 
@@ -170,20 +134,25 @@ struct ResolvedBundleReference: Codable, Hashable {
     let path: String
 }
 
-
 extension DocumentationContext: DocumentationContextDataProviderDelegate {
     public func dataProvider(_ dataProvider: any DocumentationContextDataProvider, didAddBundle bundle: DocumentationBundle) {
-        print("DID ADD")
+        Self.logger.info("[dataProvider] add bundle '\(bundle.identifier)'")
         register(bundle)
+
+        Task {
+            try await self.index.load(for: bundle, with: dataProvider)
+        }
     }
 
-    public func dataProvider(_ dataProvider: any DocumentationContextDataProvider, didRemoveBundle bundle: DocumentationBundle) {
-        print("DID REMOVE")
+    public func dataProvider(_: any DocumentationContextDataProvider, didRemoveBundle bundle: DocumentationBundle) {
+        Self.logger.info("[dataProvider] remove bundle '\(bundle.identifier)'")
+
+        self.index.unload(bundle: bundle)
         withMutation(keyPath: \.bundles) {
             _ = self.bundles.removeValue(forKey: bundle.identifier)
         }
     }
-    
+
     @MainActor fileprivate func register(_ bundle: DocumentationBundle) {
         withMutation(keyPath: \.bundles) {
             self.bundles[bundle.identifier] = bundle
@@ -196,3 +165,4 @@ extension DocumentationContext: DocumentationContextDataProviderDelegate {
     }
 }
 
+// Mark NavigatorIndex

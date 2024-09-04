@@ -2,13 +2,13 @@
 public struct TopicColor: Codable, Hashable, Sendable {
     /// A context-dependent standard colors
     public enum StandardColor: String, Codable, Hashable, Sendable {
-        case blue = "blue"
-        case gray = "gray"
-        case green = "green"
-        case orange = "orange"
-        case purple = "purple"
-        case red = "red"
-        case yellow = "yellow"
+        case blue
+        case gray
+        case green
+        case orange
+        case purple
+        case red
+        case yellow
     }
 
     /// A string identifier for a built-in, standard color.

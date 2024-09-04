@@ -1,6 +1,6 @@
+@testable import DocsySchema
 import Foundation
 import Testing
-@testable import DocsySchema
 
 @Suite("InlineContent", .tags(.models))
 struct InlineContentTests {
@@ -51,7 +51,7 @@ struct InlineContentTests {
 
     @Test
     func `subscript`() async throws {
-        let testCase = Case.`subscript`
+        let testCase = Case.subscript
         let content = try testCase.decode()
         #expect(content == testCase.value)
     }
@@ -80,7 +80,7 @@ struct InlineContentTests {
     @Test(arguments: [
         #"https://www.example.com"#,
         #"https:\/\/www.example.com"#,
-        #"doc:\/\/swift-docc.SwiftDocC\/documentation\/SwiftDocC\/FeatureFlags"#
+        #"doc:\/\/swift-docc.SwiftDocC\/documentation\/SwiftDocC\/FeatureFlags"#,
     ])
     func reference(identifier: String) async throws {
         let testCase = Case.reference(identifier)
@@ -102,7 +102,6 @@ extension Sequence where Element: Hashable {
     }
 }
 
-
 extension TestCase<InlineContent> {
     static let allCases: [TestCase<InlineContent>] = [
         text, emphasis, strong, strikethrough, combinedTextStyles,
@@ -112,6 +111,7 @@ extension TestCase<InlineContent> {
     ]
 
     // MARK: Text Style
+
     static let text = TestCase("text") {
         #"{ "type": "text", "text": "This is plain" }"#
     } value: {
@@ -119,123 +119,123 @@ extension TestCase<InlineContent> {
     }
 
     static let emphasis = TestCase("emphasised") {
-            #"""
-            { 
-                "type": "emphasis", 
-                "inlineContent": [ {"type": "text", "text": "This is emphasised"} ]
-            }
-            """#
+        #"""
+        { 
+            "type": "emphasis", 
+            "inlineContent": [ {"type": "text", "text": "This is emphasised"} ]
+        }
+        """#
     } value: {
         InlineContent.emphasis(inlineContent: [.text("This is emphasised")])
     }
 
     static let strong = TestCase("strong") {
-            #"""
-            { 
-                "type": "strong", 
-                "inlineContent": [ {"type": "text", "text": "This is strong"} ]
-            }
-            """#
+        #"""
+        { 
+            "type": "strong", 
+            "inlineContent": [ {"type": "text", "text": "This is strong"} ]
+        }
+        """#
     } value: {
         InlineContent.strong(inlineContent: [.text("This is strong")])
     }
 
     static let strikethrough = TestCase("inline head") {
-            """
-            {
-                "type": "strikethrough",
-                "inlineContent": [\(text.json)]
-            }
-            """
+        """
+        {
+            "type": "strikethrough",
+            "inlineContent": [\(text.json)]
+        }
+        """
     } value: {
         InlineContent.strikethrough(inlineContent: [text.value])
     }
 
     static let combinedTextStyles = TestCase("combined test styles") {
-            #"""
-            {
-                "type": "strong",
-                "inlineContent": [
-                    {
-                        "inlineContent": [
-                            {
-                                "inlineContent": [
-                                    {
-                                        "type": "text",
-                                        "text": "This is strong and emphasised"
-                                    }
-                                ],
-                                "type": "strikethrough"
-                            }
-                        ],
-                        "type": "emphasis"
-                    }
-                ]
-            }
-            """#
+        #"""
+        {
+            "type": "strong",
+            "inlineContent": [
+                {
+                    "inlineContent": [
+                        {
+                            "inlineContent": [
+                                {
+                                    "type": "text",
+                                    "text": "This is strong and emphasised"
+                                }
+                            ],
+                            "type": "strikethrough"
+                        }
+                    ],
+                    "type": "emphasis"
+                }
+            ]
+        }
+        """#
     } value: {
         InlineContent.strong(inlineContent: [
             .emphasis(inlineContent: [
                 .strikethrough(inlineContent: [
-                    .text("This is strong and emphasised")
-                ])
-            ])
+                    .text("This is strong and emphasised"),
+                ]),
+            ]),
         ])
     }
 
     // MARK: Subscript / Superscript
+
     static let `subscript` = TestCase("subscript") {
-            """
-            {
-                "type": "subscript",
-                "inlineContent": [\(text.json)]
-            }
-            """
+        """
+        {
+            "type": "subscript",
+            "inlineContent": [\(text.json)]
+        }
+        """
     } value: {
         InlineContent.subscript(inlineContent: [text.value])
     }
 
     static let superscript = TestCase("superscript") {
-            """
-            {
-                "type": "superscript",
-                "inlineContent": [\(text.json)]
-            }
-            """
+        """
+        {
+            "type": "superscript",
+            "inlineContent": [\(text.json)]
+        }
+        """
     } value: {
         InlineContent.superscript(inlineContent: [text.value])
     }
 
-
     static let codeVoice = TestCase("code") {
-            #"""
-            {
-                "type": "codeVoice",
-                "code": "this is code"
-            }
-            """#
+        #"""
+        {
+            "type": "codeVoice",
+            "code": "this is code"
+        }
+        """#
     } value: {
         InlineContent.codeVoice(code: "this is code")
     }
 
     static let newTerm = TestCase("new term") {
-            """
-            {
-                "type": "newTerm",
-                "inlineContent": [\(text.json)]
-            }
-            """
+        """
+        {
+            "type": "newTerm",
+            "inlineContent": [\(text.json)]
+        }
+        """
     } value: {
         InlineContent.newTerm(inlineContent: [text.value])
     }
 
     static let inlineHead = TestCase("inline head") {
-            """
-            {
-                "type": "inlineHead",
-                "inlineContent": [\(text.json)]
-            }
-            """
+        """
+        {
+            "type": "inlineHead",
+            "inlineContent": [\(text.json)]
+        }
+        """
     } value: {
         InlineContent.inlineHead(inlineContent: [text.value])
     }
@@ -260,12 +260,12 @@ extension TestCase<InlineContent> {
     }
 
     static let image = TestCase("image") {
-            #"""
-            {
-                "type": "image",
-                "identifier": "https://www.example.com/image.png"
-            }
-            """#
+        #"""
+        {
+            "type": "image",
+            "identifier": "https://www.example.com/image.png"
+        }
+        """#
     } value: {
         InlineContent.image(
             identifier: .init("https://www.example.com/image.png"),

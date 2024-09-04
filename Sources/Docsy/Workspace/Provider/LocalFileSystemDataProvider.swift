@@ -6,7 +6,7 @@ public enum LocalFileSystemDataProviderError: DescribedError {
 
     public var errorDescription: String {
         switch self {
-        case .rootIsNotDirectory(let url):
+        case let .rootIsNotDirectory(url):
             "root url is not a directory: '\(url.path())'"
         }
     }
@@ -31,7 +31,6 @@ public struct LocalFileSystemDataProvider: DataProvider {
 
         self.rootURL = rootURL
     }
-
 
     public func contentsOfURL(_ url: URL) async throws -> Data {
         precondition(url.isFileURL, "Unexpected non-file url '\(url)'.")
@@ -62,7 +61,7 @@ public struct LocalFileSystemDataProvider: DataProvider {
             do {
                 let bundle = try createBundle(at: fileURL)
                 bundles.append(bundle)
-            } catch let error {
+            } catch {
                 print(error)
             }
             files.skipDescendants()
@@ -86,9 +85,7 @@ public struct LocalFileSystemDataProvider: DataProvider {
     }
 }
 
-
-
-extension FileManager {
+package extension FileManager {
     /// Returns a Boolean value that indicates whether a directory exists at a specified path.
     package func directoryExists(atPath path: String) -> Bool {
         var isDirectory = ObjCBool(booleanLiteral: false)

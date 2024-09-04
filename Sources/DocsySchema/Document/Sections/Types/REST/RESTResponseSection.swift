@@ -47,7 +47,7 @@ public struct RESTResponse: Decodable, Equatable {
         self.type = type
         self.content = content
     }
-    
+
     enum CodingKeys: CodingKey {
         case status
         case reason
@@ -65,4 +65,3 @@ public struct RESTResponse: Decodable, Equatable {
         content = try container.decodeIfPresent([BlockContent].self, forKey: .content)
     }
 }
-

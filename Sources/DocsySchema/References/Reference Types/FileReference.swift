@@ -6,7 +6,7 @@
 
  See https://swift.org/LICENSE.txt for license information
  See https://swift.org/CONTRIBUTORS.txt for Swift project authors
-*/
+ */
 
 import Foundation
 
@@ -57,6 +57,7 @@ public struct FileReference: ReferenceProtocol, Equatable {
         self.content = content
         self.highlights = highlights
     }
+
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         identifier = try values.decode(ReferenceIdentifier.self, forKey: .identifier)
@@ -91,23 +92,22 @@ public struct LineHighlight: Codable, Equatable, Sendable {
     }
 }
 
-
 /// A reference to a type of file.
 ///
 /// This is not a reference to a specific file, but rather to a type of file. Use a file type reference together with a file reference to display an icon for that file type
 /// alongside the content of that file. For example, a property list file icon alongside the content of a specific property list file.
 public struct FileTypeReference: ReferenceProtocol, Equatable {
     public var type: ReferenceType = .fileType
-    
+
     /// The identifier of this reference.
     public var identifier: ReferenceIdentifier
-    
+
     /// The display name of the file type.
     public var displayName: String
-    
+
     /// The icon for this file type, encoded in Base64.
     public var iconBase64: Data
-    
+
     /// Creates a new file type reference.
     /// - Parameters:
     ///   - identifier: The identifier of this reference.
@@ -119,4 +119,3 @@ public struct FileTypeReference: ReferenceProtocol, Equatable {
         self.iconBase64 = iconBase64
     }
 }
-

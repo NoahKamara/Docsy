@@ -6,7 +6,7 @@
 
  See https://swift.org/LICENSE.txt for license information
  See https://swift.org/CONTRIBUTORS.txt for Swift project authors
-*/
+ */
 
 import Foundation
 
@@ -38,7 +38,6 @@ public struct VideoReference: MediaReference, URLReference, Equatable {
         self.poster = poster
     }
 
-
     enum CodingKeys: String, CodingKey {
         case type
         case identifier
@@ -46,23 +45,23 @@ public struct VideoReference: MediaReference, URLReference, Equatable {
         case variants
         case poster
     }
-    
+
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         identifier = try values.decode(ReferenceIdentifier.self, forKey: .identifier)
         altText = try values.decodeIfPresent(String.self, forKey: .alt)
-        
+
         // rebuild the data asset
         var asset = DataAsset()
         let variants = try values.decode([VariantProxy].self, forKey: .variants)
-        variants.forEach { (variant) in
+        for variant in variants {
             asset.register(variant.url, with: DataTraitCollection(from: variant.traits))
         }
         self.asset = asset
 
         poster = try values.decodeIfPresent(ReferenceIdentifier.self, forKey: .poster)
     }
-    
+
     /// The relative URL to the folder that contains all images in the built documentation output.
     public static let baseURL = URL(string: "/videos/")!
 
@@ -72,13 +71,13 @@ public struct VideoReference: MediaReference, URLReference, Equatable {
         public var url: URL
         /// The traits of this video reference.
         public var traits: [String]
-        
+
         enum CodingKeys: String, CodingKey {
             case size
             case url
             case traits
         }
-        
+
         public init(from decoder: Decoder) throws {
             let values = try decoder.container(keyedBy: CodingKeys.self)
             url = try values.decode(URL.self, forKey: .url)

@@ -6,7 +6,7 @@
 
  See https://swift.org/LICENSE.txt for license information
  See https://swift.org/CONTRIBUTORS.txt for Swift project authors
-*/
+ */
 
 /// A reference to another page which cannot be resolved.
 public struct UnresolvedRenderReference: ReferenceProtocol, Equatable {
@@ -14,15 +14,15 @@ public struct UnresolvedRenderReference: ReferenceProtocol, Equatable {
     ///
     /// This value is always `.unresolvable`.
     public var type: ReferenceType = .unresolvable
-    
+
     /// The identifier of this unresolved reference.
     public var identifier: ReferenceIdentifier
-    
+
     /// The title of this unresolved reference.
     public var title: String
 
     /// Creates a new unresolved reference with a given identifier and title.
-    /// 
+    ///
     /// - Parameters:
     ///   - identifier: The identifier of this unresolved reference.
     ///   - title: The title of this unresolved reference.

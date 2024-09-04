@@ -1,6 +1,5 @@
 import Foundation
 
-
 /// A reference to a resource.
 ///
 /// The reference can refer to a resource within a documentation bundle (e.g., another symbol) or an external resource (e.g., a web URL).
@@ -14,8 +13,6 @@ public protocol ReferenceProtocol: Decodable, Sendable, Equatable {
     /// The identifier can be used to look up a value in the document's ``RenderNode/references`` dictionary.
     var identifier: ReferenceIdentifier { get }
 }
-
-
 
 /// The type of a reference.
 public enum ReferenceType: String, Codable, Equatable, Sendable {
@@ -40,23 +37,21 @@ public enum Reference: Decodable, Sendable, Equatable {
 //    case externalLocation
 //    case unresolvable
 
-
     public init(from decoder: any Decoder) throws {
         enum CodingKeys: CodingKey {
             case type
         }
 
-
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let type = try container.decode(ReferenceType.self, forKey: .type)
 
         switch type {
-        case .image:    self = try .image(.init(from: decoder))
-        case .video:    self = try .video(.init(from: decoder))
-        case .file:     self = try .file(.init(from: decoder))
+        case .image: self = try .image(.init(from: decoder))
+        case .video: self = try .video(.init(from: decoder))
+        case .file: self = try .file(.init(from: decoder))
         case .fileType: self = try .fileType(.init(from: decoder))
-        case .topic:    self = try .topic(.init(from: decoder))
-        case .link:     self = try .link(.init(from: decoder))
+        case .topic: self = try .topic(.init(from: decoder))
+        case .link: self = try .link(.init(from: decoder))
 //        case .xcodeRequirement:
 //        case .section:
         case .download: self = try .download(.init(from: decoder))
@@ -93,19 +88,18 @@ extension URLReference {
     }
 }
 
-
 extension Reference: ReferenceProtocol {
     private var reference: any ReferenceProtocol {
         switch self {
-        case .image(let ref): ref
-        case .video(let ref): ref
-        case .file(let ref): ref
-        case .fileType(let ref): ref
+        case let .image(ref): ref
+        case let .video(ref): ref
+        case let .file(ref): ref
+        case let .fileType(ref): ref
 //        case .xcodeRequirement(let ref): ref
-        case .topic(let ref): ref
+        case let .topic(ref): ref
 //        case .section(let ref): ref
-        case .download(let ref): ref
-        case .link(let ref): ref
+        case let .download(ref): ref
+        case let .link(ref): ref
 //        case .externalLocation(let ref): ref
 //        case .unresolvable(let ref): ref
         }

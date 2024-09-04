@@ -32,7 +32,7 @@ let package = Package(
             name: "TestResources",
             path: "Tests/TestResources",
             resources: [
-                .copy("Resources/.")
+                .copy("Resources/."),
             ]
         ),
 //        .testTarget(
@@ -42,9 +42,9 @@ let package = Package(
 //                .copy("Resources/")
 //            ]
 //        )
-            .testTarget(
-                name: "SchemaTests",
-                dependencies: ["DocsySchema", "TestResources"]
-            )
+        .testTarget(
+            name: "SchemaTests",
+            dependencies: ["DocsySchema", "TestResources"]
+        ),
     ]
 )

@@ -6,14 +6,14 @@
 
  See https://swift.org/LICENSE.txt for license information
  See https://swift.org/CONTRIBUTORS.txt for Swift project authors
-*/
+ */
 
 /// A section that contains a list of parameters.
 public struct ParametersSection: SectionProtocol, Equatable {
     public var kind: Kind = .parameters
     /// The list of parameter sub-sections.
     public let parameters: [ParameterSection]
-    
+
     /// Creates a new parameters section with the given list.
     public init(parameters: [ParameterSection]) {
         self.parameters = parameters
@@ -27,4 +27,3 @@ public struct ParameterSection: Decodable, Equatable {
     /// Free-form content to provide information about the parameter.
     public var content: [BlockContent]
 }
-

@@ -36,22 +36,22 @@ public struct DownloadReference: ReferenceProtocol, URLReference, Equatable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.decode(ReferenceType.self, forKey: .type)
-        self.identifier = try container.decode(ReferenceIdentifier.self, forKey: .identifier)
-        self.url = try container.decode(URL.self, forKey: .url)
-        self.encodeUrlVerbatim = true
-        self.checksum = try container.decodeIfPresent(String.self, forKey: .checksum)
+        type = try container.decode(ReferenceType.self, forKey: .type)
+        identifier = try container.decode(ReferenceIdentifier.self, forKey: .identifier)
+        url = try container.decode(URL.self, forKey: .url)
+        encodeUrlVerbatim = true
+        checksum = try container.decodeIfPresent(String.self, forKey: .checksum)
     }
 
-    static public func ==(lhs: DownloadReference, rhs: DownloadReference) -> Bool {
+    public static func == (lhs: DownloadReference, rhs: DownloadReference) -> Bool {
         lhs.identifier == rhs.identifier
-        && lhs.url == rhs.url
-        && lhs.checksum == rhs.checksum
+            && lhs.url == rhs.url
+            && lhs.checksum == rhs.checksum
     }
 }
 
-//extension DownloadReference {
+// extension DownloadReference {
 //    private func renderURL(for url: URL, prefixComponent: String?) -> URL {
 //        url.isAbsoluteWebURL ? url : destinationURL(for: url.lastPathComponent, prefixComponent: prefixComponent)
 //    }
-//}
+// }

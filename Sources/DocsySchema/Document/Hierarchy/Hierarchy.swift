@@ -24,15 +24,16 @@ public extension Document {
         public func encode(to encoder: Encoder) throws {
             var container = encoder.singleValueContainer()
             switch self {
-            case .reference(let hierarchy):
+            case let .reference(hierarchy):
                 try container.encode(hierarchy)
-            case .tutorials(let hierarchy):
+            case let .tutorials(hierarchy):
                 try container.encode(hierarchy)
             }
         }
     }
 
     // MARK: Reference
+
     struct ReferenceHierarchy: Codable, Equatable, Sendable {
         /// The paths (breadcrumbs) that lead from the landing page to the given symbol.
         ///
@@ -55,6 +56,7 @@ public extension Document {
     }
 
     // MARK: Tutorials
+
     struct TutorialsHierarchy: Codable, Equatable, Sendable {
         /// The topic reference for the landing page.
         public var reference: ReferenceIdentifier
@@ -89,6 +91,7 @@ public extension Document {
     }
 
     // MARK: Technologies
+
     struct TechnologiesHierarchy: Codable, Equatable, Sendable {
         /// The topic reference for the landing page.
         public var reference: ReferenceIdentifier

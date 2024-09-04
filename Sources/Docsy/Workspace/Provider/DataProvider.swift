@@ -17,4 +17,3 @@ public protocol DataProvider: Sendable {
     /// Returns the documentation bundles that your data provider provides.
     func bundles() async throws -> [DocumentationBundle]
 }
-

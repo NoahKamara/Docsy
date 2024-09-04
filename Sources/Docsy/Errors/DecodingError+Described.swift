@@ -1,17 +1,16 @@
 
 import Foundation
 
-
 extension DecodingError: DescribedError {
     public var errorDescription: String {
         switch self {
-        case .dataCorrupted(let context):
+        case let .dataCorrupted(context):
             "dataCorruted(\(context.codingPath.errorDescription)): \(context.debugDescription)"
-        case .keyNotFound(let key, let context):
+        case let .keyNotFound(key, context):
             "keyNotFound(\(key.errorDescription), \(context.codingPath.errorDescription)): \(context.debugDescription)"
-        case .typeMismatch(let type, let context):
+        case let .typeMismatch(type, context):
             "typeMismatch(\(type), \(context.codingPath.errorDescription)) \(context.debugDescription)"
-        case .valueNotFound(let type, let context):
+        case let .valueNotFound(type, context):
             "valueNotFound(\(type), \(context.codingPath.errorDescription)): \(context.debugDescription)"
         @unknown default:
             "unknown(\(self))"
@@ -28,6 +27,7 @@ extension CodingKey {
         }
     }
 }
+
 extension [any CodingKey] {
     var errorDescription: String {
         if isEmpty {
@@ -37,4 +37,3 @@ extension [any CodingKey] {
         }
     }
 }
-

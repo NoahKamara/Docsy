@@ -1,6 +1,6 @@
+@testable import DocsySchema
 import Foundation
 import Testing
-@testable import DocsySchema
 
 @Suite("Reference", .tags(.models))
 struct ReferenceTests {
@@ -37,8 +37,6 @@ struct ReferenceTests {
 //        #expect(content == testCase.value)
 //    }
 }
-
-
 
 extension TestCase where T == Reference {
     static let allCases: [Self] = [
@@ -112,11 +110,11 @@ extension TestCase where T == Reference {
                 asset: .init(
                     variants: [
                         .init(from: ["2x", "light"]): light2x,
-                        .init(from: ["2x", "dark"]): dark2x
+                        .init(from: ["2x", "dark"]): dark2x,
                     ],
                     metadata: [
                         light2x: .init(svgID: nil),
-                        dark2x: .init(svgID: nil)
+                        dark2x: .init(svgID: nil),
                     ]
                 )
             )
@@ -146,8 +144,8 @@ extension TestCase where T == Reference {
                 identifier: .init("slothCreator-video.mp4"),
                 altText: "A video presenting the SlothCreator framework.",
                 asset: .init(
-                    variants: [ .init(from: []): url ],
-                    metadata: [url:.init()]
+                    variants: [.init(from: []): url],
+                    metadata: [url: .init()]
                 ),
                 poster: .init("slothCreator-icon.png")
             )

@@ -4,7 +4,6 @@ public protocol SectionProtocol: Decodable, Equatable {
     var kind: Kind { get }
 }
 
-
 public indirect enum AnyContentSection: TypedContainer, Equatable {
     public typealias Kind = SectionKind
 
@@ -26,29 +25,29 @@ public indirect enum AnyContentSection: TypedContainer, Equatable {
 
     public init(from decoder: any Decoder, as kind: SectionKind) throws {
         self = switch kind {
-        case .discussion: .discussion(try ContentSection(from: decoder))
-        case .content: .content(try ContentSection(from: decoder))
-        case .taskGroup: .taskGroup(try TaskGroupSection(from: decoder))
-        case .relationships: .relationships(try RelationshipsSection(from: decoder))
-        case .declarations: .declarations(try DeclarationsSection(from: decoder))
-        case .parameters: .parameters(try ParametersSection(from: decoder))
-        case .attributes: .attributes(try AttributesSection(from: decoder))
-        case .properties: .properties(try PropertiesSection(from: decoder))
-        case .restParameters: .restParameters(try RESTParametersSection(from: decoder))
-        case .restEndpoint: .restEndpoint(try RESTEndpointSection(from: decoder))
-        case .restBody: .restBody(try RESTBodySection(from: decoder))
-        case .restResponses: .restResponses(try RESTResponseSection(from: decoder))
-        case .plistDetails: .plistDetails(try PlistDetailsSection(from: decoder))
-        case .possibleValues: .possibleValues(try PossibleValuesSection(from: decoder))
-        case .mentions: .mentions(try MentionsSection(from: decoder))
+        case .discussion: try .discussion(ContentSection(from: decoder))
+        case .content: try .content(ContentSection(from: decoder))
+        case .taskGroup: try .taskGroup(TaskGroupSection(from: decoder))
+        case .relationships: try .relationships(RelationshipsSection(from: decoder))
+        case .declarations: try .declarations(DeclarationsSection(from: decoder))
+        case .parameters: try .parameters(ParametersSection(from: decoder))
+        case .attributes: try .attributes(AttributesSection(from: decoder))
+        case .properties: try .properties(PropertiesSection(from: decoder))
+        case .restParameters: try .restParameters(RESTParametersSection(from: decoder))
+        case .restEndpoint: try .restEndpoint(RESTEndpointSection(from: decoder))
+        case .restBody: try .restBody(RESTBodySection(from: decoder))
+        case .restResponses: try .restResponses(RESTResponseSection(from: decoder))
+        case .plistDetails: try .plistDetails(PlistDetailsSection(from: decoder))
+        case .possibleValues: try .possibleValues(PossibleValuesSection(from: decoder))
+        case .mentions: try .mentions(MentionsSection(from: decoder))
         default: fatalError()
         }
     }
 }
 
-//public extension ContentSection {
+// public extension ContentSection {
 //    var kind: SectionKind { get }
-//}
+// }
 
 public protocol TypedContainer<Kind>: Decodable {
     static var kindKey: AnyCodingKey { get }
@@ -57,10 +56,10 @@ public protocol TypedContainer<Kind>: Decodable {
     init(from decoder: any Decoder, as kind: Kind) throws
 }
 
-extension TypedContainer {
-    public static var kindKey: AnyCodingKey { AnyCodingKey(stringValue: "kind") }
+public extension TypedContainer {
+    static var kindKey: AnyCodingKey { AnyCodingKey(stringValue: "kind") }
 
-    public init(from decoder: any Decoder) throws {
+    init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: AnyCodingKey.self)
 
         guard !container.allKeys.isEmpty else {
@@ -75,7 +74,7 @@ extension TypedContainer {
 
         do {
             rawKind = try container.decode(Kind.RawValue.self, forKey: Self.kindKey)
-        } catch let error as DecodingError{
+        } catch let error as DecodingError {
             throw DecodingError.typeMismatch(Kind.RawValue.self, .init(
                 codingPath: decoder.codingPath,
                 debugDescription: "Failed to decode raw : \(error)",
@@ -94,7 +93,6 @@ extension TypedContainer {
         try self.init(from: decoder, as: kind)
     }
 }
-
 
 public enum SectionKind: String, Codable, Equatable {
     // Article render sections

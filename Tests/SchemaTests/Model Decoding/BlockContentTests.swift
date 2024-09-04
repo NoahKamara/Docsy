@@ -1,7 +1,6 @@
+@testable import DocsySchema
 import Foundation
 import Testing
-@testable import DocsySchema
-
 
 @Suite("BlockContent", .tags(.models))
 struct BlockContentTests {
@@ -31,7 +30,7 @@ struct BlockContentTests {
             syntax: syntax,
             code: [
                 "let thing = Thing.get()",
-                "thing.do()"
+                "thing.do()",
             ],
             metadata: .init()
         )
@@ -47,11 +46,9 @@ struct BlockContentTests {
     }
 }
 
-
-
 extension TestCase where T == BlockContent {
     static let allCases: [Self] = [
-//        link,
+        //        link,
 //        image,
 //        video,
 //        //        file,
@@ -73,16 +70,15 @@ extension TestCase where T == BlockContent {
         """
     } value: {
         BlockContent.paragraph(
-            BlockContent.Paragraph(inlineContent:  [
-                TestCase<InlineContent>.text.value
+            BlockContent.Paragraph(inlineContent: [
+                TestCase<InlineContent>.text.value,
             ])
         )
     }
 
-    static let asideStyleCases: [BlockContent.AsideStyle] = BlockContent.AsideStyle.Known.allCases.map({
+    static let asideStyleCases: [BlockContent.AsideStyle] = BlockContent.AsideStyle.Known.allCases.map {
         .known($0)
-    }) + [.unknown("My Custom Case")]
-
+    } + [.unknown("My Custom Case")]
 
     static func aside(
         name: String? = "My Aside",
@@ -110,16 +106,15 @@ extension TestCase where T == BlockContent {
         }
     }
 
-
     static func codeListing(syntax: String?, code: [String], metadata: ContentMetadata) -> TestCase {
         TestCase("codeListing") {
-        """
-        {
-            "type": "codeListing",
-            "syntax": \(syntax),
-            "code": \(code)
-        }
-        """
+            """
+            {
+                "type": "codeListing",
+                "syntax": \(syntax),
+                "code": \(code)
+            }
+            """
         } value: {
             BlockContent.codeListing(
                 .init(
@@ -151,7 +146,7 @@ extension TestCase where T == BlockContent {
                 .init(
                     level: level,
                     text: "Heading \(level)",
-                    anchor:  "my-heading"
+                    anchor: "my-heading"
                 )
             )
         }
@@ -160,7 +155,7 @@ extension TestCase where T == BlockContent {
 
 extension TestCase<BlockContent.ListItem> {
     static func item(isChecked: Bool) -> Self {
-        let content = [ TestCase<BlockContent>.paragraph ]
+        let content = [TestCase<BlockContent>.paragraph]
 
         return TestCase("list-item") {
             """
@@ -170,13 +165,10 @@ extension TestCase<BlockContent.ListItem> {
             }
             """
         } value: {
-            return BlockContent.ListItem(
+            BlockContent.ListItem(
                 content: content.map(\.value),
                 checked: isChecked
             )
         }
     }
 }
-
-
-

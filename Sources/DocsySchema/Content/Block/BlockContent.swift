@@ -1,11 +1,9 @@
 import Foundation
 
-
-
-
 // MARK: Decoding
-extension BlockContent {
-    enum CodingKeys: CodingKey {
+
+public extension BlockContent {
+    internal enum CodingKeys: CodingKey {
         case type
         case inlineContent, content, caption, style, name, syntax, code, level, text, items, media, runtimePreview, anchor, summary, example, metadata, start
         case request, response
@@ -15,7 +13,7 @@ extension BlockContent {
         case identifier
     }
 
-    public init(from decoder: Decoder) throws {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let type = try container.decode(BlockType.self, forKey: .type)
 
@@ -29,95 +27,91 @@ extension BlockContent {
         case .orderedList: try .orderedList(.init(from: container))
         case .unorderedList: try .unorderedList(.init(items: container.decode([ListItem].self, forKey: .items)))
         case .termList: try .termList(.init(items: container.decode([TermListItem].self, forKey: .items)))
-
         case .table:
             // Defer to Table's own Codable implemenatation to parse `extendedData` properly.
             try .table(.init(from: decoder))
-            
 //        case .row: try .row(
 //                Row(
 //                    numberOfColumns: container.decode(Int.self, forKey: .numberOfColumns),
 //                    columns: container.decode([Row.Column].self, forKey: .columns)
 //                )
 //            )
-
-            //        case .step:
-            //            self = try .step(.init(content: container.decode([RenderBlockContent].self, forKey: .content), caption: container.decodeIfPresent([RenderBlockContent].self, forKey: .caption) ?? [], media: container.decode(RenderReferenceIdentifier?.self, forKey: .media), code: container.decode(RenderReferenceIdentifier?.self, forKey: .code), runtimePreview: container.decode(RenderReferenceIdentifier?.self, forKey: .runtimePreview)))
-            //        case .endpointExample:
-            //            self = try .endpointExample(.init(
-            //                summary: container.decodeIfPresent([RenderBlockContent].self, forKey: .summary),
-            //                request: container.decode(CodeExample.self, forKey: .request),
-            //                response: container.decode(CodeExample.self, forKey: .response)
-            //            ))
-            //        case .dictionaryExample:
-            //            self = try .dictionaryExample(.init(summary: container.decodeIfPresent([RenderBlockContent].self, forKey: .summary), example: container.decode(CodeExample.self, forKey: .example)))
-            //        case .small:
-            //            self = try .small(
-            //                Small(inlineContent: container.decode([InlineContent].self, forKey: .inlineContent))
-            //            )
-            //        case .tabNavigator:
-            //            self = try .tabNavigator(
-            //                TabNavigator(
-            //                    tabs: container.decode([TabNavigator.Tab].self, forKey: .tabs)
-            //                )
-            //            )
-            //        case .links:
-            //            self = try .links(
-            //                Links(
-            //                    style: container.decode(Links.Style.self, forKey: .style),
-            //                    items: container.decode([String].self, forKey: .items)
-            //                )
-            //            )
-            //        case .video:
-            //            self = try .video(
-            //                Video(
-            //                    identifier: container.decode(RenderReferenceIdentifier.self, forKey: .identifier),
-            //                    metadata: container.decodeIfPresent(RenderContentMetadata.self, forKey: .metadata)
-            //                )
-            //            )
+        //        case .step:
+        //            self = try .step(.init(content: container.decode([RenderBlockContent].self, forKey: .content), caption: container.decodeIfPresent([RenderBlockContent].self, forKey: .caption) ?? [], media: container.decode(RenderReferenceIdentifier?.self, forKey: .media), code: container.decode(RenderReferenceIdentifier?.self, forKey: .code), runtimePreview: container.decode(RenderReferenceIdentifier?.self, forKey: .runtimePreview)))
+        //        case .endpointExample:
+        //            self = try .endpointExample(.init(
+        //                summary: container.decodeIfPresent([RenderBlockContent].self, forKey: .summary),
+        //                request: container.decode(CodeExample.self, forKey: .request),
+        //                response: container.decode(CodeExample.self, forKey: .response)
+        //            ))
+        //        case .dictionaryExample:
+        //            self = try .dictionaryExample(.init(summary: container.decodeIfPresent([RenderBlockContent].self, forKey: .summary), example: container.decode(CodeExample.self, forKey: .example)))
+        //        case .small:
+        //            self = try .small(
+        //                Small(inlineContent: container.decode([InlineContent].self, forKey: .inlineContent))
+        //            )
+        //        case .tabNavigator:
+        //            self = try .tabNavigator(
+        //                TabNavigator(
+        //                    tabs: container.decode([TabNavigator.Tab].self, forKey: .tabs)
+        //                )
+        //            )
+        //        case .links:
+        //            self = try .links(
+        //                Links(
+        //                    style: container.decode(Links.Style.self, forKey: .style),
+        //                    items: container.decode([String].self, forKey: .items)
+        //                )
+        //            )
+        //        case .video:
+        //            self = try .video(
+        //                Video(
+        //                    identifier: container.decode(RenderReferenceIdentifier.self, forKey: .identifier),
+        //                    metadata: container.decodeIfPresent(RenderContentMetadata.self, forKey: .metadata)
+        //                )
+        //            )
         case .thematicBreak: .thematicBreak
         default: throw DecodingError.dataCorrupted(.init(codingPath: container.codingPath, debugDescription: "Unknown type \(type.rawValue)"))
-
         }
     }
 
-    private enum BlockType: String, Codable {
+    enum BlockType: String, Codable {
         case paragraph, aside, codeListing, heading, orderedList, unorderedList, step, endpointExample, dictionaryExample, table, termList, row, small, tabNavigator, links, video, thematicBreak
     }
 
-    private var type: BlockType {
+    var type: BlockType {
         switch self {
-        case .paragraph: return .paragraph
-        case .aside: return .aside
-        case .codeListing: return .codeListing
-        case .heading: return .heading
-//                    case .orderedList: return .orderedList
-            //        case .unorderedList: return .unorderedList
-            //        case .step: return .step
-            //        case .endpointExample: return .endpointExample
-            //        case .dictionaryExample: return .dictionaryExample
-            //        case .table: return .table
-            //        case .termList: return .termList
-            //        case .row: return .row
-            //        case .small: return .small
-            //        case .tabNavigator: return .tabNavigator
-            //        case .links: return .links
-            //        case .video: return .video
-                    case .thematicBreak: return .thematicBreak
-        default: fatalError("unknown RenderBlockContent case in type property")
+        case .paragraph: .paragraph
+        case .aside: .aside
+        case .codeListing: .codeListing
+        case .heading: .heading
+        case .orderedList: .orderedList
+        case .unorderedList: .unorderedList
+        case .termList: .termList
+        case .table: .table
+//                    case .step: return .step
+//                    case .endpointExample: return .endpointExample
+//                    case .dictionaryExample: return .dictionaryExample
+//        case .row: .row
+//        case .small: .small
+//        case .tabNavigator: .tabNavigator
+//        case .links: .links
+//        case .video: .video
+        case .thematicBreak: .thematicBreak
+//        default: fatalError("unknown RenderBlockContent case in type property \(self)")
         }
     }
 }
 
-
 // MARK: Content Protocol
+
 protocol BlockContentProtocol: Equatable, Sendable {
     typealias Container = KeyedDecodingContainer<BlockContent.CodingKeys>
     init(from container: Container) throws
 }
 
-
 // MARK: Paragraph
+
 public extension BlockContent {
     /// A paragraph of content.
     struct Paragraph: BlockContentProtocol {
@@ -136,13 +130,10 @@ public extension BlockContent {
     }
 }
 
-
-
-
 // MARK: CodeListing
-public extension BlockContent {
 
-/// A block of sample code.
+public extension BlockContent {
+    /// A block of sample code.
     struct CodeListing: BlockContentProtocol {
         /// The language to use for syntax highlighting, if given.
         public var syntax: SourceLanguage?
@@ -172,8 +163,8 @@ public extension BlockContent {
     }
 }
 
-
 // MARK: Heading
+
 public extension BlockContent {
     /// A heading with the given level.
     struct Heading: BlockContentProtocol {
@@ -204,12 +195,8 @@ public extension BlockContent {
     }
 }
 
-
-
-
-
 ///// A step in a multi-step tutorial.
-//public struct TutorialStep: Equatable {
+// public struct TutorialStep: Equatable {
 //    /// The content inside this tutorial step.
 //    public var content: [BlockContent]
 //    /// The caption for the step.
@@ -229,10 +216,10 @@ public extension BlockContent {
 //        self.code = code
 //        self.runtimePreview = runtimePreview
 //    }
-//}
+// }
 //
 ///// A REST endpoint example that includes a request and the expected response.
-//public struct EndpointExample: Equatable {
+// public struct EndpointExample: Equatable {
 //    /// A summary of the example.
 //    public var summary: [BlockContent]?
 //    /// The request portion of the example.
@@ -246,10 +233,10 @@ public extension BlockContent {
 //        self.request = request
 //        self.response = response
 //    }
-//}
+// }
 //
 ///// An example that contains a sample code block.
-//public struct DictionaryExample: Equatable {
+// public struct DictionaryExample: Equatable {
 //    /// A summary of the sample code block.
 //    public var summary: [BlockContent]?
 //    /// The sample code for the example.
@@ -260,14 +247,12 @@ public extension BlockContent {
 //        self.summary = summary
 //        self.example = example
 //    }
-//}
+// }
 //
-
-
 
 //
 ///// A row in a grid-based layout system that describes a collection of columns.
-//public struct Row: Codable, Equatable {
+// public struct Row: Codable, Equatable {
 //    /// The number of columns that should be rendered in this row.
 //    ///
 //    /// This may be different then the count of ``columns`` array. For example, there may be
@@ -286,19 +271,19 @@ public extension BlockContent {
 //        /// The content that should be rendered in this column.
 //        public let content: [BlockContent]
 //    }
-//}
+// }
 
 ///// A paragraph of small print content that should be rendered in a small font.
 /////
 ///// Small is based on HTML's `<small>` tag and could contain content like legal,
 ///// license, or copyright text.
-//public struct Small: Codable, Equatable {
+// public struct Small: Codable, Equatable {
 //    /// The inline content that should be rendered.
 //    public let inlineContent: [InlineContent]
-//}
+// }
 //
 ///// A collection of content that should be rendered in a tab-based layout.
-//public struct TabNavigator: Codable, Equatable {
+// public struct TabNavigator: Codable, Equatable {
 //    /// The tabs that make up this tab navigator.
 //    public let tabs: [Tab]
 //
@@ -310,11 +295,11 @@ public extension BlockContent {
 //        /// The content that should be rendered in this tab.
 //        public let content: [BlockContent]
 //    }
-//}
+// }
 //
 ///// A collection of authored links that should be rendered in a similar style
 ///// to links in an on-page Topics section.
-//public struct Links: Codable, Equatable {
+// public struct Links: Codable, Equatable {
 //    /// A visual style for the links.
 //    public enum Style: String, Codable, Equatable {
 //        /// A list of the linked pages, including their full declaration and abstract.
@@ -340,10 +325,10 @@ public extension BlockContent {
 //        self.style = style
 //        self.items = items
 //    }
-//}
+// }
 //
 ///// A video with an optional caption.
-//public struct Video: Codable, Equatable {
+// public struct Video: Codable, Equatable {
 //    /// A reference to the video media that should be rendered in this block.
 //    public let identifier: ReferenceIdentifier
 //

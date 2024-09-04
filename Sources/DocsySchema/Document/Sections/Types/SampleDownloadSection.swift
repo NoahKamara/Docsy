@@ -13,14 +13,14 @@ public struct SampleDownloadSection: SectionProtocol, Equatable {
     public init(action: InlineContent) {
         self.action = action
     }
-    
+
     // MARK: - Codable
-    
+
     /// The list of keys you use to encode or decode this section.
     public enum CodingKeys: String, CodingKey {
         case kind, action
     }
-    
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         action = try container.decode(InlineContent.self, forKey: .action)

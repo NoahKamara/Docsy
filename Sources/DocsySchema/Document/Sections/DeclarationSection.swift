@@ -8,7 +8,6 @@ public struct DeclarationsSection: SectionProtocol {
     public let declarations: [DeclarationSection]
 }
 
-
 /// A section that contains a symbol declaration.
 public struct DeclarationSection: Decodable, Equatable {
     /// The platforms this declaration applies to.
@@ -141,6 +140,7 @@ public struct DeclarationSection: Decodable, Equatable {
                 self.identifier = identifier
             }
         }
+
         /// The displayable declarations for this symbol's overloads.
         let declarations: [Declaration]
         /// The index where this symbol's declaration should be displayed (inserted) among the declarations.
@@ -186,9 +186,9 @@ public struct DeclarationSection: Decodable, Equatable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: DeclarationSection.CodingKeys.self)
-        try container.encode(self.tokens, forKey: DeclarationSection.CodingKeys.tokens)
-        try container.encode(self.platforms, forKey: DeclarationSection.CodingKeys.platforms)
-        try container.encode(self.languages, forKey: DeclarationSection.CodingKeys.languages)
-        try container.encodeIfPresent(self.otherDeclarations, forKey: DeclarationSection.CodingKeys.otherDeclarations)
+        try container.encode(tokens, forKey: DeclarationSection.CodingKeys.tokens)
+        try container.encode(platforms, forKey: DeclarationSection.CodingKeys.platforms)
+        try container.encode(languages, forKey: DeclarationSection.CodingKeys.languages)
+        try container.encodeIfPresent(otherDeclarations, forKey: DeclarationSection.CodingKeys.otherDeclarations)
     }
 }

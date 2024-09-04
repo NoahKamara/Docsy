@@ -1,11 +1,10 @@
 
-import Foundation
 import DocsySchema
+import Foundation
 
 public typealias BundleIdentifier = String
 
 public struct DocumentationBundle: CustomStringConvertible, Sendable {
-
     public var description: String { "Documenatation(identifier: '\(identifier)', displayName: '\(displayName)'" }
 
     /// Information about this documentation bundle that's unrelated to its documentation content.
@@ -16,11 +15,11 @@ public struct DocumentationBundle: CustomStringConvertible, Sendable {
         metadata.displayName
     }
 
-     /// The documentation bundle identifier.
-     ///
-     /// An identifier string that specifies the app type of the bundle.
-     /// The string should be in reverse DNS format using only the Roman alphabet in
-     /// upper and lower case (A–Z, a–z), the dot (“.”), and the hyphen (“-”).
+    /// The documentation bundle identifier.
+    ///
+    /// An identifier string that specifies the app type of the bundle.
+    /// The string should be in reverse DNS format using only the Roman alphabet in
+    /// upper and lower case (A–Z, a–z), the dot (“.”), and the hyphen (“-”).
     public var identifier: BundleIdentifier {
         metadata.identifier
     }
@@ -84,7 +83,7 @@ public struct DocumentationBundle: CustomStringConvertible, Sendable {
 //        customFooter: URL? = nil,
 //        themeSettings: URL? = nil
     ) {
-        self.metadata = info
+        metadata = info
         self.baseURL = baseURL
         self.indexURL = indexURL
 //        self.symbolGraphURLs = symbolGraphURLs
@@ -104,11 +103,11 @@ public struct DocumentationBundle: CustomStringConvertible, Sendable {
             path: "/tutorials",
             sourceLanguage: .swift
         )
-        self.rootReference = TopicReference(bundleIdentifier: info.identifier, path: "/", sourceLanguage: .swift)
+        rootReference = TopicReference(bundleIdentifier: info.identifier, path: "/", sourceLanguage: .swift)
         self.documentationRootReference = documentationRootReference
         self.tutorialsRootReference = tutorialsRootReference
-        self.technologyTutorialsRootReference = tutorialsRootReference.appendingPath(urlReadablePath(info.displayName))
-        self.articlesDocumentationRootReference = documentationRootReference.appendingPath(urlReadablePath(info.displayName))
+        technologyTutorialsRootReference = tutorialsRootReference.appendingPath(urlReadablePath(info.displayName))
+        articlesDocumentationRootReference = documentationRootReference.appendingPath(urlReadablePath(info.displayName))
     }
 
     public let rootReference: TopicReference
@@ -126,21 +125,21 @@ public struct DocumentationBundle: CustomStringConvertible, Sendable {
     public let articlesDocumentationRootReference: TopicReference
 }
 
-//public func stylesheetURLs() -> [ URL ] {
+// public func stylesheetURLs() -> [ URL ] {
 //    return fm.contentsOfDirectory(at: url.appendingPathComponent("css"))
-//}
-//public func userImageURLs() -> [ URL ] {
+// }
+// public func userImageURLs() -> [ URL ] {
 //    return fm.contentsOfDirectory(at: url.appendingPathComponent("images"))
-//}
-//public func systemImageURLs() -> [ URL ] {
+// }
+// public func systemImageURLs() -> [ URL ] {
 //    return fm.contentsOfDirectory(at: url.appendingPathComponent("img"))
-//}
-//public func userVideoURLs() -> [ URL ] {
+// }
+// public func userVideoURLs() -> [ URL ] {
 //    return fm.contentsOfDirectory(at: url.appendingPathComponent("videos"))
-//}
-//public func userDownloadURLs() -> [ URL ] {
+// }
+// public func userDownloadURLs() -> [ URL ] {
 //    return fm.contentsOfDirectory(at: url.appendingPathComponent("downloads"))
-//}
+// }
 
 public enum DoccArchivePath {
     public static let tutorialsFolderName = "tutorials"

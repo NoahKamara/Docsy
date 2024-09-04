@@ -38,7 +38,7 @@ protocol CodingKeyRepresentable {
 public struct WrappedCodingKey<T>: CodingKey {
     public let stringValue: String
     public var intValue: Int? { nil }
-    public init?(intValue: Int) {
+    public init?(intValue _: Int) {
         return nil
     }
 

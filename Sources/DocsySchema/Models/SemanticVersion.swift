@@ -5,7 +5,6 @@ import Foundation
 ///
 /// A version that follows the [Semantic Versioning](https://semver.org) specification.
 public struct SemanticVersion: Codable, Equatable, Comparable, CustomStringConvertible, Sendable {
-
     /// The major version number.
     ///
     /// For example, the `1` in `1.2.3`
@@ -29,7 +28,7 @@ public struct SemanticVersion: Codable, Equatable, Comparable, CustomStringConve
     /// Optional build metadata.
     public var buildMetadata: String?
 
-    public init(major: Int, minor: Int, patch: Int, prerelease: String? = nil, buildMetadata: String? = nil) {
+    public init(major: Int, minor: Int, patch: Int, prerelease _: String? = nil, buildMetadata _: String? = nil) {
         self.major = major
         self.minor = minor
         self.patch = patch
@@ -37,11 +36,11 @@ public struct SemanticVersion: Codable, Equatable, Comparable, CustomStringConve
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.major = try container.decode(Int.self, forKey: .major)
-        self.minor = try container.decodeIfPresent(Int.self, forKey: .minor) ?? 0
-        self.patch = try container.decodeIfPresent(Int.self, forKey: .patch) ?? 0
-        self.prerelease = try container.decodeIfPresent(String.self, forKey: .prerelease)
-        self.buildMetadata = try container.decodeIfPresent(String.self, forKey: .buildMetadata)
+        major = try container.decode(Int.self, forKey: .major)
+        minor = try container.decodeIfPresent(Int.self, forKey: .minor) ?? 0
+        patch = try container.decodeIfPresent(Int.self, forKey: .patch) ?? 0
+        prerelease = try container.decodeIfPresent(String.self, forKey: .prerelease)
+        buildMetadata = try container.decodeIfPresent(String.self, forKey: .buildMetadata)
     }
 
     /// Compare one semantic version with another.

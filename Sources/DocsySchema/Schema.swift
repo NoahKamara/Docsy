@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  Schema.swift
 //  Docsy
 //
 //  Created by Noah Kamara on 28.08.24.

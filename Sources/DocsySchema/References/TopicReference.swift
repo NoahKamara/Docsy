@@ -1,9 +1,10 @@
 import Foundation
 
-public struct TopicReference: Sendable, Hashable, Equatable, CustomStringConvertible  {
+public struct TopicReference: Sendable, Hashable, Equatable, CustomStringConvertible {
     public var description: String {
         "Topic(\(url.absoluteString))"
     }
+
     /// The URL scheme for `doc://` links.
     public static let urlScheme = "doc"
 
@@ -58,7 +59,6 @@ public struct TopicReference: Sendable, Hashable, Equatable, CustomStringConvert
     //        }
     //    }
 
-
     /// Returns `true` if the passed `URL` has a "doc" URL scheme.
     public static func urlHasResolvedTopicScheme(_ url: URL?) -> Bool {
         return url?.scheme?.lowercased() == TopicReference.urlScheme
@@ -110,7 +110,7 @@ public struct TopicReference: Sendable, Hashable, Equatable, CustomStringConvert
         self.init(
             bundleIdentifier: bundleIdentifier,
             urlReadablePath: urlReadablePath(path),
-            urlReadableFragment: fragment.map({ urlReadableFragment($0) }),
+            urlReadableFragment: fragment.map { urlReadableFragment($0) },
             sourceLanguages: sourceLanguages
         )
     }
@@ -148,16 +148,16 @@ public struct TopicReference: Sendable, Hashable, Equatable, CustomStringConvert
             self.path = path
             self.fragment = fragment
             self.sourceLanguages = sourceLanguages
-            self.identifierPathAndFragment = "\(bundleIdentifier)\(path)\(fragment ?? "")"
+            identifierPathAndFragment = "\(bundleIdentifier)\(path)\(fragment ?? "")"
 
             var components = URLComponents()
             components.scheme = TopicReference.urlScheme
             components.host = bundleIdentifier
             components.path = path
             components.fragment = fragment
-            self.url = components.url!
-            self.pathComponents = self.url.pathComponents
-            self.absoluteString = self.url.absoluteString
+            url = components.url!
+            pathComponents = url.pathComponents
+            absoluteString = url.absoluteString
         }
     }
 }
@@ -189,10 +189,7 @@ extension TopicReference: Decodable {
 
         self.init(bundleIdentifier: bundleIdentifier, path: url.path, fragment: url.fragment, sourceLanguage: interfaceLanguage)
     }
-
 }
-
-
 
 /// Creates a more readable version of a path by replacing characters that are not allowed in the path of a URL with hyphens.
 ///
@@ -212,7 +209,7 @@ private extension CharacterSet {
 
     // For fragments
     static let fragmentCharactersToRemove = CharacterSet.punctuationCharacters // Remove punctuation from fragments
-        .union(CharacterSet(charactersIn: "`"))       // Also consider back-ticks as punctuation. They are used as quotes around symbols or other code.
+        .union(CharacterSet(charactersIn: "`")) // Also consider back-ticks as punctuation. They are used as quotes around symbols or other code.
         .subtracting(CharacterSet(charactersIn: "-")) // Don't remove hyphens. They are used as a whitespace replacement.
     static let whitespaceAndDashes = CharacterSet.whitespaces
         .union(CharacterSet(charactersIn: "-–—")) // hyphen, en dash, em dash
@@ -224,12 +221,12 @@ private extension CharacterSet {
 /// For example, a fragment like `"#hello world"` is converted to `"#hello-world"` instead of `"#hello%20world"`.
 func urlReadableFragment(_ fragment: some StringProtocol) -> String {
     var fragment = fragment
-    // Trim leading/trailing whitespace
+        // Trim leading/trailing whitespace
         .trimmingCharacters(in: .whitespaces)
 
-    // Replace continuous whitespace and dashes
+        // Replace continuous whitespace and dashes
         .components(separatedBy: .whitespaceAndDashes)
-        .filter({ !$0.isEmpty })
+        .filter { !$0.isEmpty }
         .joined(separator: "-")
 
     // Remove invalid characters

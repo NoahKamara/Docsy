@@ -6,7 +6,7 @@
 
  See https://swift.org/LICENSE.txt for license information
  See https://swift.org/CONTRIBUTORS.txt for Swift project authors
-*/
+ */
 
 import Foundation
 
@@ -26,13 +26,13 @@ public struct PossibleValuesSection: SectionProtocol, Equatable {
         /// Details content, if any.
         let content: [BlockContent]?
     }
-    
+
     public var kind: Kind = .possibleValues
     /// The title for the section, `nil` by default.
     public let title: String?
     /// The list of named values.
     public let values: [NamedValue]
-    
+
     /// Creates a new possible values section.
     /// - Parameter title: The section title.
     /// - Parameter values: The list of values for this section.
@@ -40,18 +40,17 @@ public struct PossibleValuesSection: SectionProtocol, Equatable {
         self.title = title
         self.values = values
     }
-    
+
     // MARK: - Codable
-    
+
     /// The list of keys you use to encode or decode this section.
     public enum CodingKeys: String, CodingKey {
         case kind, title, values
     }
-    
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         title = try container.decodeIfPresent(String.self, forKey: .title)
         values = try container.decode([NamedValue].self, forKey: .values)
     }
 }
-

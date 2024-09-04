@@ -6,7 +6,7 @@
 
  See https://swift.org/LICENSE.txt for license information
  See https://swift.org/CONTRIBUTORS.txt for Swift project authors
-*/
+ */
 
 import Foundation
 
@@ -19,7 +19,7 @@ public struct ImageReference: MediaReference, URLReference, Equatable {
 
     /// The identifier of this reference.
     public let identifier: ReferenceIdentifier
-    
+
     /// Alternate text for the image.
     ///
     /// This text helps screen-readers describe the image.
@@ -40,21 +40,21 @@ public struct ImageReference: MediaReference, URLReference, Equatable {
         case alt
         case variants
     }
-    
+
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         identifier = try values.decode(ReferenceIdentifier.self, forKey: .identifier)
         altText = try values.decodeIfPresent(String.self, forKey: .alt)
-        
+
         // rebuild the data asset
         var asset = DataAsset()
         let variants = try values.decode([VariantProxy].self, forKey: .variants)
-        variants.forEach { (variant) in
+        for variant in variants {
             asset.register(variant.url, with: DataTraitCollection(from: variant.traits), metadata: .init(svgID: variant.svgID))
         }
         self.asset = asset
     }
-    
+
     /// The relative URL to the folder that contains all images in the built documentation output.
     public static let baseURL = URL(string: "/images/")!
 

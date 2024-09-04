@@ -1,6 +1,7 @@
 
 
 // MARK: Aside
+
 public extension BlockContent {
     /// An aside block.
     struct Aside: Equatable, Sendable, BlockContentProtocol {
@@ -23,7 +24,7 @@ public extension BlockContent {
             style: AsideStyle,
             content: [BlockContent]
         ) {
-            self.customName = displayName
+            customName = displayName
             self.style = style
             self.content = content
         }
@@ -48,16 +49,16 @@ public extension BlockContent {
 
         public var rawValue: String {
             switch self {
-            case .known(let known): known.rawValue
-            case .unknown(let rawValue): rawValue
+            case let .known(known): known.rawValue
+            case let .unknown(rawValue): rawValue
             }
         }
 
         /// an appropriate display name for this style
         public var displayName: String {
             switch self {
-            case .known(let known): known.displayName
-            case .unknown(let rawValue):
+            case let .known(known): known.displayName
+            case let .unknown(rawValue):
                 if rawValue.contains(where: \.isUppercase) {
                     // If any character is upper-cased, assume the content has
                     // specific casing and return the raw value.
@@ -117,7 +118,7 @@ public extension BlockContent {
         /// The style of aside to use when rendering.
         public var renderKind: OutputStyle {
             switch self {
-            case .known(let known):
+            case let .known(known):
                 switch known {
                 case .note: .note
                 case .tip: .tip
@@ -149,4 +150,3 @@ public extension BlockContent {
         }
     }
 }
-

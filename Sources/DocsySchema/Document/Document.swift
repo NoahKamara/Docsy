@@ -99,21 +99,21 @@ public struct Document: Decodable {
 
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.schemaVersion = try container.decode(SemanticVersion.self, forKey: .schemaVersion)
-        self.identifier = try container.decode(TopicReference.self, forKey: .identifier)
-        self.kind = try container.decode(Document.Kind.self, forKey: .kind)
-        self.references = try container.decodeDictionary(of: [ReferenceIdentifier: Reference].self, forKey: .references)
-        self.hierarchy = try container.decodeIfPresent(Document.Hierarchy.self, forKey: .hierarchy)
-        self.metadata = try container.decode(Document.Metadata.self, forKey: .metadata)
-        self.abstract = try container.decodeIfPresent([InlineContent].self, forKey: .abstract)
-        self.primaryContentSections = try container.decode([AnyContentSection].self, forKey: .primaryContentSections)
+        schemaVersion = try container.decode(SemanticVersion.self, forKey: .schemaVersion)
+        identifier = try container.decode(TopicReference.self, forKey: .identifier)
+        kind = try container.decode(Document.Kind.self, forKey: .kind)
+        references = try container.decodeDictionary(of: [ReferenceIdentifier: Reference].self, forKey: .references)
+        hierarchy = try container.decodeIfPresent(Document.Hierarchy.self, forKey: .hierarchy)
+        metadata = try container.decode(Document.Metadata.self, forKey: .metadata)
+        abstract = try container.decodeIfPresent([InlineContent].self, forKey: .abstract)
+        primaryContentSections = try container.decode([AnyContentSection].self, forKey: .primaryContentSections)
     }
 
     public init(
         schemaVersion: SemanticVersion,
         identifier: TopicReference,
         kind: Kind,
-        references: [ReferenceIdentifier : Reference],
+        references: [ReferenceIdentifier: Reference],
         hierarchy: Hierarchy?,
         metadata: Metadata,
         abstract: [InlineContent]?,
@@ -150,19 +150,19 @@ public struct Document: Decodable {
                 self = .section
             case "overview":
                 self = .overview
-
             case let unknown:
                 throw DecodingError.dataCorruptedError(
-                    in: container, debugDescription: "Unknown RenderNode.Kind: '\(unknown)'.")
+                    in: container, debugDescription: "Unknown RenderNode.Kind: '\(unknown)'."
+                )
             }
         }
     }
 }
 
 extension KeyedDecodingContainer {
-    func decodeDictionary<Value: Decodable, DictKey: CodingKeyRepresentable>(of _: [DictKey:Value].Type, forKey key: Key) throws -> [DictKey: Value] {
-        let container = try self.nestedContainer(keyedBy: AnyCodingKey.self, forKey: key)
-        return try container.allKeys.reduce(into: [DictKey:Value]()) { partialResult, key in
+    func decodeDictionary<Value: Decodable, DictKey: CodingKeyRepresentable>(of _: [DictKey: Value].Type, forKey key: Key) throws -> [DictKey: Value] {
+        let container = try nestedContainer(keyedBy: AnyCodingKey.self, forKey: key)
+        return try container.allKeys.reduce(into: [DictKey: Value]()) { partialResult, key in
             partialResult[DictKey(from: key)] = try container.decode(Value.self, forKey: key)
         }
     }

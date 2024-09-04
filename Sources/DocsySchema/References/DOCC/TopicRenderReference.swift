@@ -6,7 +6,7 @@
 
  See https://swift.org/LICENSE.txt for license information
  See https://swift.org/CONTRIBUTORS.txt for Swift project authors
-*/
+ */
 
 /// A reference to another page of documentation in the current context.
 public struct TopicRenderReference: ReferenceProtocol, Equatable {
@@ -132,15 +132,18 @@ public struct TopicRenderReference: ReferenceProtocol, Equatable {
         isBeta = try values.decodeIfPresent(Bool.self, forKey: .beta) ?? false
         isDeprecated = try values.decodeIfPresent(Bool.self, forKey: .deprecated) ?? false
         defaultImplementationCount = try values.decodeIfPresent(
-            Int.self, forKey: .defaultImplementations)
+            Int.self, forKey: .defaultImplementations
+        )
         let propertyListTitleStyle = try values.decodeIfPresent(
-            PropertyListTitleStyle.self, forKey: .propertyListTitleStyle)
+            PropertyListTitleStyle.self, forKey: .propertyListTitleStyle
+        )
         let propertyListRawKey = try values.decodeIfPresent(
-            String.self, forKey: .propertyListRawKey)
+            String.self, forKey: .propertyListRawKey
+        )
         let propertyListDisplayName = try values.decodeIfPresent(
-            String.self, forKey: .propertyListDisplayName)
-        if propertyListRawKey != nil || propertyListRawKey != nil || propertyListDisplayName != nil
-        {
+            String.self, forKey: .propertyListDisplayName
+        )
+        if propertyListRawKey != nil || propertyListRawKey != nil || propertyListDisplayName != nil {
             propertyListKeyNames = PropertyListKeyNames(
                 titleStyle: propertyListTitleStyle,
                 rawKey: propertyListRawKey,
@@ -151,5 +154,3 @@ public struct TopicRenderReference: ReferenceProtocol, Equatable {
         images = try values.decodeIfPresent([TopicImage].self, forKey: .images) ?? []
     }
 }
-
-

@@ -3,15 +3,15 @@
 //
 //
 //
-//public protocol DocumentationProvider {
+// public protocol DocumentationProvider {
 //    var identifier: String { get }
-//}
+// }
 //
 //
-//import DocCArchive
-//import Foundation
+// import DocCArchive
+// import Foundation
 //
-//public struct DocCArchiveProvider: DocumentationProvider {
+// public struct DocCArchiveProvider: DocumentationProvider {
 //    public let identifier: String = UUID().uuidString
 //
 //    var archive: DocCArchive
@@ -21,15 +21,13 @@
 //        let archive = try DocCArchive(contentsOf: url)
 //        print(archive)
 //    }
-//}
+// }
 //
-//public enum FSNode {
+// public enum FSNode {
 //    case file(URL)
 //    case dir(URL, [FSNode])
-//}
+// }
 //
-//DocCArchive(contentsOf: url)
-
+// DocCArchive(contentsOf: url)
 
 import SwiftUI
-

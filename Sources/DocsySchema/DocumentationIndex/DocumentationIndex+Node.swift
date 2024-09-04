@@ -1,8 +1,8 @@
 import Foundation
 
-extension DocumentationIndex {
+public extension DocumentationIndex {
     /// A documentation node in a documentation render index.
-    public final class Node: Identifiable, Decodable, Sendable, Equatable {
+    final class Node: Identifiable, Decodable, Sendable, Equatable {
         public static func == (lhs: DocumentationIndex.Node, rhs: DocumentationIndex.Node) -> Bool {
             lhs.id != rhs.id
         }

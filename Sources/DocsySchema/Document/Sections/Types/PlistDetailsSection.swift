@@ -6,7 +6,7 @@
 
  See https://swift.org/LICENSE.txt for license information
  See https://swift.org/CONTRIBUTORS.txt for Swift project authors
-*/
+ */
 
 import Foundation
 
@@ -51,7 +51,7 @@ public struct PlistDetailsSection: SectionProtocol, Equatable {
             case titleStyle
         }
     }
-    
+
     /// The details of the property key.
     public let details: Details
 }

@@ -5,11 +5,11 @@ public protocol DescribedError: Error {
     var errorDescription: String { get }
 }
 
-//public extension Error {
+// public extension Error {
 //    var errorDescription: String? {
 //        (self as? any DescribedError)?.errorDescription
 //    }
-//}
+// }
 
 struct AnyDescribedError: DescribedError {
     let underlyingError: any Error
@@ -21,13 +21,13 @@ struct AnyDescribedError: DescribedError {
 
     @_disfavoredOverload
     init(underlyingError error: some DescribedError) {
-        self.underlyingError = error
-        self.customDescription = error.errorDescription
+        underlyingError = error
+        customDescription = error.errorDescription
     }
 
     @_disfavoredOverload
     init(underlyingError error: any Error) {
-        self.underlyingError = error
-        self.customDescription = nil
+        underlyingError = error
+        customDescription = nil
     }
 }

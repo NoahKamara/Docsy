@@ -11,7 +11,7 @@
 import Foundation
 
 /// A container for a collection of data. Each data can have multiple variants.
-//struct DataAssetManager {
+// struct DataAssetManager {
 //    var storage = [String: DataAsset]()
 //
 //    // A "file name with no extension" to "file name with extension" index
@@ -132,7 +132,7 @@ import Foundation
 //    mutating func update(name: String, asset: DataAsset, dataProvider: DocumentationContextDataProvider? = nil, bundle documentationBundle: DocumentationBundle? = nil) {
 //        bestKey(forAssetName: name).flatMap({ storage[$0] = asset })
 //    }
-//}
+// }
 
 /// A container for a collection of data that represent multiple ways to describe a single asset.
 ///
@@ -165,7 +165,7 @@ public struct DataAsset: Decodable, Equatable, Sendable {
     public var variants = [DataTraitCollection: URL]()
 
     /// The metadata associated with each variant.
-    public var metadata = [URL : Metadata]()
+    public var metadata = [URL: Metadata]()
 
     /// The context in which you intend to use the data asset.
     public var context = Context.display
@@ -174,8 +174,8 @@ public struct DataAsset: Decodable, Equatable, Sendable {
     public init() {}
 
     init(
-        variants: [DataTraitCollection : URL] = [DataTraitCollection: URL](),
-        metadata: [URL : DataAsset.Metadata] = [URL : Metadata](),
+        variants: [DataTraitCollection: URL] = [DataTraitCollection: URL](),
+        metadata: [URL: DataAsset.Metadata] = [URL: Metadata](),
         context: DataAsset.Context = Context.display
     ) {
         self.variants = variants
@@ -208,7 +208,6 @@ public struct DataAsset: Decodable, Equatable, Sendable {
 
         return BundleData(url: variant, traitCollection: traitCollection)
     }
-
 }
 
 /// The data associated with a documentation resource, for a specific trait collection.
@@ -229,10 +228,9 @@ public struct BundleData {
     }
 }
 
-
-extension DataAsset {
+public extension DataAsset {
     /// Metadata specific to this data asset.
-    public struct Metadata: Codable, Equatable, Sendable {
+    struct Metadata: Codable, Equatable, Sendable {
         /// The first ID found in the SVG asset.
         ///
         /// This value is nil if the data asset is not an SVG or if it is an SVG that does not contain an ID.
@@ -259,8 +257,8 @@ public struct DataTraitCollection: Hashable, Decodable, Sendable {
 
     /// Creates a new trait collection with traits set to their default, unspecified, values.
     public init() {
-        self.userInterfaceStyle = nil
-        self.displayScale = nil
+        userInterfaceStyle = nil
+        displayScale = nil
     }
 
     /// Returns a new trait collection consisting of traits merged from a specified array of trait collections.
@@ -303,18 +301,17 @@ public struct DataTraitCollection: Hashable, Decodable, Sendable {
 
     /// Returns all the asset's registered variants.
     public static var allCases: [DataTraitCollection] {
-        UserInterfaceStyle.allCases.flatMap { style in DisplayScale.allCases.map { .init(userInterfaceStyle: style, displayScale: $0)}}
+        UserInterfaceStyle.allCases.flatMap { style in DisplayScale.allCases.map { .init(userInterfaceStyle: style, displayScale: $0) }}
     }
-
 }
 
 /// The interface style for a rendering context.
 public enum UserInterfaceStyle: String, CaseIterable, Decodable, Sendable {
     /// The light interface style.
-    case light = "light"
+    case light
 
     /// The dark interface style.
-    case dark = "dark"
+    case dark
 }
 
 /// The display-scale factor of a rendering environment.
@@ -345,8 +342,7 @@ public enum DisplayScale: String, CaseIterable, Decodable, Sendable {
     }
 }
 
-fileprivate extension NSRegularExpression {
-
+private extension NSRegularExpression {
     /// Returns a boolean indicating if a match has been found in the given string.
     func matches(in string: String) -> Bool {
         return firstMatch(in: string) != nil

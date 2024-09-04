@@ -1,9 +1,9 @@
-//import Foundation
+// import Foundation
 //
-//public protocol VariantContainer {}
+// public protocol VariantContainer {}
 //
 //
-//public extension VariantContainer {
+// public extension VariantContainer {
 //    /// Sets the given value, if present, as the default value of the variant collection at the given key path.
 //    ///
 //    /// If a variant collection is present, this function updates its default value to the given value. Otherwise, it creates a new variant container with the given
@@ -40,4 +40,4 @@
 //    ) -> Value {
 //        self[keyPath: keyPath].defaultValue
 //    }
-//}
+// }

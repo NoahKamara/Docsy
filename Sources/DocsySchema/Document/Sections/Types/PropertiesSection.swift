@@ -6,7 +6,7 @@
 
  See https://swift.org/LICENSE.txt for license information
  See https://swift.org/CONTRIBUTORS.txt for Swift project authors
-*/
+ */
 
 import Foundation
 
@@ -28,14 +28,14 @@ public struct PropertiesSection: SectionProtocol {
         self.title = title
         self.items = items
     }
-    
+
     // MARK: - Codable
-    
+
     /// The list of keys to use to encode/decode this section.
     public enum CodingKeys: String, CodingKey {
         case kind, title, items
     }
-    
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         title = try container.decode(String.self, forKey: .title)

@@ -1,8 +1,8 @@
 import Foundation
 
-extension Document {
+public extension Document {
     /// Arbitrary metadata for a document.
-    public struct Metadata {
+    struct Metadata {
         // MARK: Tutorials metadata
 
         /// The name of technology associated with a tutorial.
@@ -94,7 +94,7 @@ extension Document.Metadata: Decodable {
     /// A list of pre-defined roles to assign to nodes.
     public enum Role: String, Equatable {
         case symbol, containerSymbol, restRequestSymbol, dictionarySymbol, pseudoSymbol,
-            pseudoCollection, collection, collectionGroup, article, sampleCode, unknown
+             pseudoCollection, collection, collectionGroup, article, sampleCode, unknown
         case table, codeListing, link, subsection, task, overview
         case tutorial = "project"
     }
@@ -133,7 +133,7 @@ extension Document.Metadata: Decodable {
             return nil
         }
 
-        public init?(intValue: Int) {
+        public init?(intValue _: Int) {
             return nil
         }
 
@@ -169,28 +169,28 @@ extension Document.Metadata: Decodable {
         category = try container.decodeIfPresent(String.self, forKey: .category)
         categoryPathComponent = try container.decodeIfPresent(String.self, forKey: .categoryPathComponent)
 
-        self.platforms = try container.decodeIfPresent([PlatformAvailability].self, forKey: .platforms)
-        self.modules = try container.decodeIfPresent([Module]?.self, forKey: .modules) ?? []
-        self.extendedModule = try container.decodeIfPresent(String.self, forKey: .extendedModule)
-        self.estimatedTime = try container.decodeIfPresent(String.self, forKey: .estimatedTime)
-        self.required = try container.decodeIfPresent(Bool.self, forKey: .required) ?? false
-        self.roleHeading = try container.decodeIfPresent(String.self, forKey: .roleHeading)
-        self.images = try container.decodeIfPresent([TopicImage].self, forKey: .images) ?? []
-        self.color = try container.decodeIfPresent(TopicColor.self, forKey: .color)
-        self.customMetadata = try container.decodeIfPresent([String: String].self, forKey: .customMetadata) ?? [:]
+        platforms = try container.decodeIfPresent([PlatformAvailability].self, forKey: .platforms)
+        modules = try container.decodeIfPresent([Module]?.self, forKey: .modules) ?? []
+        extendedModule = try container.decodeIfPresent(String.self, forKey: .extendedModule)
+        estimatedTime = try container.decodeIfPresent(String.self, forKey: .estimatedTime)
+        required = try container.decodeIfPresent(Bool.self, forKey: .required) ?? false
+        roleHeading = try container.decodeIfPresent(String.self, forKey: .roleHeading)
+        images = try container.decodeIfPresent([TopicImage].self, forKey: .images) ?? []
+        color = try container.decodeIfPresent(TopicColor.self, forKey: .color)
+        customMetadata = try container.decodeIfPresent([String: String].self, forKey: .customMetadata) ?? [:]
         let rawRole = try container.decodeIfPresent(String.self, forKey: .role)
-        self.role = rawRole == "tutorial" ? Role.tutorial.rawValue : rawRole
-        self.title = try container.decodeIfPresent(String.self, forKey: .title)
-        self.externalID = try container.decodeIfPresent(String.self, forKey: .externalID)
-        self.symbolKind = try container.decodeIfPresent(String.self, forKey: .symbolKind)
-        self.symbolAccessLevel = try container.decodeIfPresent(String.self, forKey: .symbolAccessLevel)
-        self.conformance = try container.decodeIfPresent(ConformanceSection.self, forKey: .conformance)
-        self.fragments = try container.decodeIfPresent([DeclarationSection.Token].self, forKey: .fragments)
-        self.navigatorTitle = try container.decodeIfPresent([DeclarationSection.Token].self, forKey: .navigatorTitle)
-        self.sourceFileURI = try container.decodeIfPresent(String.self, forKey: .sourceFileURI)
-        self.remoteSource = try container.decodeIfPresent(RemoteSource.self, forKey: .remoteSource)
-        self.tags = try container.decodeIfPresent([Document.Tag].self, forKey: .tags)
-        self.hasNoExpandedDocumentation = try container.decodeIfPresent(Bool.self, forKey: .hasNoExpandedDocumentation) ?? false
+        role = rawRole == "tutorial" ? Role.tutorial.rawValue : rawRole
+        title = try container.decodeIfPresent(String.self, forKey: .title)
+        externalID = try container.decodeIfPresent(String.self, forKey: .externalID)
+        symbolKind = try container.decodeIfPresent(String.self, forKey: .symbolKind)
+        symbolAccessLevel = try container.decodeIfPresent(String.self, forKey: .symbolAccessLevel)
+        conformance = try container.decodeIfPresent(ConformanceSection.self, forKey: .conformance)
+        fragments = try container.decodeIfPresent([DeclarationSection.Token].self, forKey: .fragments)
+        navigatorTitle = try container.decodeIfPresent([DeclarationSection.Token].self, forKey: .navigatorTitle)
+        sourceFileURI = try container.decodeIfPresent(String.self, forKey: .sourceFileURI)
+        remoteSource = try container.decodeIfPresent(RemoteSource.self, forKey: .remoteSource)
+        tags = try container.decodeIfPresent([Document.Tag].self, forKey: .tags)
+        hasNoExpandedDocumentation = try container.decodeIfPresent(Bool.self, forKey: .hasNoExpandedDocumentation) ?? false
 
         let extraKeys = Set(container.allKeys).subtracting(
             [

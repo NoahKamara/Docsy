@@ -1,9 +1,8 @@
 import Foundation
 
-
-
 public extension BlockContent {
     // MARK: OrderedList
+
     /// A list that contains ordered items.
     struct OrderedList: BlockContentProtocol {
         /// The items in this list.
@@ -26,6 +25,7 @@ public extension BlockContent {
     }
 
     // MARK: Unordered
+
     /// A list that contains unordered items.
     struct UnorderedList: Equatable, Sendable {
         /// The items in this list.
@@ -37,8 +37,8 @@ public extension BlockContent {
         }
     }
 
-
     // MARK: ListItem
+
     /// An item in a list.
     struct ListItem: Schema {
         /// The item content.
@@ -54,22 +54,22 @@ public extension BlockContent {
     }
 }
 
-
 public extension BlockContent {
     // MARK: TermList
+
     /// A list of terms.
     struct TermList: Schema {
         /// The items in this list.
         public var items: [TermListItem]
-    
+
         /// Creates a new term list with the given items.
         public init(items: [TermListItem]) {
             self.items = items
         }
     }
-    
 
     // MARK: TermList Item
+
     /// A term definition.
     ///
     /// Includes a named term and its definition, that look like:
@@ -85,7 +85,7 @@ public extension BlockContent {
             /// The term content.
             public let inlineContent: [InlineContent]
         }
-        
+
         /// A definition rendered as a list of block-content elements.
         public struct Definition: Schema {
             /// The definition content.
@@ -98,5 +98,3 @@ public extension BlockContent {
         public let definition: Definition
     }
 }
-
-

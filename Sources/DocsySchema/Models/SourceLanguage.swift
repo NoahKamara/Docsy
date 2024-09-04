@@ -1,12 +1,19 @@
 import Foundation
 
-public struct SourceLanguage: Hashable, Codable, Comparable, Sendable {
+public struct SourceLanguage: Hashable, Codable, Equatable, Sendable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    
     /// The display name of the programming language.
     public var name: String
+
     /// A globally unique identifier for the language.
     public var id: String
+
     /// Aliases for the language's identifier.
     public var idAliases: [String] = []
+
     /// The identifier to use for link disambiguation purposes.
     public var linkDisambiguationID: String
 
@@ -34,7 +41,7 @@ public struct SourceLanguage: Hashable, Codable, Comparable, Sendable {
 
             let id = name.lowercased()
             self.id = id
-            self.linkDisambiguationID = id
+            linkDisambiguationID = id
         }
     }
 
@@ -76,7 +83,6 @@ public struct SourceLanguage: Hashable, Codable, Comparable, Sendable {
         }
     }
 
-
     enum CodingKeys: CodingKey {
         case name
         case id
@@ -98,10 +104,10 @@ public struct SourceLanguage: Hashable, Codable, Comparable, Sendable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: SourceLanguage.CodingKeys.self)
 
-        try container.encode(self.name, forKey: SourceLanguage.CodingKeys.name)
-        try container.encode(self.id, forKey: SourceLanguage.CodingKeys.id)
-        try container.encode(self.idAliases, forKey: SourceLanguage.CodingKeys.idAliases)
-        try container.encode(self.linkDisambiguationID, forKey: SourceLanguage.CodingKeys.linkDisambiguationID)
+        try container.encode(name, forKey: SourceLanguage.CodingKeys.name)
+        try container.encode(id, forKey: SourceLanguage.CodingKeys.id)
+        try container.encode(idAliases, forKey: SourceLanguage.CodingKeys.idAliases)
+        try container.encode(linkDisambiguationID, forKey: SourceLanguage.CodingKeys.linkDisambiguationID)
     }
 
     public static func < (lhs: SourceLanguage, rhs: SourceLanguage) -> Bool {
@@ -116,9 +122,8 @@ public struct SourceLanguage: Hashable, Codable, Comparable, Sendable {
     }
 }
 
-
-
 // MARK: Known Languages
+
 public extension SourceLanguage {
     /// The list of programming languages that are known to DocC.
     static let knownLanguages: [SourceLanguage] = [
@@ -144,7 +149,6 @@ public extension SourceLanguage {
         .xml,
         .metal,
     ]
-
 
     /// Finds the programming language that matches a given identifier, or creates a new one if it finds no existing language.
     /// - Parameter id: The identifier of the programming language.
@@ -173,12 +177,11 @@ public extension SourceLanguage {
         case "metal": self = .metal
         case "html, xhtml, rss, atom, xjb, xsd, xsl, plist, wsf, svg": self = .xml
         default:
-            self.name = id
+            name = id
             self.id = id
-            self.linkDisambiguationID = id
+            linkDisambiguationID = id
         }
     }
-
 
     /// The Bash shell scripting language.
     static let bash = SourceLanguage(name: "Bash", id: "bash", idAliases: ["sh", "zsh"])
@@ -223,6 +226,3 @@ public extension SourceLanguage {
     /// The Metal programming language.
     static let metal = SourceLanguage(name: "Metal", id: "metal")
 }
-
-
-

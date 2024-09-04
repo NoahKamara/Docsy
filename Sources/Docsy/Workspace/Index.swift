@@ -5,9 +5,9 @@
 ////  Created by Noah Kamara on 24.08.24.
 ////
 //
-//import Foundation
+// import Foundation
 //
-//public struct Index {
+// public struct Index {
 //    public let includedArchiveIdentifiers: [String]
 //    public let interfaceLanguages: InterfaceLanguages
 //    public let references: References
@@ -19,19 +19,19 @@
 //        self.references = references
 //        self.schemaVersion = schemaVersion
 //    }
-//}
+// }
 //
 //// MARK: - InterfaceLanguages
-//public struct InterfaceLanguages {
+// public struct InterfaceLanguages {
 //    public let swift: [Swift]
 //
 //    public init(swift: [Swift]) {
 //        self.swift = swift
 //    }
-//}
+// }
 //
 //// MARK: - Swift
-//public struct Swift {
+// public struct Swift {
 //    public let children: [SwiftChild]
 //    public let path: String
 //    public let title: String
@@ -45,10 +45,10 @@
 //        self.type = type
 //        self.icon = icon
 //    }
-//}
+// }
 //
 //// MARK: - FluffyChild
-//public struct FluffyChild {
+// public struct FluffyChild {
 //    public let title: String
 //    public let type: PurpleType
 //    public let path: String?
@@ -62,10 +62,10 @@
 //        self.children = children
 //        self.deprecated = deprecated
 //    }
-//}
+// }
 //
 //// MARK: - PurpleChild
-//public struct PurpleChild {
+// public struct PurpleChild {
 //    public let title: String
 //    public let type: FluffyType
 //    public let path: String?
@@ -77,10 +77,10 @@
 //        self.path = path
 //        self.children = children
 //    }
-//}
+// }
 //
 //// MARK: - SwiftChild
-//public struct SwiftChild {
+// public struct SwiftChild {
 //    public let title: String
 //    public let type: String
 //    public let path: String?
@@ -92,9 +92,9 @@
 //        self.path = path
 //        self.children = children
 //    }
-//}
+// }
 //
-//public enum PurpleType: String {
+// public enum PurpleType: String {
 //    case groupMarker
 //    case method
 //    case op
@@ -102,9 +102,9 @@
 //    case symbol
 //    case typeCase
 //    case typeInit
-//}
+// }
 //
-//public enum FluffyType: String {
+// public enum FluffyType: String {
 //    case groupMarker
 //    case method
 //    case property
@@ -113,19 +113,19 @@
 //    case typeExtension
 //    case typeInit
 //    case typeProtocol
-//}
+// }
 //
 //// MARK: - References
-//public struct References {
+// public struct References {
 //    public let slothCreatorIconPNG: SlothCreatorIconPNG
 //
 //    public init(slothCreatorIconPNG: SlothCreatorIconPNG) {
 //        self.slothCreatorIconPNG = slothCreatorIconPNG
 //    }
-//}
+// }
 //
 //// MARK: - SlothCreatorIconPNG
-//public struct SlothCreatorIconPNG: Codable {
+// public struct SlothCreatorIconPNG: Codable {
 //    public let alt: String
 //    public let identifier: String
 //    public let type: String
@@ -137,10 +137,10 @@
 //        self.type = type
 //        self.variants = variants
 //    }
-//}
+// }
 //
 //// MARK: - Variant
-//public struct Variant: Codable {
+// public struct Variant: Codable {
 //    public let traits: [String]
 //    public let url: String
 //
@@ -148,10 +148,10 @@
 //        self.traits = traits
 //        self.url = url
 //    }
-//}
+// }
 //
 //// MARK: - SchemaVersion
-//public struct SchemaVersion: Codable {
+// public struct SchemaVersion: Codable {
 //    public let major: Int
 //    public let minor: Int
 //    public let patch: Int
@@ -161,4 +161,4 @@
 //        self.minor = minor
 //        self.patch = patch
 //    }
-//}
+// }

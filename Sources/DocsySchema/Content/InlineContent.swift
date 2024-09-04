@@ -4,10 +4,12 @@ public typealias InlineContents = [InlineContent]
 
 public enum InlineContent: Equatable, Hashable, Sendable {
     // MARK: Plain
+
     /// A piece of plain text.
     case text(String)
 
     // MARK: Text Style
+
     /// A piece of code like a variable name or a single operator.
     case codeVoice(code: String)
     /// An emphasized piece of inline content.
@@ -22,6 +24,7 @@ public enum InlineContent: Equatable, Hashable, Sendable {
     case superscript(inlineContent: [InlineContent])
 
     // MARK: Embeddings & References
+
     /// An image element.
     case image(identifier: ReferenceIdentifier, metadata: ContentMetadata?)
     /// A reference to another resource.
@@ -33,8 +36,8 @@ public enum InlineContent: Equatable, Hashable, Sendable {
     case inlineHead(inlineContent: [InlineContent])
 }
 
-
 // MARK: Decodable
+
 extension InlineContent: Decodable {
     private enum InlineType: String, Codable {
         case codeVoice
@@ -92,7 +95,7 @@ extension InlineContent: Decodable {
             self = try .strong(inlineContent: container.decode([Self].self, forKey: .inlineContent))
         case .image:
             self = try .image(
-                identifier: container.decode(ReferenceIdentifier.self, forKey: . identifier),
+                identifier: container.decode(ReferenceIdentifier.self, forKey: .identifier),
                 metadata: container.decodeIfPresent(ContentMetadata.self, forKey: .metadata)
             )
         case .reference:
@@ -132,6 +135,7 @@ extension InlineContent: Decodable {
 }
 
 // MARK: Metadata
+
 /// Additional metadata that might belong to a content element.
 public struct ContentMetadata: Equatable, Hashable, Decodable, Sendable {
     /// named anchor
@@ -145,9 +149,9 @@ public struct ContentMetadata: Equatable, Hashable, Decodable, Sendable {
     public var deviceFrame: String?
 }
 
-
 // MARK: Lossy PlainText conversion
-extension InlineContent {
+
+public extension InlineContent {
     /// Returns a lossy conversion of the formatted content to a plain-text string.
     ///
     /// This implementation is necessarily limited because it doesn't make
@@ -155,7 +159,7 @@ extension InlineContent {
     /// more sense to use the `rawIndexableTextContent` function that does use `RenderReference`
     /// for a more accurate textual representation of `InlineContent.image` and
     /// `InlineContent.reference`.
-    public var plainText: String {
+    var plainText: String {
         switch self {
         case let .codeVoice(code):
             return code
@@ -183,10 +187,9 @@ extension InlineContent {
     }
 }
 
-extension Sequence<InlineContent> {
+public extension Sequence<InlineContent> {
     /// Returns a lossy conversion of the formatted content to a plain-text string.
-    public var plainText: String {
+    var plainText: String {
         return map { $0.plainText }.joined()
     }
 }
-
