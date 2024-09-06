@@ -59,12 +59,8 @@ public struct LocalFileSystemDataProvider: DataProvider {
                 continue
             }
 
-            do {
-                let bundle = try createBundle(at: fileURL)
-                bundles.append(bundle)
-            } catch {
-                print(error)
-            }
+            let bundle = try createBundle(at: fileURL)
+            bundles.append(bundle)
             files.skipDescendants()
         }
 

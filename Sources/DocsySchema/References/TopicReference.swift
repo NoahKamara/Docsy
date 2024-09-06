@@ -1,6 +1,6 @@
 import Foundation
 
-public struct TopicReference: Sendable, Hashable, Equatable, CustomStringConvertible {
+public struct TopicReference: Sendable, Hashable, Equatable, CustomStringConvertible, Codable {
     public var description: String {
         "Topic(\(url.absoluteString))"
     }
@@ -107,7 +107,7 @@ public struct TopicReference: Sendable, Hashable, Equatable, CustomStringConvert
         )
     }
 
-    struct Storage: Sendable, Hashable, Equatable {
+    struct Storage: Sendable, Hashable, Equatable, Codable {
         let bundleIdentifier: String
         let path: String
         let fragment: String?
@@ -144,7 +144,7 @@ public struct TopicReference: Sendable, Hashable, Equatable, CustomStringConvert
     }
 }
 
-extension TopicReference: Decodable {
+extension TopicReference {
     enum CodingKeys: CodingKey {
         case url, interfaceLanguage
     }
@@ -170,6 +170,13 @@ extension TopicReference: Decodable {
         let interfaceLanguage = SourceLanguage(id: language)
 
         self.init(bundleIdentifier: bundleIdentifier, path: url.path, fragment: url.fragment, sourceLanguage: interfaceLanguage)
+    }
+
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+
+        try container.encode(sourceLanguage.id, forKey: .interfaceLanguage)
+        try container.encode(url, forKey: .url)
     }
 }
 

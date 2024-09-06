@@ -23,7 +23,7 @@ public extension NavigatorIndex {
         for bundle: DocumentationBundle,
         with dataProvider: any DocumentationContextDataProvider
     ) async throws {
-        Self.logger.info("[\(bundle.identifier)] loading")
+        Self.logger.debug("[\(bundle.identifier)] loading")
 
         let index: DocumentationIndex = try await {
             do {
@@ -61,7 +61,7 @@ public extension NavigatorIndex {
     ///   - dataProvider: A provider of documentation data
     @MainActor
     func unload(bundle: DocumentationBundle) {
-        Self.logger.info("[\(bundle.identifier)] unlodaing")
+        Self.logger.debug("[\(bundle.identifier)] unlodaing")
         tree.removeBundle(bundle.identifier)
     }
 }

@@ -68,7 +68,7 @@ public actor DocumentationWorkspace: DocumentationContextDataProvider {
     ///   - provider: The workspace data provider to add to the workspace.
     ///   - options: The options that the data provider uses to discover documentation bundles that it provides to the delegate.
     public func registerProvider(_ provider: DataProvider) async throws {
-        Self.logger.info("[\(provider.identifier)] register '\(type(of: provider))'")
+        Self.logger.debug("[\(provider.identifier)] register '\(type(of: provider))'")
 
         // We must add the provider before adding the bundle so that the delegate
         // may start making requests immediately.

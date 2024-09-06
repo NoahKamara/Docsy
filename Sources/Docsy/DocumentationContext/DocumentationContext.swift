@@ -66,7 +66,6 @@ public class DocumentationContext {
 
     public func document(for reference: TopicReference) async throws -> Document {
         do {
-            print("DOCUMENT")
             let bundle = try bundle(for: reference.bundleIdentifier)
             var url = bundle.baseURL
             url.append(component: "data")
@@ -76,7 +75,7 @@ public class DocumentationContext {
             let document = try JSONDecoder().decode(Document.self, from: data)
             return document
         } catch let error as DescribedError {
-            print("document(for:) failed: " + error.errorDescription)
+            Self.logger.error("document(for:) failed: \(error.errorDescription)")
             throw error
         } catch {
             throw error
@@ -91,7 +90,7 @@ public class DocumentationContext {
             url.append(component: "index.html")
             return try await dataProvider.contentsOfURL(url, in: bundle)
         } catch let error as DescribedError {
-            print("document(for:) failed: " + error.errorDescription)
+            Self.logger.error("failed to load contents for [\(reference.url)]: \(error.errorDescription)")
             throw error
         } catch {
             throw error
@@ -120,7 +119,7 @@ public class DocumentationContext {
             let url = bundle.baseURL.appending(path: path)
             return try await dataProvider.contentsOfURL(url, in: bundle)
         } catch let error as DescribedError {
-            print("document(for:) failed: " + error.errorDescription)
+            Self.logger.error("failed to load contents for [\(url)]: \(error.errorDescription)")
             throw error
         } catch {
             throw error
@@ -180,7 +179,7 @@ struct ResolvedBundleReference: Codable, Hashable {
 
 extension DocumentationContext: DocumentationContextDataProviderDelegate {
     public func dataProvider(_ dataProvider: any DocumentationContextDataProvider, didAddBundle bundle: DocumentationBundle) {
-        Self.logger.info("[dataProvider] add bundle '\(bundle.identifier)'")
+        Self.logger.debug("[dataProvider] add bundle '\(bundle.identifier)'")
         register(bundle)
 
         Task {
@@ -189,7 +188,7 @@ extension DocumentationContext: DocumentationContextDataProviderDelegate {
     }
 
     public func dataProvider(_: any DocumentationContextDataProvider, didRemoveBundle bundle: DocumentationBundle) {
-        Self.logger.info("[dataProvider] remove bundle '\(bundle.identifier)'")
+        Self.logger.debug("[dataProvider] remove bundle '\(bundle.identifier)'")
 
         index.unload(bundle: bundle)
         withMutation(keyPath: \.bundles) {
