@@ -39,8 +39,8 @@ public struct UnresolvedRenderReference: ReferenceProtocol, Equatable {
 
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        type = try values.decode(ReferenceType.self, forKey: .type)
-        identifier = try values.decode(ReferenceIdentifier.self, forKey: .identifier)
-        title = try values.decode(String.self, forKey: .title)
+        self.type = try values.decode(ReferenceType.self, forKey: .type)
+        self.identifier = try values.decode(ReferenceIdentifier.self, forKey: .identifier)
+        self.title = try values.decode(String.self, forKey: .title)
     }
 }

@@ -25,12 +25,12 @@ public struct TaskGroupSection: SectionProtocol, Equatable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        title = try container.decodeIfPresent(String.self, forKey: .title)
-        abstract = try container.decodeIfPresent([InlineContent].self, forKey: .abstract)
-        identifiers = try container.decode([String].self, forKey: .identifiers)
+        self.title = try container.decodeIfPresent(String.self, forKey: .title)
+        self.abstract = try container.decodeIfPresent([InlineContent].self, forKey: .abstract)
+        self.identifiers = try container.decode([String].self, forKey: .identifiers)
 
-        generated = try container.decodeIfPresent(Bool.self, forKey: .generated) ?? false
-        anchor = try container.decodeIfPresent(String.self, forKey: .anchor)
-        discussion = try container.decodeIfPresent(AnyContentSection.self, forKey: .discussion)
+        self.generated = try container.decodeIfPresent(Bool.self, forKey: .generated) ?? false
+        self.anchor = try container.decodeIfPresent(String.self, forKey: .anchor)
+        self.discussion = try container.decodeIfPresent(AnyContentSection.self, forKey: .discussion)
     }
 }

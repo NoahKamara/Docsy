@@ -41,55 +41,37 @@ public struct TopicReference: Sendable, Hashable, Equatable, CustomStringConvert
         return newReference
     }
 
-    //    /// A synchronized reference cache to store resolved references.
-    //    private static var sharedPool = Synchronized([ReferenceBundleIdentifier: [ReferenceKey: ResolvedTopicReference]]())
-    //
-    //    /// Clears cached references belonging to the bundle with the given identifier.
-    //    /// - Parameter bundleIdentifier: The identifier of the bundle to which the method should clear belonging references.
-    //    static func purgePool(for bundleIdentifier: String) {
-    //        sharedPool.sync { $0.removeValue(forKey: bundleIdentifier) }
-    //    }
-
-    //    /// Enables reference caching for any identifiers created with the given bundle identifier.
-    //    static func enableReferenceCaching(for bundleIdentifier: ReferenceBundleIdentifier) {
-    //        sharedPool.sync { sharedPool in
-    //            if !sharedPool.keys.contains(bundleIdentifier) {
-    //                sharedPool[bundleIdentifier] = [:]
-    //            }
-    //        }
-    //    }
-
     /// Returns `true` if the passed `URL` has a "doc" URL scheme.
     public static func urlHasResolvedTopicScheme(_ url: URL?) -> Bool {
-        return url?.scheme?.lowercased() == TopicReference.urlScheme
+        url?.scheme?.lowercased() == TopicReference.urlScheme
     }
 
     /// The storage for the resolved topic reference's state.
     let _storage: Storage
 
     public var url: URL {
-        return _storage.url
+        _storage.url
     }
 
     /// The identifier of the bundle that owns this documentation topic.
     public var bundleIdentifier: String {
-        return _storage.bundleIdentifier
+        _storage.bundleIdentifier
     }
 
     /// The absolute path from the bundle to this topic, delimited by `/`.
     public var path: String {
-        return _storage.path
+        _storage.path
     }
 
     /// A URL fragment referring to a resource in the topic.
     public var fragment: String? {
-        return _storage.fragment
+        _storage.fragment
     }
 
     /// The source language for which this topic is relevant.
     public var sourceLanguage: SourceLanguage {
         // Return Swift by default to maintain backwards-compatibility.
-        return sourceLanguages.contains(.swift) ? .swift : sourceLanguages.first!
+        sourceLanguages.contains(.swift) ? .swift : sourceLanguages.first!
     }
 
     /// The source languages for which this topic is relevant.
@@ -98,7 +80,7 @@ public struct TopicReference: Sendable, Hashable, Equatable, CustomStringConvert
     /// corresponding ``DocumentationNode``. If you need to query the source languages associated with a documentation node, use
     /// ``DocumentationContext/sourceLanguages(for:)`` instead.
     public var sourceLanguages: Set<SourceLanguage> {
-        return _storage.sourceLanguages
+        _storage.sourceLanguages
     }
 
     /// - Note: The `path` parameter is escaped to a path readable string.
@@ -117,7 +99,7 @@ public struct TopicReference: Sendable, Hashable, Equatable, CustomStringConvert
 
     private init(bundleIdentifier: String, urlReadablePath: String, urlReadableFragment: String? = nil, sourceLanguages: Set<SourceLanguage>) {
         precondition(!sourceLanguages.isEmpty, "ResolvedTopicReference.sourceLanguages cannot be empty")
-        _storage = Storage(
+        self._storage = Storage(
             bundleIdentifier: bundleIdentifier,
             path: urlReadablePath,
             fragment: urlReadableFragment,
@@ -148,16 +130,16 @@ public struct TopicReference: Sendable, Hashable, Equatable, CustomStringConvert
             self.path = path
             self.fragment = fragment
             self.sourceLanguages = sourceLanguages
-            identifierPathAndFragment = "\(bundleIdentifier)\(path)\(fragment ?? "")"
+            self.identifierPathAndFragment = "\(bundleIdentifier)\(path)\(fragment ?? "")"
 
             var components = URLComponents()
             components.scheme = TopicReference.urlScheme
             components.host = bundleIdentifier
             components.path = path
             components.fragment = fragment
-            url = components.url!
-            pathComponents = url.pathComponents
-            absoluteString = url.absoluteString
+            self.url = components.url!
+            self.pathComponents = url.pathComponents
+            self.absoluteString = url.absoluteString
         }
     }
 }
@@ -197,7 +179,7 @@ extension TopicReference: Decodable {
 /// For example, a path like `"hello world/example project"` is converted to `"hello-world/example-project"`
 /// instead of `"hello%20world/example%20project"`.
 public func urlReadablePath(_ path: some StringProtocol) -> String {
-    return path.components(separatedBy: .urlPathNotAllowed).joined(separator: "-")
+    path.components(separatedBy: .urlPathNotAllowed).joined(separator: "-")
 }
 
 private extension CharacterSet {

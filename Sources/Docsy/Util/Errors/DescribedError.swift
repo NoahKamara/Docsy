@@ -21,13 +21,13 @@ struct AnyDescribedError: DescribedError {
 
     @_disfavoredOverload
     init(underlyingError error: some DescribedError) {
-        underlyingError = error
-        customDescription = error.errorDescription
+        self.underlyingError = error
+        self.customDescription = error.errorDescription
     }
 
     @_disfavoredOverload
     init(underlyingError error: any Error) {
-        underlyingError = error
-        customDescription = nil
+        self.underlyingError = error
+        self.customDescription = nil
     }
 }

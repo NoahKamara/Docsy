@@ -1,4 +1,3 @@
-
 import DocsySchema
 import Foundation
 
@@ -24,14 +23,14 @@ public struct DocumentationBundle: CustomStringConvertible, Sendable {
         metadata.identifier
     }
 
-//    /// The documentation bundle's version.
-//    ///
-//    /// > It's not safe to make computations based on assumptions about the format of bundle's version. The version can be in any format.
+    /// The documentation bundle's version.
+    ///
+    /// > It's not safe to make computations based on assumptions about the format of bundle's version. The version can be in any format.
 //    public var version: String? {
-//        info.version
+//        metadata.version
 //    }
 
-//    /// Symbol Graph JSON files for the modules documented by this bundle.
+    /// Symbol Graph JSON files for the modules documented by this bundle.
 //    public let symbolGraphURLs: [URL]
 //
 //    /// DocC Markup files of the bundle.
@@ -51,9 +50,9 @@ public struct DocumentationBundle: CustomStringConvertible, Sendable {
 //
 //    /// A custom HTML file to use as the footer for rendered output.
 //    public let customFooter: URL?
-//
-//    /// A custom JSON settings file used to theme renderer output.
-//    public let themeSettings: URL?
+
+    /// A custom JSON settings file used to theme renderer output.
+    public let themeSettings: URL?
 
     /// A URL prefix to be appended to the relative presentation URL.
     public let baseURL: URL
@@ -75,15 +74,15 @@ public struct DocumentationBundle: CustomStringConvertible, Sendable {
     public init(
         info: Metadata,
         baseURL: URL = URL(string: "/")!,
-        indexURL: URL
+        indexURL: URL,
 //        symbolGraphURLs: [URL],
 //        documentURLs: [URL],
 //        miscResourceURLs: [URL],
 //        customHeader: URL? = nil,
 //        customFooter: URL? = nil,
-//        themeSettings: URL? = nil
+        themeSettings: URL? = nil
     ) {
-        metadata = info
+        self.metadata = info
         self.baseURL = baseURL
         self.indexURL = indexURL
 //        self.symbolGraphURLs = symbolGraphURLs
@@ -103,11 +102,12 @@ public struct DocumentationBundle: CustomStringConvertible, Sendable {
             path: "/tutorials",
             sourceLanguage: .swift
         )
-        rootReference = TopicReference(bundleIdentifier: info.identifier, path: "/", sourceLanguage: .swift)
+        self.rootReference = TopicReference(bundleIdentifier: info.identifier, path: "", sourceLanguage: .swift)
         self.documentationRootReference = documentationRootReference
         self.tutorialsRootReference = tutorialsRootReference
-        technologyTutorialsRootReference = tutorialsRootReference.appendingPath(urlReadablePath(info.displayName))
-        articlesDocumentationRootReference = documentationRootReference.appendingPath(urlReadablePath(info.displayName))
+        self.technologyTutorialsRootReference = tutorialsRootReference.appendingPath(urlReadablePath(info.displayName))
+        self.articlesDocumentationRootReference = documentationRootReference.appendingPath(urlReadablePath(info.displayName))
+        self.themeSettings = themeSettings
     }
 
     public let rootReference: TopicReference
@@ -123,30 +123,4 @@ public struct DocumentationBundle: CustomStringConvertible, Sendable {
 
     /// Default path to resolve articles.
     public let articlesDocumentationRootReference: TopicReference
-}
-
-// public func stylesheetURLs() -> [ URL ] {
-//    return fm.contentsOfDirectory(at: url.appendingPathComponent("css"))
-// }
-// public func userImageURLs() -> [ URL ] {
-//    return fm.contentsOfDirectory(at: url.appendingPathComponent("images"))
-// }
-// public func systemImageURLs() -> [ URL ] {
-//    return fm.contentsOfDirectory(at: url.appendingPathComponent("img"))
-// }
-// public func userVideoURLs() -> [ URL ] {
-//    return fm.contentsOfDirectory(at: url.appendingPathComponent("videos"))
-// }
-// public func userDownloadURLs() -> [ URL ] {
-//    return fm.contentsOfDirectory(at: url.appendingPathComponent("downloads"))
-// }
-
-public enum DoccArchivePath {
-    public static let tutorialsFolderName = "tutorials"
-    public static let documentationFolderName = "documentation"
-    public static let dataFolderName = "data"
-    public static let indexFolderName = "index"
-
-    public static let tutorialsFolder = "/\(tutorialsFolderName)"
-    public static let documentationFolder = "/\(documentationFolderName)"
 }

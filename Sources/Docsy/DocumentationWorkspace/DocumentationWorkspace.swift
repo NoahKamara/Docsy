@@ -1,11 +1,6 @@
 import Foundation
 import OSLog
 
-extension Logger {
-    static func docsy(_ category: String) -> Logger {
-        Logger(subsystem: "com.noahkamara.docsy", category: category)
-    }
-}
 
 public actor DocumentationWorkspace: DocumentationContextDataProvider {
     static let logger = Logger.docsy("Workspace")
@@ -20,10 +15,10 @@ public actor DocumentationWorkspace: DocumentationContextDataProvider {
         /// A plain-text description of the error.
         public var errorDescription: String {
             switch self {
-            case let .unknownBundle(id):
-                return "The requested data could not be located because a containing bundle with id '\(id)' could not be found in the workspace."
-            case let .unknownProvider(id):
-                return "The requested data could not be located because a containing data provider with id '\(id)' could not be found in the workspace."
+            case .unknownBundle(let id):
+                "The requested data could not be located because a containing bundle with id '\(id)' could not be found in the workspace."
+            case .unknownProvider(let id):
+                "The requested data could not be located because a containing data provider with id '\(id)' could not be found in the workspace."
             }
         }
     }
@@ -79,9 +74,7 @@ public actor DocumentationWorkspace: DocumentationContextDataProvider {
         // may start making requests immediately.
         providers[provider.identifier] = provider
 
-        let discoveredBundles = try await Task.detached {
-            try await provider.bundles()
-        }.value
+        let discoveredBundles = try await provider.bundles()
 
         for bundle in discoveredBundles {
             Self.logger.info("[\(provider.identifier)] register bundle: '\(bundle.identifier)'")
@@ -123,16 +116,3 @@ public actor DocumentationWorkspace: DocumentationContextDataProvider {
         providers[provider.identifier] = nil
     }
 }
-
-// public extension DocumentationWorkspace {
-//    @MainActor
-//    func setDelegate(_ delegate: DocumentationContextDataProviderDelegate) async {
-//        return
-//    }
-//
-//    //    func beginNotifyingDelegate() async {
-//    //        for (identifier, bundle) in bundles {
-//    //            await delegate?.dataProvider(self, didAddBundle: bundle)
-//    //        }
-//    //    }
-// }

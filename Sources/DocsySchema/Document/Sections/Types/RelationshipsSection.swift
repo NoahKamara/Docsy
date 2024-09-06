@@ -43,8 +43,8 @@ public struct RelationshipsSection: SectionProtocol, Equatable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.decode(String.self, forKey: .type)
-        title = try container.decode(String.self, forKey: .title)
-        identifiers = try container.decode([String].self, forKey: .identifiers)
+        self.type = try container.decode(String.self, forKey: .type)
+        self.title = try container.decode(String.self, forKey: .title)
+        self.identifiers = try container.decode([String].self, forKey: .identifiers)
     }
 }

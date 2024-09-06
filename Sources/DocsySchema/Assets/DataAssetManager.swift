@@ -257,15 +257,15 @@ public struct DataTraitCollection: Hashable, Decodable, Sendable {
 
     /// Creates a new trait collection with traits set to their default, unspecified, values.
     public init() {
-        userInterfaceStyle = nil
-        displayScale = nil
+        self.userInterfaceStyle = nil
+        self.displayScale = nil
     }
 
     /// Returns a new trait collection consisting of traits merged from a specified array of trait collections.
     public init(traitsFrom traitCollections: [DataTraitCollection]) {
         for trait in traitCollections {
-            userInterfaceStyle = trait.userInterfaceStyle ?? userInterfaceStyle
-            displayScale = trait.displayScale ?? displayScale
+            self.userInterfaceStyle = trait.userInterfaceStyle ?? userInterfaceStyle
+            self.displayScale = trait.displayScale ?? displayScale
         }
     }
 
@@ -273,9 +273,9 @@ public struct DataTraitCollection: Hashable, Decodable, Sendable {
     public init(from rawValues: [String]) {
         for value in rawValues {
             if let validUserInterfaceStyle = UserInterfaceStyle(rawValue: value) {
-                userInterfaceStyle = validUserInterfaceStyle
+                self.userInterfaceStyle = validUserInterfaceStyle
             } else if let validDisplayScale = DisplayScale(rawValue: value) {
-                displayScale = validDisplayScale
+                self.displayScale = validDisplayScale
             }
         }
     }
@@ -333,11 +333,11 @@ public enum DisplayScale: String, CaseIterable, Decodable, Sendable {
     var scaleFactor: Int {
         switch self {
         case .standard:
-            return 1
+            1
         case .double:
-            return 2
+            2
         case .triple:
-            return 3
+            3
         }
     }
 }
@@ -345,7 +345,7 @@ public enum DisplayScale: String, CaseIterable, Decodable, Sendable {
 private extension NSRegularExpression {
     /// Returns a boolean indicating if a match has been found in the given string.
     func matches(in string: String) -> Bool {
-        return firstMatch(in: string) != nil
+        firstMatch(in: string) != nil
     }
 
     /// Returns a substring containing the first match found in a given string.

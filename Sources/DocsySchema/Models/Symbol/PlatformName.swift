@@ -5,7 +5,7 @@ public struct PlatformName: Codable, Hashable, Equatable, Sendable {
 
     /// Compares platform names independently of any known aliases differences or possible incomplete display names.
     public static func == (lhs: PlatformName, rhs: PlatformName) -> Bool {
-        return lhs.rawValue == rhs.rawValue
+        lhs.rawValue == rhs.rawValue
     }
 
     /// Creates a new platform name value.

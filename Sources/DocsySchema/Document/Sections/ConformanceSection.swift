@@ -40,11 +40,11 @@ public struct ConformanceSection: Decodable, Equatable, Sendable {
     ///
     /// This method removes symbol graph constraints on `Self` that are always fulfilled.
     static func filterConstraints(_ constraints: [Constraint], options: ConstraintRenderOptions) -> [Constraint] {
-        return constraints
+        constraints
             .filter { constraint -> Bool in
                 if options.isLeaf {
                     // Leaf symbol.
-                    if constraint.leftTypeName == "Self" && constraint.rightTypeName == options.parentName {
+                    if constraint.leftTypeName == "Self", constraint.rightTypeName == options.parentName {
                         // The Swift compiler will sometimes include a constraint's to `Self`'s type,
                         // filter those generic constraints out.
                         return false
@@ -52,7 +52,7 @@ public struct ConformanceSection: Decodable, Equatable, Sendable {
                     return true
                 } else {
                     // Non-leaf symbol.
-                    if constraint.leftTypeName == "Self" && constraint.rightTypeName == options.selfName {
+                    if constraint.leftTypeName == "Self", constraint.rightTypeName == options.selfName {
                         // The Swift compiler will sometimes include a constraint's to `Self`'s type,
                         // filter those generic constraints out.
                         return false
@@ -98,7 +98,7 @@ public struct ConformanceSection: Decodable, Equatable, Sendable {
 
 private extension String {
     /// Returns the string surrounded by spaces.
-    var spaceDelimited: String { return " \(self) " }
+    var spaceDelimited: String { " \(self) " }
 }
 
 /// SymbolGraph.Symbol.Swift.GenericConstraint
@@ -169,9 +169,9 @@ public struct Constraint: Codable, Hashable {
     /// Create a new GenericConstraint by decoding a native format.
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        kind = try container.decode(Kind.self, forKey: .kind)
-        leftTypeName = try container.decode(String.self, forKey: .leftTypeName)
-        rightTypeName = try container.decode(String.self, forKey: .rightTypeName)
+        self.kind = try container.decode(Kind.self, forKey: .kind)
+        self.leftTypeName = try container.decode(String.self, forKey: .leftTypeName)
+        self.rightTypeName = try container.decode(String.self, forKey: .rightTypeName)
     }
 
     /// Encode a GenericConstraint to a native format.
@@ -187,9 +187,9 @@ extension Constraint.Kind {
     /// The spelling to use when rendering this kind of constraint.
     var spelling: String {
         switch self {
-        case .conformance: return "conforms to"
-        case .sameType: return "is"
-        case .superclass: return "inherits"
+        case .conformance: "conforms to"
+        case .sameType: "is"
+        case .superclass: "inherits"
         }
     }
 }

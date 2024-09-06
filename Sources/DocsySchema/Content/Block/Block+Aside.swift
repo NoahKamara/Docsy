@@ -24,7 +24,7 @@ public extension BlockContent {
             style: AsideStyle,
             content: [BlockContent]
         ) {
-            customName = displayName
+            self.customName = displayName
             self.style = style
             self.content = content
         }
@@ -49,16 +49,16 @@ public extension BlockContent {
 
         public var rawValue: String {
             switch self {
-            case let .known(known): known.rawValue
-            case let .unknown(rawValue): rawValue
+            case .known(let known): known.rawValue
+            case .unknown(let rawValue): rawValue
             }
         }
 
         /// an appropriate display name for this style
         public var displayName: String {
             switch self {
-            case let .known(known): known.displayName
-            case let .unknown(rawValue):
+            case .known(let known): known.displayName
+            case .unknown(let rawValue):
                 if rawValue.contains(where: \.isUppercase) {
                     // If any character is upper-cased, assume the content has
                     // specific casing and return the raw value.
@@ -118,7 +118,7 @@ public extension BlockContent {
         /// The style of aside to use when rendering.
         public var renderKind: OutputStyle {
             switch self {
-            case let .known(known):
+            case .known(let known):
                 switch known {
                 case .note: .note
                 case .tip: .tip

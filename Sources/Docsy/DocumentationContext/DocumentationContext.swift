@@ -57,7 +57,7 @@ public class DocumentationContext {
 
         public var errorDescription: String {
             let msg = switch self {
-            case let .unknownBundle(bundleIdentifier): "Unknown Bundle '\(bundleIdentifier)'"
+            case .unknownBundle(let bundleIdentifier): "Unknown Bundle '\(bundleIdentifier)'"
             }
 
             return "failed to resolve reference :" + msg
@@ -75,6 +75,50 @@ public class DocumentationContext {
             let data = try await dataProvider.contentsOfURL(url, in: bundle)
             let document = try JSONDecoder().decode(Document.self, from: data)
             return document
+        } catch let error as DescribedError {
+            print("document(for:) failed: " + error.errorDescription)
+            throw error
+        } catch {
+            throw error
+        }
+    }
+
+    public func contents(for reference: TopicReference) async throws -> Data {
+        do {
+            let bundle = try bundle(for: reference.bundleIdentifier)
+            var url = bundle.baseURL
+            url.append(path: reference.path.trimmingPrefix("/"))
+            url.append(component: "index.html")
+            return try await dataProvider.contentsOfURL(url, in: bundle)
+        } catch let error as DescribedError {
+            print("document(for:) failed: " + error.errorDescription)
+            throw error
+        } catch {
+            throw error
+        }
+    }
+
+    /// Provides contents for the url if the url is a valid url provided by this context
+    ///
+    /// > only use doc urls
+    ///
+    /// - Parameter url: a doc url like `doc://<bundle-identifier>/path`
+    /// - Returns:
+    public nonisolated func contentsOfURL(_ url: URL) async throws -> Data {
+        guard url.scheme == "doc" else {
+            throw ContextError.unknownBundle("scheme error")
+        }
+
+        let (bundleIdentifier, path): (String, String) = if let host = url.host() {
+            (host, url.path())
+        } else {
+            (url.path(), "/")
+        }
+
+        do {
+            let bundle = try bundle(for: bundleIdentifier)
+            let url = bundle.baseURL.appending(path: path)
+            return try await dataProvider.contentsOfURL(url, in: bundle)
         } catch let error as DescribedError {
             print("document(for:) failed: " + error.errorDescription)
             throw error
@@ -147,7 +191,7 @@ extension DocumentationContext: DocumentationContextDataProviderDelegate {
     public func dataProvider(_: any DocumentationContextDataProvider, didRemoveBundle bundle: DocumentationBundle) {
         Self.logger.info("[dataProvider] remove bundle '\(bundle.identifier)'")
 
-        self.index.unload(bundle: bundle)
+        index.unload(bundle: bundle)
         withMutation(keyPath: \.bundles) {
             _ = self.bundles.removeValue(forKey: bundle.identifier)
         }

@@ -24,9 +24,9 @@ public extension Document {
         public func encode(to encoder: Encoder) throws {
             var container = encoder.singleValueContainer()
             switch self {
-            case let .reference(hierarchy):
+            case .reference(let hierarchy):
                 try container.encode(hierarchy)
-            case let .tutorials(hierarchy):
+            case .tutorials(let hierarchy):
                 try container.encode(hierarchy)
             }
         }
@@ -77,9 +77,9 @@ public extension Document {
 
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
-            reference = try container.decode(ReferenceIdentifier.self, forKey: .reference)
-            modules = try container.decodeIfPresent([Hierarchy.Chapter].self, forKey: .modules)
-            paths = try container.decode([[String]].self, forKey: .paths)
+            self.reference = try container.decode(ReferenceIdentifier.self, forKey: .reference)
+            self.modules = try container.decodeIfPresent([Hierarchy.Chapter].self, forKey: .modules)
+            self.paths = try container.decode([[String]].self, forKey: .paths)
         }
 
         public func encode(to encoder: Encoder) throws {
@@ -112,9 +112,9 @@ public extension Document {
 
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
-            reference = try container.decode(ReferenceIdentifier.self, forKey: .reference)
-            modules = try container.decodeIfPresent([Hierarchy.Chapter].self, forKey: .modules)
-            paths = try container.decode([[String]].self, forKey: .paths)
+            self.reference = try container.decode(ReferenceIdentifier.self, forKey: .reference)
+            self.modules = try container.decodeIfPresent([Hierarchy.Chapter].self, forKey: .modules)
+            self.paths = try container.decode([[String]].self, forKey: .paths)
         }
 
         public func encode(to encoder: Encoder) throws {

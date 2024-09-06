@@ -58,10 +58,10 @@ public struct RESTResponse: Decodable, Equatable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        status = try container.decode(UInt.self, forKey: .status)
-        reason = try container.decodeIfPresent(String.self, forKey: .reason)
-        mimeType = try container.decodeIfPresent(String.self, forKey: .mimeType)
-        type = try container.decode([DeclarationSection.Token].self, forKey: .type)
-        content = try container.decodeIfPresent([BlockContent].self, forKey: .content)
+        self.status = try container.decode(UInt.self, forKey: .status)
+        self.reason = try container.decodeIfPresent(String.self, forKey: .reason)
+        self.mimeType = try container.decodeIfPresent(String.self, forKey: .mimeType)
+        self.type = try container.decode([DeclarationSection.Token].self, forKey: .type)
+        self.content = try container.decodeIfPresent([BlockContent].self, forKey: .content)
     }
 }

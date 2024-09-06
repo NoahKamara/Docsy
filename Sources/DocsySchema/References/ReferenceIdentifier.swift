@@ -10,7 +10,7 @@ public struct ReferenceIdentifier: Codable, Hashable, Equatable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        identifier = try container.decode(String.self)
+        self.identifier = try container.decode(String.self)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -39,7 +39,7 @@ public struct WrappedCodingKey<T>: CodingKey {
     public let stringValue: String
     public var intValue: Int? { nil }
     public init?(intValue _: Int) {
-        return nil
+        nil
     }
 
     public init(stringValue: String) {

@@ -69,17 +69,17 @@ extension InlineContent: Decodable {
 
     private var type: InlineType {
         switch self {
-        case .codeVoice: return .codeVoice
-        case .emphasis: return .emphasis
-        case .strong: return .strong
-        case .image: return .image
-        case .reference: return .reference
-        case .text: return .text
-        case .subscript: return .subscript
-        case .superscript: return .superscript
-        case .newTerm: return .newTerm
-        case .inlineHead: return .inlineHead
-        case .strikethrough: return .strikethrough
+        case .codeVoice: .codeVoice
+        case .emphasis: .emphasis
+        case .strong: .strong
+        case .image: .image
+        case .reference: .reference
+        case .text: .text
+        case .subscript: .subscript
+        case .superscript: .superscript
+        case .newTerm: .newTerm
+        case .inlineHead: .inlineHead
+        case .strikethrough: .strikethrough
         }
     }
 
@@ -161,28 +161,28 @@ public extension InlineContent {
     /// `InlineContent.reference`.
     var plainText: String {
         switch self {
-        case let .codeVoice(code):
-            return code
-        case let .emphasis(inlineContent):
-            return inlineContent.plainText
-        case let .strong(inlineContent):
-            return inlineContent.plainText
-        case let .image(_, metadata):
-            return (metadata?.abstract?.plainText) ?? ""
-        case let .reference(_, _, overridingTitle, overridingTitleInlineContent):
-            return overridingTitle ?? overridingTitleInlineContent?.plainText ?? ""
-        case let .text(text):
-            return text
-        case let .newTerm(inlineContent):
-            return inlineContent.plainText
-        case let .inlineHead(inlineContent):
-            return inlineContent.plainText
-        case let .subscript(inlineContent):
-            return inlineContent.plainText
-        case let .superscript(inlineContent):
-            return inlineContent.plainText
-        case let .strikethrough(inlineContent):
-            return inlineContent.plainText
+        case .codeVoice(let code):
+            code
+        case .emphasis(let inlineContent):
+            inlineContent.plainText
+        case .strong(let inlineContent):
+            inlineContent.plainText
+        case .image(_, let metadata):
+            (metadata?.abstract?.plainText) ?? ""
+        case .reference(_, _, let overridingTitle, let overridingTitleInlineContent):
+            overridingTitle ?? overridingTitleInlineContent?.plainText ?? ""
+        case .text(let text):
+            text
+        case .newTerm(let inlineContent):
+            inlineContent.plainText
+        case .inlineHead(let inlineContent):
+            inlineContent.plainText
+        case .subscript(let inlineContent):
+            inlineContent.plainText
+        case .superscript(let inlineContent):
+            inlineContent.plainText
+        case .strikethrough(let inlineContent):
+            inlineContent.plainText
         }
     }
 }
@@ -190,6 +190,6 @@ public extension InlineContent {
 public extension Sequence<InlineContent> {
     /// Returns a lossy conversion of the formatted content to a plain-text string.
     var plainText: String {
-        return map { $0.plainText }.joined()
+        map(\.plainText).joined()
     }
 }

@@ -114,24 +114,24 @@ public struct TopicRenderReference: ReferenceProtocol, Equatable {
 
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        type = try values.decode(ReferenceType.self, forKey: .type)
-        identifier = try values.decode(ReferenceIdentifier.self, forKey: .identifier)
-        title = try values.decode(String.self, forKey: .title)
-        url = try values.decode(String.self, forKey: .url)
-        abstract = try values.decodeIfPresent([InlineContent].self, forKey: .abstract) ?? []
+        self.type = try values.decode(ReferenceType.self, forKey: .type)
+        self.identifier = try values.decode(ReferenceIdentifier.self, forKey: .identifier)
+        self.title = try values.decode(String.self, forKey: .title)
+        self.url = try values.decode(String.self, forKey: .url)
+        self.abstract = try values.decodeIfPresent([InlineContent].self, forKey: .abstract) ?? []
 
         // Provide backwards-compatibility for TopicRenderReferences that don't have a `kind` key.
-        kind = try values.decodeIfPresent(Document.Kind.self, forKey: .kind) ?? .tutorial
-        required = try values.decodeIfPresent(Bool.self, forKey: .required) ?? false
-        role = try values.decodeIfPresent(String.self, forKey: .role)
-        fragments = try values.decodeIfPresent([DeclarationSection.Token].self, forKey: .fragments)
-        navigatorTitle = try values.decodeIfPresent([DeclarationSection.Token].self, forKey: .navigatorTitle)
+        self.kind = try values.decodeIfPresent(Document.Kind.self, forKey: .kind) ?? .tutorial
+        self.required = try values.decodeIfPresent(Bool.self, forKey: .required) ?? false
+        self.role = try values.decodeIfPresent(String.self, forKey: .role)
+        self.fragments = try values.decodeIfPresent([DeclarationSection.Token].self, forKey: .fragments)
+        self.navigatorTitle = try values.decodeIfPresent([DeclarationSection.Token].self, forKey: .navigatorTitle)
 
-        conformance = try values.decodeIfPresent(ConformanceSection.self, forKey: .conformance)
-        estimatedTime = try values.decodeIfPresent(String.self, forKey: .estimatedTime)
-        isBeta = try values.decodeIfPresent(Bool.self, forKey: .beta) ?? false
-        isDeprecated = try values.decodeIfPresent(Bool.self, forKey: .deprecated) ?? false
-        defaultImplementationCount = try values.decodeIfPresent(
+        self.conformance = try values.decodeIfPresent(ConformanceSection.self, forKey: .conformance)
+        self.estimatedTime = try values.decodeIfPresent(String.self, forKey: .estimatedTime)
+        self.isBeta = try values.decodeIfPresent(Bool.self, forKey: .beta) ?? false
+        self.isDeprecated = try values.decodeIfPresent(Bool.self, forKey: .deprecated) ?? false
+        self.defaultImplementationCount = try values.decodeIfPresent(
             Int.self, forKey: .defaultImplementations
         )
         let propertyListTitleStyle = try values.decodeIfPresent(
@@ -144,13 +144,13 @@ public struct TopicRenderReference: ReferenceProtocol, Equatable {
             String.self, forKey: .propertyListDisplayName
         )
         if propertyListRawKey != nil || propertyListRawKey != nil || propertyListDisplayName != nil {
-            propertyListKeyNames = PropertyListKeyNames(
+            self.propertyListKeyNames = PropertyListKeyNames(
                 titleStyle: propertyListTitleStyle,
                 rawKey: propertyListRawKey,
                 displayName: propertyListDisplayName
             )
         }
-        tags = try values.decodeIfPresent([Document.Tag].self, forKey: .tags)
-        images = try values.decodeIfPresent([TopicImage].self, forKey: .images) ?? []
+        self.tags = try values.decodeIfPresent([Document.Tag].self, forKey: .tags)
+        self.images = try values.decodeIfPresent([TopicImage].self, forKey: .images) ?? []
     }
 }

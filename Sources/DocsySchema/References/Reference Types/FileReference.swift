@@ -60,12 +60,12 @@ public struct FileReference: ReferenceProtocol, Equatable {
 
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        identifier = try values.decode(ReferenceIdentifier.self, forKey: .identifier)
-        fileName = try values.decode(String.self, forKey: .fileName)
-        fileType = try values.decode(String.self, forKey: .fileType)
-        syntax = try values.decode(String.self, forKey: .syntax)
-        content = try values.decode([String].self, forKey: .content)
-        highlights = try values.decodeIfPresent([LineHighlight].self, forKey: .highlights) ?? []
+        self.identifier = try values.decode(ReferenceIdentifier.self, forKey: .identifier)
+        self.fileName = try values.decode(String.self, forKey: .fileName)
+        self.fileType = try values.decode(String.self, forKey: .fileType)
+        self.syntax = try values.decode(String.self, forKey: .syntax)
+        self.content = try values.decode([String].self, forKey: .content)
+        self.highlights = try values.decodeIfPresent([LineHighlight].self, forKey: .highlights) ?? []
     }
 }
 

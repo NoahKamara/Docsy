@@ -36,11 +36,11 @@ public struct DownloadReference: ReferenceProtocol, URLReference, Equatable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.decode(ReferenceType.self, forKey: .type)
-        identifier = try container.decode(ReferenceIdentifier.self, forKey: .identifier)
-        url = try container.decode(URL.self, forKey: .url)
-        encodeUrlVerbatim = true
-        checksum = try container.decodeIfPresent(String.self, forKey: .checksum)
+        self.type = try container.decode(ReferenceType.self, forKey: .type)
+        self.identifier = try container.decode(ReferenceIdentifier.self, forKey: .identifier)
+        self.url = try container.decode(URL.self, forKey: .url)
+        self.encodeUrlVerbatim = true
+        self.checksum = try container.decodeIfPresent(String.self, forKey: .checksum)
     }
 
     public static func == (lhs: DownloadReference, rhs: DownloadReference) -> Bool {

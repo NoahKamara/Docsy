@@ -43,8 +43,8 @@ public struct ImageReference: MediaReference, URLReference, Equatable {
 
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        identifier = try values.decode(ReferenceIdentifier.self, forKey: .identifier)
-        altText = try values.decodeIfPresent(String.self, forKey: .alt)
+        self.identifier = try values.decode(ReferenceIdentifier.self, forKey: .identifier)
+        self.altText = try values.decodeIfPresent(String.self, forKey: .alt)
 
         // rebuild the data asset
         var asset = DataAsset()
@@ -78,9 +78,9 @@ public struct ImageReference: MediaReference, URLReference, Equatable {
 
         public init(from decoder: Decoder) throws {
             let values = try decoder.container(keyedBy: CodingKeys.self)
-            url = try values.decode(URL.self, forKey: .url)
-            traits = try values.decode([String].self, forKey: .traits)
-            svgID = try values.decodeIfPresent(String.self, forKey: .svgID)
+            self.url = try values.decode(URL.self, forKey: .url)
+            self.traits = try values.decode([String].self, forKey: .traits)
+            self.svgID = try values.decodeIfPresent(String.self, forKey: .svgID)
         }
     }
 }

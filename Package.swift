@@ -26,8 +26,7 @@ let package = Package(
             name: "Docsy",
             dependencies: ["DocsySchema"]
         ),
-        .target(name: "DocsySchema", dependencies: ["DocsyCore"]),
-        .target(name: "DocsyCore"),
+        .target(name: "DocsySchema"),
         .target(
             name: "TestResources",
             path: "Tests/TestResources",

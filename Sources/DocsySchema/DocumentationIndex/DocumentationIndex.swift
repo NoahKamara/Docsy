@@ -23,7 +23,7 @@ public struct DocumentationIndex: Decodable, Equatable, Sendable {
 //        references: [String: ImageReference] = [:],
         includedArchiveIdentifiers: [String]
     ) {
-        schemaVersion = Self.currentSchemaVersion
+        self.schemaVersion = Self.currentSchemaVersion
         self.interfaceLanguages = interfaceLanguages
 //        self.references = references
         self.includedArchiveIdentifiers = includedArchiveIdentifiers
@@ -38,10 +38,10 @@ public struct DocumentationIndex: Decodable, Equatable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        schemaVersion = try container.decode(SemanticVersion.self, forKey: .schemaVersion)
-        interfaceLanguages = try container.decode(InterfaceLanguages.self, forKey: .interfaceLanguages)
+        self.schemaVersion = try container.decode(SemanticVersion.self, forKey: .schemaVersion)
+        self.interfaceLanguages = try container.decode(InterfaceLanguages.self, forKey: .interfaceLanguages)
 //        self.references = try container.decodeIfPresent([String : ImageReference].self, forKey: .references) ?? [:]
-        includedArchiveIdentifiers = try container.decodeIfPresent([String].self.self, forKey: .includedArchiveIdentifiers) ?? []
+        self.includedArchiveIdentifiers = try container.decodeIfPresent([String].self.self, forKey: .includedArchiveIdentifiers) ?? []
     }
 
 //    public mutating func merge(_ other: DocumentationIndex) throws {
@@ -120,10 +120,10 @@ private struct SourceLanguageKey: CodingKey {
     var intValue: Int? { nil }
 
     init(stringValue: String) {
-        lang = SourceLanguage(name: stringValue)
+        self.lang = SourceLanguage(name: stringValue)
     }
 
     init?(intValue _: Int) {
-        return nil
+        nil
     }
 }

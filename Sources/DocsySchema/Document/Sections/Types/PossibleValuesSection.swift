@@ -50,7 +50,7 @@ public struct PossibleValuesSection: SectionProtocol, Equatable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        title = try container.decodeIfPresent(String.self, forKey: .title)
-        values = try container.decode([NamedValue].self, forKey: .values)
+        self.title = try container.decodeIfPresent(String.self, forKey: .title)
+        self.values = try container.decode([NamedValue].self, forKey: .values)
     }
 }

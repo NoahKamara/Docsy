@@ -48,8 +48,8 @@ public struct VideoReference: MediaReference, URLReference, Equatable {
 
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        identifier = try values.decode(ReferenceIdentifier.self, forKey: .identifier)
-        altText = try values.decodeIfPresent(String.self, forKey: .alt)
+        self.identifier = try values.decode(ReferenceIdentifier.self, forKey: .identifier)
+        self.altText = try values.decodeIfPresent(String.self, forKey: .alt)
 
         // rebuild the data asset
         var asset = DataAsset()
@@ -59,7 +59,7 @@ public struct VideoReference: MediaReference, URLReference, Equatable {
         }
         self.asset = asset
 
-        poster = try values.decodeIfPresent(ReferenceIdentifier.self, forKey: .poster)
+        self.poster = try values.decodeIfPresent(ReferenceIdentifier.self, forKey: .poster)
     }
 
     /// The relative URL to the folder that contains all images in the built documentation output.
@@ -80,8 +80,8 @@ public struct VideoReference: MediaReference, URLReference, Equatable {
 
         public init(from decoder: Decoder) throws {
             let values = try decoder.container(keyedBy: CodingKeys.self)
-            url = try values.decode(URL.self, forKey: .url)
-            traits = try values.decode([String].self, forKey: .traits)
+            self.url = try values.decode(URL.self, forKey: .url)
+            self.traits = try values.decode([String].self, forKey: .traits)
         }
     }
 }

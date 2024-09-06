@@ -30,21 +30,21 @@ public struct LinkReference: ReferenceProtocol, Equatable {
 
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        identifier = try values.decode(ReferenceIdentifier.self, forKey: .identifier)
+        self.identifier = try values.decode(ReferenceIdentifier.self, forKey: .identifier)
 
         let urlPath = try values.decode(String.self, forKey: .url)
 
         if let formattedTitle = try values.decodeIfPresent([InlineContent].self, forKey: .titleInlineContent) {
-            titleInlineContent = formattedTitle
-            title = try values.decodeIfPresent(String.self, forKey: .title) ?? formattedTitle.plainText
+            self.titleInlineContent = formattedTitle
+            self.title = try values.decodeIfPresent(String.self, forKey: .title) ?? formattedTitle.plainText
         } else if let plainTextTitle = try values.decodeIfPresent(String.self, forKey: .title) {
-            titleInlineContent = [.text(plainTextTitle)]
-            title = plainTextTitle
+            self.titleInlineContent = [.text(plainTextTitle)]
+            self.title = plainTextTitle
         } else {
-            titleInlineContent = [.text(urlPath)]
-            title = urlPath
+            self.titleInlineContent = [.text(urlPath)]
+            self.title = urlPath
         }
 
-        url = urlPath
+        self.url = urlPath
     }
 }

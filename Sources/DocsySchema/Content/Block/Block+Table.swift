@@ -45,10 +45,10 @@ public extension BlockContent {
 
 public extension BlockContent.Table {
     static func == (lhs: BlockContent.Table, rhs: BlockContent.Table) -> Bool {
-        guard lhs.header == rhs.header
-            && lhs.extendedData == rhs.extendedData
-            && lhs.metadata == rhs.metadata
-            && lhs.rows == rhs.rows
+        guard lhs.header == rhs.header,
+              lhs.extendedData == rhs.extendedData,
+              lhs.metadata == rhs.metadata,
+              lhs.rows == rhs.rows
         else {
             return false
         }
@@ -83,7 +83,7 @@ extension BlockContent.Table {
         }
 
         var stringValue: String {
-            return "\(row)_\(column)"
+            "\(row)_\(column)"
         }
 
         init?(stringValue: String) {
@@ -94,8 +94,8 @@ extension BlockContent.Table {
             else {
                 return nil
             }
-            row = rowIndex
-            column = columnIndex
+            self.row = rowIndex
+            self.column = columnIndex
         }
 
         // The key is only represented by a string value
@@ -156,7 +156,7 @@ public extension BlockContent {
 
         public init(from decoder: Decoder) throws {
             let container = try decoder.singleValueContainer()
-            cells = try container.decode([Cell].self)
+            self.cells = try container.decode([Cell].self)
         }
     }
 

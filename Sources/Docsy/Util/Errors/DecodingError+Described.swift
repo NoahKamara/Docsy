@@ -4,13 +4,13 @@ import Foundation
 extension DecodingError: DescribedError {
     public var errorDescription: String {
         switch self {
-        case let .dataCorrupted(context):
+        case .dataCorrupted(let context):
             "dataCorruted(\(context.codingPath.errorDescription)): \(context.debugDescription)"
-        case let .keyNotFound(key, context):
+        case .keyNotFound(let key, let context):
             "keyNotFound(\(key.errorDescription), \(context.codingPath.errorDescription)): \(context.debugDescription)"
-        case let .typeMismatch(type, context):
+        case .typeMismatch(let type, let context):
             "typeMismatch(\(type), \(context.codingPath.errorDescription)) \(context.debugDescription)"
-        case let .valueNotFound(type, context):
+        case .valueNotFound(let type, let context):
             "valueNotFound(\(type), \(context.codingPath.errorDescription)): \(context.debugDescription)"
         @unknown default:
             "unknown(\(self))"

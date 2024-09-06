@@ -23,6 +23,6 @@ public struct SampleDownloadSection: SectionProtocol, Equatable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        action = try container.decode(InlineContent.self, forKey: .action)
+        self.action = try container.decode(InlineContent.self, forKey: .action)
     }
 }

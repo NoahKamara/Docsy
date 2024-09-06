@@ -6,11 +6,12 @@ public enum LocalFileSystemDataProviderError: DescribedError {
 
     public var errorDescription: String {
         switch self {
-        case let .rootIsNotDirectory(url):
+        case .rootIsNotDirectory(let url):
             "root url is not a directory: '\(url.path())'"
         }
     }
 }
+
 
 public struct LocalFileSystemDataProvider: DataProvider {
     public let identifier: String = UUID().uuidString
@@ -32,7 +33,7 @@ public struct LocalFileSystemDataProvider: DataProvider {
         self.rootURL = rootURL
     }
 
-    public func contentsOfURL(_ url: URL) async throws -> Data {
+    public func contentsOfURL(_ url: consuming URL) async throws -> Data {
         precondition(url.isFileURL, "Unexpected non-file url '\(url)'.")
         return try Data(contentsOf: url)
     }
@@ -87,14 +88,14 @@ public struct LocalFileSystemDataProvider: DataProvider {
 
 package extension FileManager {
     /// Returns a Boolean value that indicates whether a directory exists at a specified path.
-    package func directoryExists(atPath path: String) -> Bool {
+    func directoryExists(atPath path: String) -> Bool {
         var isDirectory = ObjCBool(booleanLiteral: false)
         let fileExistsAtPath = fileExists(atPath: path, isDirectory: &isDirectory)
         return fileExistsAtPath && isDirectory.boolValue
     }
 
     // This method does n't exist on `FileManager`. There is a similar looking method but it doesn't provide information about potential errors.
-    package func contents(of url: URL) throws -> Data {
-        return try Data(contentsOf: url)
+    func contents(of url: URL) throws -> Data {
+        try Data(contentsOf: url)
     }
 }

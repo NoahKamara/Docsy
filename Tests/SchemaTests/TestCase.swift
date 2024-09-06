@@ -48,11 +48,11 @@ struct JSONValue: ExpressibleByStringInterpolation {
     let rawValue: String
 
     init(stringLiteral value: StaticString) {
-        rawValue = value.description
+        self.rawValue = value.description
     }
 
     init(stringInterpolation: StringInterpolation) {
-        rawValue = stringInterpolation.result
+        self.rawValue = stringInterpolation.result
     }
 
     struct StringInterpolation: StringInterpolationProtocol {
@@ -76,7 +76,7 @@ struct JSONValue: ExpressibleByStringInterpolation {
             appendInterpolation(json.jsonValue)
         }
 
-        mutating func appendInterpolation<T: JSONValueRepresentable>(_ jsonOptional: T?) {
+        mutating func appendInterpolation(_ jsonOptional: (some JSONValueRepresentable)?) {
             if let jsonOptional {
                 appendInterpolation(jsonOptional)
             } else {
@@ -84,7 +84,7 @@ struct JSONValue: ExpressibleByStringInterpolation {
             }
         }
 
-        mutating func appendInterpolation<T: JSONValueRepresentable>(_ jsonArray: [T]) {
+        mutating func appendInterpolation(_ jsonArray: [some JSONValueRepresentable]) {
             let contents = jsonArray.map(\.jsonValue.rawValue).joined(separator: ",")
             appendInterpolation(literal: "[" + contents + "]")
         }
@@ -119,7 +119,7 @@ extension Int: JSONValueRepresentable {
 
 extension String: JSONValueRepresentable {
     var jsonValue: JSONValue {
-        return "\"\(literal: self)\""
+        "\"\(literal: self)\""
     }
 }
 

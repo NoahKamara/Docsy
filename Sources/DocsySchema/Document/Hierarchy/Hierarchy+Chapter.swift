@@ -18,10 +18,10 @@ public extension Document.Hierarchy {
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
 
-            reference = try container.decode(ReferenceIdentifier.self, forKey: .reference)
+            self.reference = try container.decode(ReferenceIdentifier.self, forKey: .reference)
             // Decode using the new key if its present, otherwise decode using the previous key
             let tutorialsKey = container.contains(.tutorials) ? CodingKeys.tutorials : CodingKeys.projects
-            tutorials = try container.decode([Tutorial].self, forKey: tutorialsKey)
+            self.tutorials = try container.decode([Tutorial].self, forKey: tutorialsKey)
         }
 
         public func encode(to encoder: Encoder) throws {

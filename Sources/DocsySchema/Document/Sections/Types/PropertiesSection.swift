@@ -38,8 +38,8 @@ public struct PropertiesSection: SectionProtocol {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        title = try container.decode(String.self, forKey: .title)
-        items = try container.decode([RenderProperty].self, forKey: .items)
+        self.title = try container.decode(String.self, forKey: .title)
+        self.items = try container.decode([RenderProperty].self, forKey: .items)
     }
 }
 

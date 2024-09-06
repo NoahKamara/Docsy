@@ -130,11 +130,11 @@ extension Document.Metadata: Decodable {
         }
 
         public var intValue: Int? {
-            return nil
+            nil
         }
 
         public init?(intValue _: Int) {
-            return nil
+            nil
         }
 
         public static let category = CodingKeys(stringValue: "category")
@@ -237,19 +237,19 @@ extension AnyMetadata: Decodable {
         let container = try decoder.singleValueContainer()
 
         if container.decodeNil() {
-            value = ()
+            self.value = ()
         } else if let bool = try? container.decode(Bool.self) {
-            value = bool
+            self.value = bool
         } else if let int = try? container.decode(Int.self) {
-            value = int
+            self.value = int
         } else if let double = try? container.decode(Double.self) {
-            value = double
+            self.value = double
         } else if let string = try? container.decode(String.self) {
-            value = string
+            self.value = string
         } else if let array = try? container.decode([AnyMetadata].self) {
-            value = array.map { $0.value }
+            self.value = array.map(\.value)
         } else if let dictionary = try? container.decode([String: AnyMetadata].self) {
-            value = dictionary.mapValues { $0.value }
+            self.value = dictionary.mapValues { $0.value }
         } else {
             throw DecodingError.dataCorruptedError(in: container, debugDescription: "AnyMetadata failed to decode the value.")
         }

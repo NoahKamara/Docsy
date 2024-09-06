@@ -4,7 +4,7 @@ public struct SourceLanguage: Hashable, Codable, Equatable, Sendable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
-    
+
     /// The display name of the programming language.
     public var name: String
 
@@ -41,7 +41,7 @@ public struct SourceLanguage: Hashable, Codable, Equatable, Sendable {
 
             let id = name.lowercased()
             self.id = id
-            linkDisambiguationID = id
+            self.linkDisambiguationID = id
         }
     }
 
@@ -177,9 +177,9 @@ public extension SourceLanguage {
         case "metal": self = .metal
         case "html, xhtml, rss, atom, xjb, xsd, xsl, plist, wsf, svg": self = .xml
         default:
-            name = id
+            self.name = id
             self.id = id
-            linkDisambiguationID = id
+            self.linkDisambiguationID = id
         }
     }
 

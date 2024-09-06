@@ -91,15 +91,15 @@ extension URLReference {
 extension Reference: ReferenceProtocol {
     private var reference: any ReferenceProtocol {
         switch self {
-        case let .image(ref): ref
-        case let .video(ref): ref
-        case let .file(ref): ref
-        case let .fileType(ref): ref
+        case .image(let ref): ref
+        case .video(let ref): ref
+        case .file(let ref): ref
+        case .fileType(let ref): ref
 //        case .xcodeRequirement(let ref): ref
-        case let .topic(ref): ref
+        case .topic(let ref): ref
 //        case .section(let ref): ref
-        case let .download(ref): ref
-        case let .link(ref): ref
+        case .download(let ref): ref
+        case .link(let ref): ref
 //        case .externalLocation(let ref): ref
 //        case .unresolvable(let ref): ref
         }

@@ -116,11 +116,11 @@ public struct DeclarationSection: Decodable, Equatable {
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
 
-            text = try container.decode(String.self, forKey: .text)
-            kind = try container.decode(Kind.self, forKey: .kind)
-            preciseIdentifier = try container.decodeIfPresent(String.self, forKey: .preciseIdentifier)
-            identifier = try container.decodeIfPresent(String.self, forKey: .identifier)
-            highlight = try container.decodeIfPresent(Highlight.self, forKey: .highlight)
+            self.text = try container.decode(String.self, forKey: .text)
+            self.kind = try container.decode(Kind.self, forKey: .kind)
+            self.preciseIdentifier = try container.decodeIfPresent(String.self, forKey: .preciseIdentifier)
+            self.identifier = try container.decodeIfPresent(String.self, forKey: .identifier)
+            self.highlight = try container.decodeIfPresent(Highlight.self, forKey: .highlight)
         }
     }
 
@@ -178,10 +178,10 @@ public struct DeclarationSection: Decodable, Equatable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        tokens = try container.decode([Token].self, forKey: .tokens)
-        platforms = try container.decode([PlatformName?].self, forKey: .platforms)
-        languages = try container.decodeIfPresent([String].self, forKey: .languages)
-        otherDeclarations = try container.decodeIfPresent(OtherDeclarations.self, forKey: .otherDeclarations)
+        self.tokens = try container.decode([Token].self, forKey: .tokens)
+        self.platforms = try container.decode([PlatformName?].self, forKey: .platforms)
+        self.languages = try container.decodeIfPresent([String].self, forKey: .languages)
+        self.otherDeclarations = try container.decodeIfPresent(OtherDeclarations.self, forKey: .otherDeclarations)
     }
 
     public func encode(to encoder: Encoder) throws {

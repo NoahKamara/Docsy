@@ -15,8 +15,8 @@ public struct AttributesSection: SectionProtocol, Equatable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        title = try container.decode(String.self, forKey: .title)
-        attributes = try container.decodeIfPresent([RenderAttribute].self, forKey: .attributes)
+        self.title = try container.decode(String.self, forKey: .title)
+        self.attributes = try container.decodeIfPresent([RenderAttribute].self, forKey: .attributes)
     }
 }
 
@@ -55,15 +55,15 @@ public enum RenderAttribute: Decodable, Equatable {
     /// A title for this attribute.
     var title: String {
         switch self {
-        case .default: return "Default value"
-        case .minimum: return "Minimum"
-        case .minimumExclusive: return "Minimum"
-        case .maximum: return "Maximum"
-        case .maximumExclusive: return "Maximum"
-        case .minimumLength: return "Minimum length"
-        case .maximumLength: return "Maximum length"
-        case .allowedValues: return "Possible Values"
-        case .allowedTypes: return "Possible Types"
+        case .default: "Default value"
+        case .minimum: "Minimum"
+        case .minimumExclusive: "Minimum"
+        case .maximum: "Maximum"
+        case .maximumExclusive: "Maximum"
+        case .minimumLength: "Minimum length"
+        case .maximumLength: "Maximum length"
+        case .allowedValues: "Possible Values"
+        case .allowedTypes: "Possible Types"
         }
     }
 
