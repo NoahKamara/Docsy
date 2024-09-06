@@ -1,8 +1,8 @@
 //
 //  Schema.swift
-//  Docsy
+// Docsy
 //
-//  Created by Noah Kamara on 28.08.24.
+//  Copyright © 2024 Noah Kamara.
 //
 
 import Foundation

@@ -1,3 +1,10 @@
+//
+//  RESTResponseSection.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
+
 import Foundation
 
 /// A section that displays a list of REST responses.

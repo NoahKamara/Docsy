@@ -1,3 +1,9 @@
+//
+//  Block+Table.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
 
 public extension BlockContent {
     // MARK: Table

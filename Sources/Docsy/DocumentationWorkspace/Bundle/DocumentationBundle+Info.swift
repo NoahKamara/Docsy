@@ -1,3 +1,9 @@
+//
+//  DocumentationBundle+Info.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
 
 public extension DocumentationBundle {
     struct Metadata: Codable, Equatable, Sendable {

@@ -1,3 +1,10 @@
+//
+//  SourceLanguage.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
+
 import Foundation
 
 public struct SourceLanguage: Hashable, Codable, Equatable, Sendable {

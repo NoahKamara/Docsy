@@ -1,3 +1,9 @@
+//
+//  Hierarchy+Tutorial.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
 
 public extension Document.Hierarchy {
     struct Tutorial: Codable, Equatable, Sendable {

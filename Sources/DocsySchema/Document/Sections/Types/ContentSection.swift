@@ -1,6 +1,9 @@
-////import Markdown
 //
-// public typealias BlockContent = String
+//  ContentSection.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
 
 /// A block content element.
 public enum BlockContent: Schema {

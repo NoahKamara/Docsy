@@ -1,3 +1,10 @@
+//
+//  TopicReference.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
+
 import Foundation
 
 public struct TopicReference: Sendable, Hashable, Equatable, CustomStringConvertible, Codable {
@@ -144,12 +151,12 @@ public struct TopicReference: Sendable, Hashable, Equatable, CustomStringConvert
     }
 }
 
-extension TopicReference {
-    enum CodingKeys: CodingKey {
+public extension TopicReference {
+    internal enum CodingKeys: CodingKey {
         case url, interfaceLanguage
     }
 
-    public init(from decoder: Decoder) throws {
+    init(from decoder: Decoder) throws {
         enum TopicReferenceDeserializationError: Error {
             case unexpectedURLScheme(url: URL, scheme: String)
             case missingBundleIdentifier(url: URL)
@@ -172,7 +179,7 @@ extension TopicReference {
         self.init(bundleIdentifier: bundleIdentifier, path: url.path, fragment: url.fragment, sourceLanguage: interfaceLanguage)
     }
 
-    public func encode(to encoder: any Encoder) throws {
+    func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
         try container.encode(sourceLanguage.id, forKey: .interfaceLanguage)

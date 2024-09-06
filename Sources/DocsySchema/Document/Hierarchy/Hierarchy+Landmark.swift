@@ -1,3 +1,10 @@
+//
+//  Hierarchy+Landmark.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
+
 import Foundation
 
 public extension Document.Hierarchy {

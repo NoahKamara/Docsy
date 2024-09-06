@@ -1,4 +1,9 @@
-
+//
+//  PlatformName.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
 
 public struct PlatformName: Codable, Hashable, Equatable, Sendable {
     public var rawValue: String

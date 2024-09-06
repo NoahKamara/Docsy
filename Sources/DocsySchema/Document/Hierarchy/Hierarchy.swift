@@ -1,3 +1,9 @@
+//
+//  Hierarchy.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
 
 public extension Document {
     /// Hierarchical information for a document.

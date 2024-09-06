@@ -1,3 +1,10 @@
+//
+//  File.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
+
 import Foundation
 
 /// A section of documentation content.

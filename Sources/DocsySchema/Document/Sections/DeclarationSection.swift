@@ -1,3 +1,10 @@
+//
+//  DeclarationSection.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
+
 import Foundation
 
 /// A compound section that contains a list of declaration sections.

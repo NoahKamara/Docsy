@@ -1,6 +1,12 @@
+//
+//  DocumentationWorkspace.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
+
 import Foundation
 import OSLog
-
 
 public actor DocumentationWorkspace: DocumentationContextDataProvider {
     static let logger = Logger.docsy("Workspace")

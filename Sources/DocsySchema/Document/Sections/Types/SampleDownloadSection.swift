@@ -1,3 +1,10 @@
+//
+//  SampleDownloadSection.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
+
 import Foundation
 
 /// A section that contains download data for a sample project.

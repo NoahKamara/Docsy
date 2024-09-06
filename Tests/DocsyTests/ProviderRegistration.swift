@@ -1,8 +1,8 @@
 //
-//  File 2.swift
-//  Docsy
+//  ProviderRegistration.swift
+// Docsy
 //
-//  Created by Noah Kamara on 25.08.24.
+//  Copyright © 2024 Noah Kamara.
 //
 
 @testable import Docsy

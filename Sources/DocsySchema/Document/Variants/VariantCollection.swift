@@ -1,4 +1,11 @@
 //
+//  VariantCollection.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
+
+//
 //
 ///// A collection of variants for a document value.
 /////

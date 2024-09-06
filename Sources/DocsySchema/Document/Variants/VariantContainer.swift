@@ -1,3 +1,10 @@
+//
+//  VariantContainer.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
+
 // import Foundation
 //
 // public protocol VariantContainer {}

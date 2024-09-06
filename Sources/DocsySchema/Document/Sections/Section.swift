@@ -1,3 +1,9 @@
+//
+//  Section.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
 
 public protocol SectionProtocol: Decodable, Equatable {
     typealias Kind = SectionKind

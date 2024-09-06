@@ -1,4 +1,9 @@
-
+//
+//  Block+Aside.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
 
 // MARK: Aside
 

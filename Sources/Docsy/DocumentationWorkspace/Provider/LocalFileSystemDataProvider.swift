@@ -1,3 +1,9 @@
+//
+//  LocalFileSystemDataProvider.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
 
 import Foundation
 
@@ -11,7 +17,6 @@ public enum LocalFileSystemDataProviderError: DescribedError {
         }
     }
 }
-
 
 public struct LocalFileSystemDataProvider: DataProvider {
     public let identifier: String = UUID().uuidString

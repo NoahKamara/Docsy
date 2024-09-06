@@ -1,3 +1,10 @@
+//
+//  DocumentationBundle.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
+
 import DocsySchema
 import Foundation
 

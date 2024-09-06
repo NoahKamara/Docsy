@@ -1,3 +1,10 @@
+//
+//  AttributesSection.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
+
 import Foundation
 
 /// A section that contains a list of attributes.

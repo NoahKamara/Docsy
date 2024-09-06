@@ -1,3 +1,10 @@
+//
+//  Reference.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
+
 import Foundation
 
 /// A reference to a resource.

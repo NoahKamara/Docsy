@@ -1,3 +1,10 @@
+//
+//  PlatformAvailability.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
+
 import Foundation
 
 /// Availability information of a symbol on a specific platform.

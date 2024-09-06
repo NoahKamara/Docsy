@@ -1,3 +1,10 @@
+//
+//  ReferenceIdentifier.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
+
 import Foundation
 
 public struct ReferenceIdentifier: Codable, Hashable, Equatable, Sendable {

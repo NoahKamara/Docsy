@@ -1,3 +1,10 @@
+//
+//  Logger.swift
+// Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
+
 import OSLog
 
 extension Logger {
