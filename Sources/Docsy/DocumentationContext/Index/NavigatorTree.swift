@@ -15,7 +15,11 @@ public extension NavigatorIndex {
     class NavigatorTree: Node {
         public var rootNodes: [Node]
         
-        public override var children: [NavigatorIndex.Node]? { rootNodes }
+        public var isEmpty: Bool {
+            children?.isEmpty != false
+        }
+        
+        public override var children: [Node]? { rootNodes }
         
         init() {
             self.rootNodes = []

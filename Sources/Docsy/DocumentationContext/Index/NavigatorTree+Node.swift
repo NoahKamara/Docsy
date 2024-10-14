@@ -13,6 +13,7 @@ public extension NavigatorIndex {
     // MARK: Node
     
     /// A Node in a ``NavigatorIndex``
+    @Observable
     class Node: Identifiable {
         /// The title of the node, suitable for presentation.
         public let title: String
