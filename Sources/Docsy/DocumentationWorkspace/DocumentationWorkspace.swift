@@ -65,7 +65,7 @@ public actor DocumentationWorkspace: DocumentationContextDataProvider {
 
     /// Creates a new, empty documentation workspace.
     public init() {}
-
+    
     /// Adds a new data provider to the workspace.
     ///
     /// Adding a data provider also adds the documentation bundles that it provides, and notifies the ``delegate`` of the added bundles.

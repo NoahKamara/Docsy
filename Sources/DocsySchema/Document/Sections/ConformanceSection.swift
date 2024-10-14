@@ -76,7 +76,7 @@ public struct ConformanceSection: Decodable, Equatable, Sendable {
     /// relation kind, for example, "is a" or "conforms to". The `conformances` parameter
     /// contains at least one requirement.
     static func groupRequirements(_: [Constraint]) -> [InlineContent] {
-        #warning("commented out")
+//        #warning("commented out")
         //            precondition(!constraints.isEmpty)
         //
         //            let constraintTypeNames = constraints.map { constraint in
@@ -92,7 +92,7 @@ public struct ConformanceSection: Decodable, Equatable, Sendable {
         //                InlineContent.codeVoice(code: ConformanceSection.displayNameForConformingType(constraints[0].leftTypeName)),
         //                InlineContent.text(constraints[0].kind.spelling.spaceDelimited)
         //            ] + constraintCompoundName
-        return []
+        []
     }
 }
 

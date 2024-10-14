@@ -105,7 +105,6 @@ public struct TopicReference: Sendable, Hashable, Equatable, CustomStringConvert
     }
 
     private init(bundleIdentifier: String, urlReadablePath: String, urlReadableFragment: String? = nil, sourceLanguages: Set<SourceLanguage>) {
-        precondition(!sourceLanguages.isEmpty, "ResolvedTopicReference.sourceLanguages cannot be empty")
         self._storage = Storage(
             bundleIdentifier: bundleIdentifier,
             path: urlReadablePath,

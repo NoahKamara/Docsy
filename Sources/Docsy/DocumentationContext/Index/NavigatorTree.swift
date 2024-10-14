@@ -13,46 +13,18 @@ public extension NavigatorIndex {
     /// The tree of a ``NavigatorIndex``
     @Observable
     class NavigatorTree: Node {
-        public var availableLanguages: Set<SourceLanguage> {
-            access(keyPath: \.nodes)
-            return nodes.values.map(\.availableLanguages).reduce(Set()) {
-                $0.union($1)
-            }
-        }
-
-        public var isEmpty: Bool {
-            access(keyPath: \.nodes.count)
-            return nodes.isEmpty
-        }
-
-        private var nodes: [BundleIdentifier: BundleNode] = [:]
-
-        override public var children: [NavigatorIndex.Node]! {
-            access(keyPath: \.nodes)
-            return Array(nodes.values)
-        }
-
+        public var rootNodes: [Node]
+        
+        public override var children: [NavigatorIndex.Node]? { rootNodes }
+        
         init() {
+            self.rootNodes = []
             super.init(
-                title: "Root",
+                title: "",
                 children: [],
                 reference: nil,
                 type: .root
             )
-        }
-
-        @MainActor
-        func insertBundle(_ bundle: BundleNode) {
-            withMutation(keyPath: \.nodes[bundle.identifier]) {
-                nodes[bundle.identifier] = bundle
-            }
-        }
-
-        @MainActor
-        func removeBundle(_ identifier: BundleIdentifier) {
-            withMutation(keyPath: \.nodes[identifier]) {
-                _ = nodes.removeValue(forKey: identifier)
-            }
         }
     }
 }

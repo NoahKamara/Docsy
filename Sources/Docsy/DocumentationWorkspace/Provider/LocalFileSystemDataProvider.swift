@@ -38,7 +38,7 @@ public struct LocalFileSystemDataProvider: DataProvider {
         self.rootURL = rootURL
     }
 
-    public func contentsOfURL(_ url: consuming URL) async throws -> Data {
+    public func contentsOfURL(_ url: consuming URL) throws -> Data {
         precondition(url.isFileURL, "Unexpected non-file url '\(url)'.")
         return try Data(contentsOf: url)
     }
@@ -48,6 +48,7 @@ public struct LocalFileSystemDataProvider: DataProvider {
     }
 
     public func bundles(fileManager: FileManager) throws -> [DocumentationBundle] {
+        print(rootURL)
         guard rootURL.pathExtension != "doccarchive" else {
             let rootBundle = try createBundle(at: rootURL)
             return [rootBundle]

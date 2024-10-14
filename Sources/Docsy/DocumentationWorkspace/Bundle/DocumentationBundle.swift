@@ -10,8 +10,9 @@ import Foundation
 
 public typealias BundleIdentifier = String
 
-public struct DocumentationBundle: CustomStringConvertible, Sendable {
+public struct DocumentationBundle: Identifiable, CustomStringConvertible, Sendable {
     public var description: String { "Documenatation(identifier: '\(identifier)', displayName: '\(displayName)'" }
+    public var id: String { identifier }
 
     /// Information about this documentation bundle that's unrelated to its documentation content.
     public let metadata: Metadata
@@ -109,7 +110,7 @@ public struct DocumentationBundle: CustomStringConvertible, Sendable {
             path: "/tutorials",
             sourceLanguage: .swift
         )
-        self.rootReference = TopicReference(bundleIdentifier: info.identifier, path: "", sourceLanguage: .swift)
+        self.rootReference = TopicReference(bundleIdentifier: info.identifier, path: "", sourceLanguages: [])
         self.documentationRootReference = documentationRootReference
         self.tutorialsRootReference = tutorialsRootReference
         self.technologyTutorialsRootReference = tutorialsRootReference.appendingPath(urlReadablePath(info.displayName))
