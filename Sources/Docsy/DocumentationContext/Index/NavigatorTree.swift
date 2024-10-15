@@ -16,11 +16,16 @@ public extension NavigatorIndex {
         public var rootNodes: [Node]
         
         public var isEmpty: Bool {
-            children?.isEmpty != false
+            access(keyPath: \.nodes.count)
+            return nodes.isEmpty
         }
-        
-        public override var children: [Node]? { rootNodes }
-        
+        private var nodes: [BundleIdentifier: BundleNode] = [:]
+
+        override public var children: [NavigatorIndex.Node]! {
+            access(keyPath: \.nodes)
+            return Array(nodes.values)
+        }
+
         init() {
             self.rootNodes = []
             super.init(
@@ -30,11 +35,24 @@ public extension NavigatorIndex {
                 type: .root
             )
         }
+
+        @MainActor
+        func insertBundle(_ bundle: BundleNode) {
+            withMutation(keyPath: \.nodes[bundle.identifier]) {
+                nodes[bundle.identifier] = bundle
+            }
+        }
+
+        @MainActor
+        func removeBundle(_ identifier: BundleIdentifier) {
+            withMutation(keyPath: \.nodes[identifier]) {
+                _ = nodes.removeValue(forKey: identifier)
+            }
+        }
     }
 }
 
 // MARK: Tree Representation
-
 extension NavigatorIndex.Node {
     func treeLines(prefix: String = "", isLast: Bool = true) -> [String] {
         var line = prefix
@@ -61,3 +79,4 @@ extension NavigatorIndex.Node {
         treeLines().joined(separator: "\n")
     }
 }
+

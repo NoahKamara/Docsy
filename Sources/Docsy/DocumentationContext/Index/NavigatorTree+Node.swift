@@ -56,21 +56,36 @@ public extension NavigatorIndex {
                 )
             }
         }
-
-//        /// Unloads the bundle's index from this instance by removing it from the tree
-//        /// - Parameters:
-//        ///   - bundle: A Bundle that was provided by the dataProvider
-//        ///   - dataProvider: A provider of documentation data
-//        @MainActor
-//        func unload(bundle: DocumentationBundle) {
-//            Self.logger.debug("[\(bundle.identifier)] unlodaing")
-//            tree.removeBundle(bundle.identifier)
-//        }
     }
 }
 
-// MARK: LanguageGroup Node
 
+// MARK: Bundle Node
+public extension NavigatorIndex {
+    /// A Node representing the root of a bundles index.
+    /// it may contain one or more ``LanguageGroup``s
+    @Observable
+    final class BundleNode: Node {
+        let identifier: BundleIdentifier
+
+        public let availableLanguages: Set<SourceLanguage>
+
+        init(bundle: DocumentationBundle, children: [LanguageGroup]) {
+            self.identifier = bundle.identifier
+            self.availableLanguages = Set(children.map(\.language))
+
+            super.init(
+                title: bundle.displayName,
+                children: children,
+                reference: nil,
+                type: .root
+            )
+        }
+    }
+}
+
+
+// MARK: LanguageGroup Node
 public extension NavigatorIndex {
     /// A ``Node`` representing a source code language.
     ///

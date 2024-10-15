@@ -189,19 +189,17 @@ extension DocumentationContext: DocumentationContextDataProviderDelegate {
         register(bundle)
 
         Task {
-            #warning("NOT IMPLEMENTED")
-            //            try await self.index.load(for: bundle, with: dataProvider)
+            try await self.index.load(for: bundle, with: dataProvider)
         }
     }
 
     public func dataProvider(_: any DocumentationContextDataProvider, didRemoveBundle bundle: DocumentationBundle) {
         Self.logger.debug("[dataProvider] remove bundle '\(bundle.identifier)'")
 
-//        index.unload(bundle: bundle)
-        #warning("NOT IMPLEMENTED")
-//        withMutation(keyPath: \.bundles) {
-//            _ = self.bundles.removeValue(forKey: bundle.identifier)
-//        }
+        index.unload(bundle: bundle)
+        withMutation(keyPath: \.bundles) {
+            _ = self.bundles.removeValue(forKey: bundle.identifier)
+        }
     }
 
     @MainActor fileprivate func register(_ bundle: DocumentationBundle) {
