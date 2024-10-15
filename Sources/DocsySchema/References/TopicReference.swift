@@ -76,9 +76,9 @@ public struct TopicReference: Sendable, Hashable, Equatable, CustomStringConvert
     }
 
     /// The source language for which this topic is relevant.
-    public var sourceLanguage: SourceLanguage {
+    public var sourceLanguage: SourceLanguage? {
         // Return Swift by default to maintain backwards-compatibility.
-        sourceLanguages.contains(.swift) ? .swift : sourceLanguages.first!
+        sourceLanguages.contains(.swift) ? .swift : sourceLanguages.first
     }
 
     /// The source languages for which this topic is relevant.
@@ -172,16 +172,31 @@ public extension TopicReference {
             throw TopicReferenceDeserializationError.missingBundleIdentifier(url: url)
         }
 
-        let language = try container.decode(String.self, forKey: .interfaceLanguage)
-        let interfaceLanguage = SourceLanguage(id: language)
+        let languageId = try container.decodeIfPresent(String.self, forKey: .interfaceLanguage)
 
-        self.init(bundleIdentifier: bundleIdentifier, path: url.path, fragment: url.fragment, sourceLanguage: interfaceLanguage)
+        if let languageId {
+            let sourceLanguage = SourceLanguage(id: languageId)
+            
+            self.init(
+                bundleIdentifier: bundleIdentifier,
+                path: url.path,
+                fragment: url.fragment,
+                sourceLanguage: sourceLanguage
+            )
+        } else {
+            self.init(
+                bundleIdentifier: bundleIdentifier,
+                path: url.path,
+                fragment: url.fragment,
+                sourceLanguages: .init()
+            )
+        }
     }
 
     func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
-        try container.encode(sourceLanguage.id, forKey: .interfaceLanguage)
+        try container.encodeIfPresent(sourceLanguage?.id, forKey: .interfaceLanguage)
         try container.encode(url, forKey: .url)
     }
 }
