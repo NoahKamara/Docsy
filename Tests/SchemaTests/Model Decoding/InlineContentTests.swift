@@ -1,3 +1,10 @@
+//
+//  InlineContentTests.swift
+//  Docsy
+//
+//  Copyright © 2024 Noah Kamara.
+//
+
 @testable import DocsySchema
 import Foundation
 import Testing

@@ -1,17 +1,15 @@
 //
 //  NavigatorTree+Node.swift
-// Docsy
+//  Docsy
 //
 //  Copyright © 2024 Noah Kamara.
 //
 
 import Observation
 
-
-
 public extension NavigatorIndex {
     // MARK: Node
-    
+
     /// A Node in a ``NavigatorIndex``
     @Observable
     class Node: Identifiable {
@@ -59,8 +57,8 @@ public extension NavigatorIndex {
     }
 }
 
-
 // MARK: Bundle Node
+
 public extension NavigatorIndex {
     /// A Node representing the root of a bundles index.
     /// it may contain one or more ``LanguageGroup``s
@@ -84,8 +82,8 @@ public extension NavigatorIndex {
     }
 }
 
-
 // MARK: LanguageGroup Node
+
 public extension NavigatorIndex {
     /// A ``Node`` representing a source code language.
     ///

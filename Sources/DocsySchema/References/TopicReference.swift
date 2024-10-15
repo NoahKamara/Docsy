@@ -1,6 +1,6 @@
 //
 //  TopicReference.swift
-// Docsy
+//  Docsy
 //
 //  Copyright © 2024 Noah Kamara.
 //
@@ -176,7 +176,7 @@ public extension TopicReference {
 
         if let languageId {
             let sourceLanguage = SourceLanguage(id: languageId)
-            
+
             self.init(
                 bundleIdentifier: bundleIdentifier,
                 path: url.path,

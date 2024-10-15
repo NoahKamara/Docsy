@@ -1,6 +1,6 @@
 //
 //  NavigatorTree.swift
-// Docsy
+//  Docsy
 //
 //  Copyright © 2024 Noah Kamara.
 //
@@ -14,11 +14,12 @@ public extension NavigatorIndex {
     @Observable
     class NavigatorTree: Node {
         public var rootNodes: [Node]
-        
+
         public var isEmpty: Bool {
             access(keyPath: \.nodes.count)
             return nodes.isEmpty
         }
+
         private var nodes: [BundleIdentifier: BundleNode] = [:]
 
         override public var children: [NavigatorIndex.Node]! {
@@ -53,6 +54,7 @@ public extension NavigatorIndex {
 }
 
 // MARK: Tree Representation
+
 extension NavigatorIndex.Node {
     func treeLines(prefix: String = "", isLast: Bool = true) -> [String] {
         var line = prefix
@@ -79,4 +81,3 @@ extension NavigatorIndex.Node {
         treeLines().joined(separator: "\n")
     }
 }
-

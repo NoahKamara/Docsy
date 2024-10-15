@@ -1,6 +1,6 @@
 //
 //  Logger.swift
-// Docsy
+//  Docsy
 //
 //  Copyright © 2024 Noah Kamara.
 //
