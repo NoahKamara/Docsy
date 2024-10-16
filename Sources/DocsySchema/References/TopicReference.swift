@@ -8,6 +8,14 @@
 import Foundation
 
 public struct TopicReference: Sendable, Hashable, Equatable, CustomStringConvertible, Codable {
+    public static func == (lhs: TopicReference, rhs: TopicReference) -> Bool {
+        lhs.url == rhs.url
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(url)
+    }
+    
     public var description: String {
         "Topic(\(url.absoluteString))"
     }
@@ -94,6 +102,24 @@ public struct TopicReference: Sendable, Hashable, Equatable, CustomStringConvert
     public init(bundleIdentifier: String, path: String, fragment: String? = nil, sourceLanguage: SourceLanguage) {
         self.init(bundleIdentifier: bundleIdentifier, path: path, fragment: fragment, sourceLanguages: [sourceLanguage])
     }
+    
+    public init?(url: URL) {
+        guard TopicReference.urlHasResolvedTopicScheme(url) else {
+            return nil
+        }
+
+        guard let bundleIdentifier = url.host else {
+            return nil
+        }
+
+        self.init(
+            bundleIdentifier: bundleIdentifier,
+            path: url.path,
+            fragment: url.fragment,
+            sourceLanguage: .swift
+        )
+    }
+
 
     public init(bundleIdentifier: String, path: String, fragment: String? = nil, sourceLanguages: Set<SourceLanguage>) {
         self.init(
