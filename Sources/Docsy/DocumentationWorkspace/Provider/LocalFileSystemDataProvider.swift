@@ -48,7 +48,6 @@ public struct LocalFileSystemDataProvider: DataProvider {
     }
 
     public func bundles(fileManager: FileManager) throws -> [DocumentationBundle] {
-        print(rootURL)
         guard rootURL.pathExtension != "doccarchive" else {
             let rootBundle = try createBundle(at: rootURL)
             return [rootBundle]

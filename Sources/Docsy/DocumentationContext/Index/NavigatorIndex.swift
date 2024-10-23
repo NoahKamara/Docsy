@@ -57,7 +57,8 @@ public extension NavigatorIndex {
         }
 
         let bundleNode = BundleNode(bundle: bundle, children: langGroups)
-        await tree.insertBundle(bundleNode)
+        await tree.root.nodes.append(bundleNode)
+//        await tree.insertBundle(bundleNode)
     }
 
     /// Unloads the bundle's index from this instance by removing it from the tree
@@ -67,6 +68,8 @@ public extension NavigatorIndex {
     @MainActor
     func unload(bundle: DocumentationBundle) {
         Self.logger.info("[\(bundle.identifier)] unlodaing")
-        tree.removeBundle(bundle.identifier)
+        tree.root.nodes.removeAll(where: {
+            $0.title == bundle.displayName
+        })
     }
 }

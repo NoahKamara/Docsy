@@ -31,7 +31,7 @@ class Cache {
 import OSLog
 
 @Observable
-public class DocumentationContext {
+open class DocumentationContext: DocumentationContextDataProviderDelegate {
     static let logger = Logger.docsy("Context")
 
     private let decoder = JSONDecoder()
@@ -109,7 +109,7 @@ public class DocumentationContext {
     ///
     /// - Parameter url: a doc url like `doc://<bundle-identifier>/path`
     /// - Returns:
-    public nonisolated func contentsOfURL(_ url: URL) async throws -> Data {
+    public func contentsOfURL(_ url: URL) async throws -> Data {
         guard url.scheme == "doc" else {
             throw ContextError.unknownBundle("scheme error")
         }
@@ -176,24 +176,17 @@ public class DocumentationContext {
             }
         }
     }
-}
 
-struct ResolvedBundleReference: Codable, Hashable {
-    let bundleIdentifier: BundleIdentifier
-    let path: String
-}
-
-extension DocumentationContext: DocumentationContextDataProviderDelegate {
-    public func dataProvider(_ dataProvider: any DocumentationContextDataProvider, didAddBundle bundle: DocumentationBundle) {
+    open func dataProvider(_ dataProvider: any DocumentationContextDataProvider, didAddBundle bundle: DocumentationBundle) {
         Self.logger.debug("[dataProvider] add bundle '\(bundle.identifier)'")
         register(bundle)
-
-        Task {
-            try await self.index.load(for: bundle, with: dataProvider)
-        }
+//
+//        Task {
+//            try await self.index.load(for: bundle, with: dataProvider)
+//        }
     }
 
-    public func dataProvider(_: any DocumentationContextDataProvider, didRemoveBundle bundle: DocumentationBundle) {
+    open func dataProvider(_: any DocumentationContextDataProvider, didRemoveBundle bundle: DocumentationBundle) {
         Self.logger.debug("[dataProvider] remove bundle '\(bundle.identifier)'")
 
         index.unload(bundle: bundle)
@@ -212,6 +205,11 @@ extension DocumentationContext: DocumentationContextDataProviderDelegate {
 //
 //        await self.index.register(bundleIndex, for: bundle.identifier)
     }
+}
+
+struct ResolvedBundleReference: Codable, Hashable {
+    let bundleIdentifier: BundleIdentifier
+    let path: String
 }
 
 // Mark NavigatorIndex

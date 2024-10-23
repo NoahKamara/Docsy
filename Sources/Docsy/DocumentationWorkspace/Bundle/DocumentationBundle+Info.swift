@@ -20,5 +20,10 @@ public extension DocumentationBundle {
             case displayName = "bundleDisplayName"
             case identifier = "bundleIdentifier"
         }
+
+        public init(displayName: String, identifier: String) {
+            self.displayName = displayName
+            self.identifier = identifier
+        }
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum PageType: String, Decodable, Sendable {
+public enum PageType: String, Codable, Sendable {
     case root
     case article
     case tutorial = "project"
@@ -46,4 +46,7 @@ public enum PageType: String, Decodable, Sendable {
     case languageGroup
     case container
     case groupMarker
+
+    // Custom
+    case leaf
 }

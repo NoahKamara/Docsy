@@ -12,7 +12,7 @@ public extension NavigatorIndex {
 
     /// A Node in a ``NavigatorIndex``
     @Observable
-    class Node: Identifiable {
+    open class Node: Identifiable {
         /// The title of the node, suitable for presentation.
         public let title: String
 
@@ -68,7 +68,7 @@ public extension NavigatorIndex {
 
         public let availableLanguages: Set<SourceLanguage>
 
-        init(bundle: DocumentationBundle, children: [LanguageGroup]) {
+        public init(bundle: DocumentationBundle, children: [LanguageGroup]) {
             self.identifier = bundle.identifier
             self.availableLanguages = Set(children.map(\.language))
 
@@ -91,7 +91,7 @@ public extension NavigatorIndex {
     final class LanguageGroup: Node {
         public let language: SourceLanguage
 
-        init(_ language: SourceLanguage, children: [NavigatorIndex.Node]? = nil) {
+        public init(_ language: SourceLanguage, children: [NavigatorIndex.Node]? = nil) {
             self.language = language
             super.init(
                 title: language.name,

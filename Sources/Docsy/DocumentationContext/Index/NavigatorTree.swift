@@ -10,27 +10,24 @@ import Observation
 // MARK: Root
 
 public extension NavigatorIndex {
-    /// The tree of a ``NavigatorIndex``
     @Observable
-    class NavigatorTree: Node {
-        public var rootNodes: [Node]
-
+    class BundlesNode: Node {
         public var isEmpty: Bool {
-            access(keyPath: \.nodes.count)
-            return nodes.isEmpty
+            access(keyPath: \.bundles.count)
+            return bundles.isEmpty
         }
 
-        private var nodes: [BundleIdentifier: BundleNode] = [:]
+        private var bundles: [BundleNode] = []
 
         override public var children: [NavigatorIndex.Node]! {
-            access(keyPath: \.nodes)
-            return Array(nodes.values)
+            access(keyPath: \.bundles)
+            return bundles
         }
 
-        init() {
-            self.rootNodes = []
+        init(title: String, bundles: [BundleNode]) {
+            self.bundles = bundles
             super.init(
-                title: "",
+                title: title,
                 children: [],
                 reference: nil,
                 type: .root
@@ -38,17 +35,64 @@ public extension NavigatorIndex {
         }
 
         @MainActor
-        func insertBundle(_ bundle: BundleNode) {
-            withMutation(keyPath: \.nodes[bundle.identifier]) {
-                nodes[bundle.identifier] = bundle
+        func insertBundle(_ bundle: BundleNode, at offset: Int) {
+            if let existingBundleIndex = bundles.firstIndex(where: { $0.identifier == bundle.identifier }) {
+                withMutation(keyPath: \.bundles[existingBundleIndex]) {
+                    bundles[existingBundleIndex] = bundle
+                }
+            } else {
+                withMutation(keyPath: \.bundles) {
+                    bundles.append(bundle)
+                }
             }
         }
 
         @MainActor
         func removeBundle(_ identifier: BundleIdentifier) {
-            withMutation(keyPath: \.nodes[identifier]) {
-                _ = nodes.removeValue(forKey: identifier)
+            withMutation(keyPath: \.bundles) {
+                _ = bundles.removeAll(where: { $0.identifier == identifier })
             }
+        }
+    }
+
+    @Observable
+    class RootNode: Node {
+        public var nodes: [NavigatorIndex.Node]
+
+        override public var children: [NavigatorIndex.Node]! {
+            access(keyPath: \.nodes)
+            return nodes
+        }
+
+        public init(nodes: [NavigatorIndex.Node]) {
+            self.nodes = nodes
+            super.init(title: "", children: nil, reference: nil, type: .root)
+        }
+    }
+
+    /// The tree of a ``NavigatorIndex``
+    @Observable
+    class NavigatorTree: Node {
+        public let root: RootNode
+
+        public var isEmpty: Bool {
+            access(keyPath: \.root.children?.isEmpty)
+            return root.children?.isEmpty != false
+        }
+
+        override public var children: [NavigatorIndex.Node]! {
+            access(keyPath: \.root.children)
+            return root.children
+        }
+
+        init(rootNodes: [Node] = []) {
+            self.root = RootNode(nodes: rootNodes)
+            super.init(
+                title: "",
+                children: [],
+                reference: nil,
+                type: .root
+            )
         }
     }
 }
